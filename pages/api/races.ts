@@ -20,6 +20,8 @@ interface KeyValue {
     Timestamp: Date
     Date: Date
     Title: string
+    Course: string
+    'Email Address': string
 }
 
 export async function listMajors(auth): Promise<Array<KeyValue>> {
@@ -38,7 +40,6 @@ export async function listMajors(auth): Promise<Array<KeyValue>> {
                 rows.map((row, i) => {
                     if (i === 0) {
                         headers = row;
-                        console.log(headers)
                     } else {
                         let rowData = {};
                         row.map((v, i) => {
