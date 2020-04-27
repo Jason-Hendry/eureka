@@ -17,23 +17,20 @@ export default ({body: {password, email}}, res) => {
     const client = new faunadb.Client({
         secret: process.env.FAUNADB_SECRET
     })
-    const secretRaw = crypto.randomBytes(20);
-    const hash = crypto.createHmac('sha256', secretRaw).update(password).digest('hex');
-    const secret = btoa(secretRaw)
-    const roles = [];
+    // const secretRaw = crypto.randomBytes(20);
+    // const hash = crypto.createHmac('sha256', secretRaw).update(password).digest('hex');
+    // const secret = btoa(secretRaw)
+    // const roles = [];
 
-    const createP = client.query(
-        q.Create(
-            q.Collection('User'),
-            {
-                data: {email, roles},
-                credentials: {password}
-            }
+    client.query(
+        q.Logout(
+            q.Match(q.Index('users_by_email'), email),
+            {password}
         )
     ).then(({ref}) => {
-        res.json({email, ref})
+        res.json({ref})
     }).catch((error) => {
-        res.status(error.requestResult.statusCode).json({error: error})
+        res.json({error: error})
     })
 
 }
