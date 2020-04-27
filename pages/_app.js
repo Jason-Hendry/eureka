@@ -79,6 +79,15 @@ export default class MyApp extends App {
       <React.Fragment>
         <Head>
           <title>Eureka Cycling</title>
+          <!-- Global site tag (gtag.js) - Google Analytics -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164628709-1"></script>
+          <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-164628709-1');
+          </script>
         </Head>
         <Component {...pageProps} />
       </React.Fragment>
