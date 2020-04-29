@@ -16,11 +16,7 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 import Parallax from "components/Parallax/Parallax.js";
 
 import styles from "assets/jss/nextjs-material-kit/pages/landingPage.js";
-import {listMajors} from "./api/races";
-import authorize from "../google/auth";
-import {format} from "date-fns";
 import InfoArea from "../components/InfoArea/InfoArea";
-import MapIcon from '@material-ui/icons/Map';
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
@@ -35,7 +31,7 @@ export default function LandingPage(props) {
     const classes = useStyles();
     const {races, ...rest} = props;
 
-    const raceList = races.sort((a,b) => a.sort-b.sort).map(r => <li>{r.Title} - {r.Course}</li>)
+    // const raceList = races.sort((a,b) => a.sort-b.sort).map(r => <li>{r.Title} - {r.Course}</li>)
 
     return (
         <div>
