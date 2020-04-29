@@ -69,7 +69,7 @@ export default function Index(props) {
 
     return <TableContainer component={Paper}>
             <Toolbar className={classes.tableHeading}>
-                <Typography variant={"h6"} component={"div"}>Manage Ranges</Typography>
+                <Typography variant={"h6"} component={"div"}>Manage Races</Typography>
                 <Button variant={"contained"} color={"primary"} className={classes.newRace} onClick={newRace}>New Race</Button>
             </Toolbar>
             <Table>
