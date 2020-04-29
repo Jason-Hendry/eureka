@@ -6,9 +6,7 @@ import {Secret} from "../../components/AdminTheme/Secret";
 
 export default function Index(props) {
 
-
     return <AdminActions/>
-
 
 }
 

@@ -25,6 +25,7 @@ import PageChange from "components/PageChange/PageChange.js";
 
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 import AdminTheme from "../components/AdminTheme/AdminTheme";
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 
 Router.events.on("routeChangeStart", url => {
   console.log(`Loading: ${url}`);
@@ -43,10 +44,13 @@ Router.events.on("routeChangeError", () => {
   document.body.classList.remove("body-page-transition");
 });
 
+const theme = createMuiTheme({
+});
+
 export default class MyApp extends App {
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
-    console.log("ctx", ctx)
+    // console.log("ctx", ctx)
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
@@ -68,7 +72,9 @@ export default class MyApp extends App {
         <Head>
           <title>Eureka Cycling</title>
         </Head>
-        {wrap}
+        <ThemeProvider theme={theme}>
+          {wrap}
+        </ThemeProvider>
       </React.Fragment>
     );
   }

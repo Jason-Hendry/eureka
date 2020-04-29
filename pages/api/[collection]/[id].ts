@@ -1,39 +1,47 @@
 import {IncomingMessage, ServerResponse} from "http";
 import {Interface} from "readline";
 import btoa from "btoa"
+import {reject} from "q";
 
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-export function DocPutService(collection, data, secret, callback, error) {
-    fetch("/api/${collection}/${id}?secret=${secret}", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({secret, ...data})
+export function DocPutService(collection, id, data, secret) {
+    return new Promise((resolve, reject) => {
+
+        fetch(`/api/${collection}/${id}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({secret, ...data})
+        })
+            .then(res => res.json())
+            .then(result => resolve(result))
+            .catch(error => reject(error))
     })
-        .then(res => res.json())
-        .then(result => callback(result))
-        .catch(error => error(error))
-}
-export function DocGetService(collection, id, secret, callback, error) {
-    fetch("/api/${collection}/${id}?secret=${secret}", {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-        .then(res => res.json())
-        .then(result => callback(result))
-        .catch(error => error(error))
 }
 
-export default ({body,method,query:{collection, id, secret}}, res) => {
+export function DocGetService(collection, id, secret) {
+    return new Promise((resolve, reject) => {
+        console.log(`Fetching: /api/${ collection }/${ id }?secret=${ secret }`)
+        fetch(`/api/${ collection }/${ id }?secret=${ secret }`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(res => res.json())
+            .then(result => resolve(result))
+            .catch(error => reject(error))
+    })
+}
+
+export default ({body, method, query: {collection, id, secret}}, res) => {
     const client = new faunadb.Client({
         secret: body.secret ?? secret
     })
-    if(method == "PUT") {
+    if (method == "PUT") {
         delete body.secret
         client.query(
             q.Update(
@@ -42,7 +50,7 @@ export default ({body,method,query:{collection, id, secret}}, res) => {
                     data: body,
                 }
             )
-        ).then(({ref:{id}, data}) => {
+        ).then(({ref: {id}, data}) => {
             res.json({id, data})
         }).catch((error) => {
             res.status(error.requestResult.statusCode).json({error: error})
