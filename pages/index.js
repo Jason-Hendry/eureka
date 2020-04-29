@@ -130,16 +130,16 @@ export default function LandingPage(props) {
 }
 
 export async function getStaticProps(props) {
-    const data = await listMajors(authorize())
+    // const data = await listMajors(authorize())
 
-    props['races'] = data.map(r => {
-        console.log(r.Date)
-        // r['sort'] = parseInt(format(r.Date, 'yyyy'))
-        // r['month'] = format(r.Date, 'MMMM')
-        delete r['Timestamp']
-        delete r['Date']
-        return r
-    })
+    // props['races'] = data.map(r => {
+    //     console.log(r.Date)
+    //     // r['sort'] = parseInt(format(r.Date, 'yyyy'))
+    //     // r['month'] = format(r.Date, 'MMMM')
+    //     delete r['Timestamp']
+    //     delete r['Date']
+    //     return r
+    // })
 
     return {props}
 }

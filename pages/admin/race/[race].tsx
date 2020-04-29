@@ -16,7 +16,7 @@ export default function Index(props) {
             c.push("/admin/")
         }
         if(race.length === 0) {
-            RaceGetService(race, secret, setRace, (e) => console.log(e))
+            // RaceGetService(race, secret, setRace, (e) => console.log(e))
         }
     }
     return <div>

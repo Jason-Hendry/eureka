@@ -1,13 +1,11 @@
-import React, {useState} from "react"
-import AdminActions from "../../pages-sections/Admin/AdminActions";
-import Login from "../../pages-sections/Admin/Login"
+import React, {useContext, useState} from "react"
 import {useRouter} from "next/router";
-import {useLocalStorage} from "./index";
 import {RaceListService} from "../api/races";
 import Link from "next/link";
+import {Secret} from "../../components/AdminTheme/Secret";
 
 export default function Index(props) {
-    const [secret, setSecret] = useLocalStorage("secret", "")
+    const secret = useContext(Secret)
     const [races, setRaces] = useState([])
 
     if(process.browser) {
