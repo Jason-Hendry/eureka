@@ -1,8 +1,8 @@
 import React, {useState} from "react"
-import AdminActions from "../pages-sections/Admin/AdminActions";
-import Login from "../pages-sections/Admin/Login"
+import AdminActions from "../../pages-sections/Admin/AdminActions";
+import Login from "../../pages-sections/Admin/Login"
 
-export default function Admin(props) {
+export default function Index(props) {
     const [secret, setSecret] = useLocalStorage("secret", "")
 
     return <div>
@@ -12,7 +12,7 @@ export default function Admin(props) {
 }
 
 // Hook
-function useLocalStorage(key, initialValue) {
+export function useLocalStorage(key, initialValue) {
     // State to store our value
     // Pass initial state function to useState so logic is only executed once
     const [storedValue, setStoredValue] = useState(() => {
