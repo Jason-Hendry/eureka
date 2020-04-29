@@ -1,13 +1,11 @@
 import fetch from 'node-fetch'
-import authorize from "../../google/auth";
-import {listMajors} from "../api/races";
 import {format} from 'date-fns'
 
-export default function Race({races}) {
+export default function Race() {
 
-    const raceList = races.sort((a,b) => a.sort-b.sort).map(r => <li>{r.Title} - {r.Course}</li>)
+    // const raceList = races.sort((a,b) => a.sort-b.sort).map(r => <li>{r.Title} - {r.Course}</li>)
 
-    return <div>{raceList}</div>
+    return <div>Races</div>
 }
 
 //
@@ -27,17 +25,17 @@ export default function Race({races}) {
 // }
 
 // @ts-ignore
-export async function getStaticProps() {
-    const data = await listMajors(authorize())
-
-    return {props: {races: data.map(r => {
-        console.log(typeof r.Date)
-        // r['sort'] = parseInt(format(r.Date, 'yyyy'))
-        // r['month'] = format(r.Date, 'MMMM')
-        delete r['Timestamp']
-        delete r['Date']
-        return r
-    })}}
-}
+// export async function getStaticProps() {
+//     const data = await listMajors(authorize())
+//
+//     return {props: {races: data.map(r => {
+//         console.log(typeof r.Date)
+//         // r['sort'] = parseInt(format(r.Date, 'yyyy'))
+//         // r['month'] = format(r.Date, 'MMMM')
+//         delete r['Timestamp']
+//         delete r['Date']
+//         return r
+//     })}}
+// }
 
 
