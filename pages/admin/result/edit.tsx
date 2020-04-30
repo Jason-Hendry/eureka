@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import {
     DocPutResults,
     ResultsFetcher
-} from "../../../services/DocumentService";
+} from "../../../services/APIService";
 import {Results, ResultsData} from "../../../models/Results";
 import useSWR, {mutate} from "swr";
 

@@ -20,7 +20,7 @@ import {
     DocPutRaces,
     RaceFetcher,
     UserListFetcher
-} from "../../../services/DocumentService";
+} from "../../../services/APIService";
 import {Race, RaceFormat} from "../../../models/Race";
 import useSWR, {mutate} from "swr";
 import {CourseList} from "../../../models/Course";

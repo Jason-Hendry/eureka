@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListCourses, DocPostCourse} from "../../services/DocumentService";
+import {DocListCourses, DocPostCourse} from "../../services/APIService";
 import {CourseList} from "../../models/Course";
 
 const useStyles = makeStyles((theme: Theme) => ({

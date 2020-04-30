@@ -3,7 +3,7 @@ import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
-import {DocGetUser, DocPutRaces, DocPutUser, RaceFetcher, UserFetcher} from "../../../services/DocumentService";
+import {DocGetUser, DocPutRaces, DocPutUser, RaceFetcher, UserFetcher} from "../../../services/APIService";
 import {User, UserData} from "../../../models/User";
 import useSWR, {mutate} from "swr";
 import {Race} from "../../../models/Race";

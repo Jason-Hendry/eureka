@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListRaces, DocPostRaces} from "../../services/DocumentService";
+import {DocListRaces, DocPostRaces} from "../../services/APIService";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {

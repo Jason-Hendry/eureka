@@ -14,7 +14,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListUsers, DocPostUser} from "../../services/DocumentService";
+import {DocListUsers, DocPostUser} from "../../services/APIService";
 import {UserList} from "../../models/User";
 
 const useStyles = makeStyles((theme: Theme) => ({
