@@ -3,7 +3,7 @@ import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import {makeStyles} from "@material-ui/core/styles";
-
+import {format, isFuture, parse} from 'date-fns'
 // @material-ui/icons
 
 // core components
@@ -23,9 +23,9 @@ const dashboardRoutes = [];
 
 import {container, title} from "../../assets/jss/nextjs-material-kit.js";
 import {createStyles} from "@material-ui/styles";
-import {Button, Grid} from "@material-ui/core";
-import {DocListRaces} from "../../services/DirectService";
-import {RaceList} from "../../models/Race";
+import {Avatar, Button, Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectService";
+import {Race, RaceList} from "../../models/Race";
 
 const useStyles = makeStyles((theme) => createStyles({
     container: {
@@ -60,10 +60,30 @@ const useStyles = makeStyles((theme) => createStyles({
     },
     section: {
         padding: "70px 0",
-        textAlign: "center"
     },
     description: {
         color: "#999"
+    },
+    raceTitle: {
+        display: "block"
+    },
+    marshal: {
+        paddingRight: theme.spacing(1)
+    },
+    raceCard: {
+        marginBottom: theme.spacing(2)
+    },
+    Criterium: {
+        backgroundColor: "#fd7b7b",
+    },
+    Handicap: {
+        backgroundColor: "#7bd0fd",
+    },
+    GradedPointsRace: {
+        backgroundColor: "#ffcd47",
+    },
+    Graded: {
+        backgroundColor: "#5ae54e",
     }
 }));
 
@@ -72,11 +92,33 @@ interface Props {
 }
 
 // Sections for this page
-export default function Race(props: Props) {
+export default function RacePage(props: Props) {
     const classes = useStyles();
     const {races, ...rest} = props;
 
-    const RaceList = races.map(r => <div key={r.id}>{r.data.Title}</div>)
+    const RaceList = races.map(r => {
+        console.log(r.data.Date)
+        const raceDate = r.data.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
+        const day = raceDate ? format(raceDate, 'eeee MMM do') : null;
+        const rf = r.data?.RaceFormat ? r.data.RaceFormat.substr(0,1) : "-"
+        const marshalList = r.data.MarshallNames.map((n, i) => <span className={classes.marshal} key={i}>{n}</span>)
+        return <Card className={classes.raceCard} key={r.id}>
+            <CardHeader avatar={
+                <Avatar aria-label="recipe" title={r.data?.RaceFormat} className={classes[r.data?.RaceFormat]}>
+                    {rf}
+                </Avatar>
+            } title={r.data.Title} subheader={day} />
+            <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {r.data.RaceFormat} - {r.data?.CourseData?.data?.Title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                Marshalls: {marshalList}
+                </Typography>
+            </CardContent>
+
+        </Card>
+    })
 
     return (
         <div>
@@ -105,10 +147,10 @@ export default function Race(props: Props) {
                             <br/>
                             <Button color="primary"
                                     variant={"contained"}
-                                size={"large"}
-                                href="void"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                    size={"large"}
+                                    href="void"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                             >Join Eureka</Button>
                         </Grid>
                     </GridContainer>
@@ -131,9 +173,27 @@ export default function Race(props: Props) {
 }
 
 export async function getStaticProps() {
+    const courses = await DocListCourses(process.env.FAUNADB_SECRET)
+    const users = await DocListUsers(process.env.FAUNADB_SECRET)
     const props = {
-        races: await DocListRaces(process.env.FAUNADB_SECRET)
+        races: await DocListRaces(process.env.FAUNADB_SECRET),
+
     }
-    props.races = props.races.filter(r => r.data !== undefined)
+    props.races = props.races.filter(r => {
+        const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
+        return r.data !== undefined &&
+            raceDate && isFuture(raceDate)
+    }).map<Race>(r => {
+        r.sortKey = parseInt(format(parse(r.data.Date, "yyyy-MM-dd", new Date()), 'yyyyDDD'))
+        const courseData = courses.filter(c => c.id == r.data.Course).pop()
+        if (courseData)  {
+            r.data.CourseData = courseData
+        }
+        r.data.MarshallNames = r.data?.Marshalls ? users.filter(c => r.data.Marshalls.indexOf(c.id) != -1).map(u => u.data.name) : [];
+        return r
+    }).sort((a, b): number => {
+        return a.sortKey - b.sortKey
+    })
+    console.log(props.races[0].data)
     return {props}
 }
