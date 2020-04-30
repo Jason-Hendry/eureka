@@ -3,8 +3,9 @@ import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
-import {DocGetRaces, DocPutRaces} from "../../../services/DocumentService";
-import {RaceData} from "../../../models/Race";
+import {DocGetRaces, DocPutRaces, RaceFetcher} from "../../../services/DocumentService";
+import {Race, RaceData} from "../../../models/Race";
+import useSWR, {mutate} from "swr";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -21,29 +22,21 @@ const inputProps = {
     step: 300,
 };
 
-function Race() {
-    const secret = useContext(Secret);
+export default function EditRace() {
     const classes = useStyles();
-    const router = useRouter()
-    const [loaded, setLoaded] = useState(false)
+    const router = useRouter();
 
-    const [race, setRace] = useState<RaceData>({Title:""})
-    const [btnLabel, setBtnLabel] = useState("Save")
+    const secret = useContext(Secret);
+    const id = process.browser ? document.location.hash.replace('#','') : "";
+    const key = `/api/Races/${id}?secret=${secret}`
+    const {data, error} = useSWR<Race>(key, RaceFetcher)
+    const race = data?.data
 
-    const [id, setId] = useState("")
-    useEffect(() => setId(document.location.hash.replace('#','')))
-
-    if(process.browser && id && !loaded) {
-
-        setLoaded(true)
-
-        DocGetRaces(id, secret).then(r => {
-            setRace(r.data)
-        }).catch((err) => {
-            // console.log('Race.ts: ', err)
-            setRace({"Title":"Error"})
-        })
+    const setRace = (raceData) => {
+        mutate(key, {...data, data:raceData}, false)
     }
+
+    const [btnLabel, setBtnLabel] = useState("Save")
 
     const save = () => {
         setBtnLabel("Saving...")
@@ -84,4 +77,3 @@ function Race() {
 export async function getStaticProps(props) {
     return {props}
 }
-export default Race

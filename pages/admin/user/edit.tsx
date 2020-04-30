@@ -3,8 +3,10 @@ import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
-import { DocGetUser, DocPutUser} from "../../../services/DocumentService";
-import {UserData} from "../../../models/User";
+import {DocGetUser, DocPutRaces, DocPutUser, RaceFetcher, UserFetcher} from "../../../services/DocumentService";
+import {User, UserData} from "../../../models/User";
+import useSWR, {mutate} from "swr";
+import {Race} from "../../../models/Race";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -21,28 +23,21 @@ const inputProps = {
     step: 300,
 };
 
-function User() {
-    const secret = useContext(Secret);
+export default function EditUser() {
     const classes = useStyles();
-    const router = useRouter()
-    const [loaded, setLoaded] = useState(false)
+    const router = useRouter();
 
-    const [user, setUser] = useState<UserData>({email:""})
-    const [btnLabel, setBtnLabel] = useState("Save")
+    const secret = useContext(Secret);
+    const id = process.browser ? document.location.hash.replace('#','') : "";
+    const key = `/api/User/${id}?secret=${secret}`
+    const {data, error} = useSWR<User>(key, UserFetcher)
+    const user = data?.data
 
-    const [id, setId] = useState("")
-    useEffect(() => setId(document.location.hash.replace('#','')))
-
-    if(process.browser && id && !loaded) {
-        setLoaded(true)
-
-        DocGetUser(id, secret).then(r => {
-            setUser(r.data)
-        }).catch((err) => {
-            // console.log('User.ts: ', err)
-            setUser(null)
-        })
+    const setUser = (userData: UserData) => {
+        mutate(key, {...data, data:userData}, false)
     }
+
+    const [btnLabel, setBtnLabel] = useState("Save")
 
     const save = () => {
         setBtnLabel("Saving...")
@@ -52,7 +47,7 @@ function User() {
         }).catch(e => setBtnLabel("Failed"));
     }
 
-    return <Paper className={classes.root}>
+    return user ? <Paper className={classes.root}>
         <Toolbar className={classes.tableHeading}><Typography variant={"h6"} component={"div"}>Edit User</Typography></Toolbar>
 
         <TextField className={classes.field} variant={"standard"}
@@ -62,10 +57,9 @@ function User() {
                    type={"email"} InputLabelProps={{shrink: true}} fullWidth={true} />
 
         <Button variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
-    </Paper>
+    </Paper> : null
 
 }
 export async function getStaticProps(props) {
     return {props}
 }
-export default User

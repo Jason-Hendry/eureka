@@ -3,8 +3,9 @@ import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
-import {DocGetCourse, DocPutCourse} from "../../../services/DocumentService";
-import {CourseData} from "../../../models/Course";
+import {CourseFetcher, DocGetCourse, DocPutCourse, DocPutRaces, RaceFetcher} from "../../../services/DocumentService";
+import {Course, CourseData} from "../../../models/Course";
+import useSWR, {mutate} from "swr";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -21,29 +22,21 @@ const inputProps = {
     step: 300,
 };
 
-function Course() {
-    const secret = useContext(Secret);
+export default function EditCourse() {
     const classes = useStyles();
-    const router = useRouter()
-    const [loaded, setLoaded] = useState(false)
+    const router = useRouter();
 
-    const [course, setCourse] = useState<CourseData>({Title:""})
-    const [btnLabel, setBtnLabel] = useState("Save")
+    const secret = useContext(Secret);
+    const id = process.browser ? document.location.hash.replace('#','') : "";
+    const key = `/api/Courses/${id}?secret=${secret}`
+    const {data, error} = useSWR<Course>(key, CourseFetcher)
+    const course = data?.data
 
-    const [id, setId] = useState("")
-    useEffect(() => setId(document.location.hash.replace('#','')))
-
-    if(process.browser && id && !loaded) {
-
-        setLoaded(true)
-
-        DocGetCourse(id, secret).then(r => {
-            setCourse(r.data)
-        }).catch((err) => {
-            // console.log('Course.ts: ', err)
-            setCourse({"Title":"Error"})
-        })
+    const setCourse = (couseData: CourseData) => {
+        mutate(key, {...data, data:couseData}, false)
     }
+
+    const [btnLabel, setBtnLabel] = useState("Save")
 
     const save = () => {
         setBtnLabel("Saving...")
@@ -69,4 +62,3 @@ function Course() {
 export async function getStaticProps(props) {
     return {props}
 }
-export default Course

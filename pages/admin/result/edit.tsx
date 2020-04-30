@@ -3,8 +3,12 @@ import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
-import {DocGetResults, DocPutResults} from "../../../services/DocumentService";
-import {ResultsData} from "../../../models/Results";
+import {
+    DocPutResults,
+    ResultsFetcher
+} from "../../../services/DocumentService";
+import {Results, ResultsData} from "../../../models/Results";
+import useSWR, {mutate} from "swr";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -22,27 +26,20 @@ const inputProps = {
 };
 
 function Result() {
-    const secret = useContext(Secret);
     const classes = useStyles();
-    const router = useRouter()
+    const router = useRouter();
 
-    const [loaded, setLoaded] = useState(false)
-    const [result, setResult] = useState<ResultsData>({Title:""})
-    const [btnLabel, setBtnLabel] = useState("Save")
+    const secret = useContext(Secret);
+    const id = process.browser ? document.location.hash.replace('#','') : "";
+    const key = `/api/Results/${id}?secret=${secret}`
+    const {data, error} = useSWR<Results>(key, ResultsFetcher)
+    const result = data?.data
 
-    const [id, setId] = useState("")
-    useEffect(() => setId(document.location.hash.replace('#','')))
-
-    if(process.browser && id && !loaded) {
-
-        setLoaded(true)
-        DocGetResults(id, secret).then(r => {
-            setResult(r.data)
-        }).catch((err) => {
-            // console.log('Result.ts: ', err)
-            setResult(null)
-        })
+    const setResult = (resultData: ResultsData) => {
+        mutate(key, {...data, data:resultData}, false)
     }
+
+    const [btnLabel, setBtnLabel] = useState("Save")
 
     const save = () => {
         setBtnLabel("Saving...")

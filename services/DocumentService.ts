@@ -3,6 +3,7 @@ import {News, NewsData, NewsList} from "../models/News";
 import {Results, ResultsData, ResultsList} from "../models/Results";
 import {User, UserData, UserList} from "../models/User";
 import {Course, CourseData, CourseList} from "../models/Course";
+import React from "react";
 
 export function DocListRaces(secret: string) :Promise<RaceList> {
     return DocListService<RaceList>("Races", secret)
@@ -129,3 +130,10 @@ function DocPutService<T>(collection: string, data: object, id: string, secret: 
             .catch(error => reject(error))
     })
 }
+
+
+export const RaceFetcher = url => fetch(url).then(r => <Race><unknown>r.json())
+export const ResultsFetcher = url => fetch(url).then(r => <Results><unknown>r.json())
+export const CourseFetcher = url => fetch(url).then(r => <Course><unknown>r.json())
+export const UserFetcher = url => fetch(url).then(r => <User><unknown>r.json())
+export const NewsFetcher = url => fetch(url).then(r => <News><unknown>r.json())
