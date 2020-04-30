@@ -49,12 +49,13 @@ export default function Index(props) {
     }
 
     const newUser = () => {
-        DocPostUser( {email:""}, secret).then(({id}) => router.push(`/admin/user/edit#${id}`)).catch(e => {});
+        DocPostUser( {email:"",name:""}, secret).then(({id}) => router.push(`/admin/user/edit#${id}`)).catch(e => {});
     }
 
     const list = users.map((r, i) => {
         console.log(r)
         return <TableRow key={i} className={classes.row}>
+            <TableCell>{r.data.name}</TableCell>
             <TableCell>{r.data.email}</TableCell>
             <TableCell>
                 <Button variant={"text"}><Link href={"/admin/user/edit#" + r.id}>Edit</Link></Button>
@@ -70,7 +71,8 @@ export default function Index(props) {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell variant={"head"}>Title</TableCell>
+                        <TableCell variant={"head"}>Name</TableCell>
+                        <TableCell variant={"head"}>Email</TableCell>
                         <TableCell variant={"head"}>Actions</TableCell>
                     </TableRow>
                 </TableHead>

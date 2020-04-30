@@ -50,11 +50,20 @@ export default function EditUser() {
     return user ? <Paper className={classes.root}>
         <Toolbar className={classes.tableHeading}><Typography variant={"h6"} component={"div"}>Edit User</Typography></Toolbar>
 
-        <TextField className={classes.field} variant={"standard"}
+        <TextField className={classes.field}
                    label={'Email'}
                    value={user.email || ""}
                    onChange={(e) => setUser({...user, email: e.target.value})}
-                   type={"email"} InputLabelProps={{shrink: true}} fullWidth={true} />
+                   type={"email"}
+                   InputLabelProps={{shrink: true}}
+                   fullWidth={true} />
+
+        <TextField className={classes.field}
+                   label={'Full Name'}
+                   value={user.name || ""}
+                   onChange={(e) => setUser({...user, name: e.target.value})}
+                   InputLabelProps={{shrink: true}}
+                   fullWidth={true} />
 
         <Button variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
     </Paper> : null

@@ -118,6 +118,7 @@ export function DocPutCourse(data: CourseData, id: string, secret: string) :Prom
 function DocPutService<T>(collection: string, data: object, id: string, secret: string): Promise<T> {
     return new Promise((resolve, reject) => {
 
+
         fetch(`/api/${collection}/${id}`, {
             method: "PUT",
             headers: {
@@ -133,7 +134,12 @@ function DocPutService<T>(collection: string, data: object, id: string, secret: 
 
 
 export const RaceFetcher = url => fetch(url).then(r => <Race><unknown>r.json())
+export const RaceListFetcher = url => fetch(url).then(r => <RaceList><unknown>r.json())
 export const ResultsFetcher = url => fetch(url).then(r => <Results><unknown>r.json())
+export const ResultsListFetcher = url => fetch(url).then(r => <ResultsList><unknown>r.json())
 export const CourseFetcher = url => fetch(url).then(r => <Course><unknown>r.json())
+export const CourseListFetcher = url => fetch(url).then(r => <CourseList><unknown>r.json())
 export const UserFetcher = url => fetch(url).then(r => <User><unknown>r.json())
+export const UserListFetcher = url => fetch(url).then(r => <UserList><unknown>r.json())
 export const NewsFetcher = url => fetch(url).then(r => <News><unknown>r.json())
+export const NewsListFetcher = url => fetch(url).then(r => <NewsList><unknown>r.json())

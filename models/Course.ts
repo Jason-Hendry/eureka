@@ -9,6 +9,7 @@ export type CourseList = Array<Course>;
 
 export interface CourseData {
     Title: string
+    LapDistance?: number
 }
 
 
