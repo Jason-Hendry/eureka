@@ -14,7 +14,8 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListRaces, DocPostRaces} from "../../services/DocumentService";
+import {DocListUsers, DocPostUser} from "../../services/DocumentService";
+import {UserList} from "../../models/User";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -30,47 +31,45 @@ const useStyles = makeStyles((theme: Theme) => ({
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1)
     },
-    newRace: {
+    newUser: {
         marginRight: theme.spacing(1)
     }
 }))
 
 export default function Index(props) {
     const secret = useContext(Secret)
-    const [races, setRaces] = useState([])
+    const [users, setUsers] = useState<UserList>([])
     const classes = useStyles()
     const router = useRouter()
 
     if (process.browser) {
-        if (races.length === 0) {
-            DocListRaces(secret).then(list => setRaces(list)).catch(e => setRaces([{Title:"Error"}]))
+        if (users.length === 0) {
+            DocListUsers(secret).then(list => setUsers(list)).catch(e => setUsers([]))
         }
     }
 
-    const newRace = () => {
-        DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/${id}`)).catch(e => {});
+    const newUser = () => {
+        DocPostUser( {email:""}, secret).then(({id}) => router.push(`/admin/user/${id}`)).catch(e => {});
     }
 
-    const list = races.map((r, i) => {
+    const list = users.map((r, i) => {
         console.log(r)
         return <TableRow key={i} className={classes.row}>
-            <TableCell>{r.data?.Date ?? "- no date -"}</TableCell>
-            <TableCell>{r.data?.Title ? r.data.Title : '- No name -'}</TableCell>
+            <TableCell>{r.data.email}</TableCell>
             <TableCell>
-                <Button variant={"text"}><Link href={"/admin/race/" + r.id}>Edit</Link></Button>
+                <Button variant={"text"}><Link href={"/admin/user/" + r.id}>Edit</Link></Button>
             </TableCell>
         </TableRow>
     })
 
     return <TableContainer component={Paper}>
             <Toolbar className={classes.tableHeading}>
-                <Typography variant={"h6"} component={"div"}>Manage Races</Typography>
-                <Button variant={"contained"} color={"primary"} className={classes.newRace} onClick={newRace}>New Race</Button>
+                <Typography variant={"h6"} component={"div"}>Manage Users</Typography>
+                <Button variant={"contained"} color={"primary"} className={classes.newUser} onClick={newUser}>New User</Button>
             </Toolbar>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell variant={"head"}>Date</TableCell>
                         <TableCell variant={"head"}>Title</TableCell>
                         <TableCell variant={"head"}>Actions</TableCell>
                     </TableRow>

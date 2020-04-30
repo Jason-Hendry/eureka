@@ -6,37 +6,6 @@ import {reject} from "q";
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-export function DocPutService(collection, id, data, secret) {
-    return new Promise((resolve, reject) => {
-
-        fetch(`/api/${collection}/${id}`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({secret, ...data})
-        })
-            .then(res => res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
-
-export function DocGetService(collection, id, secret) {
-    return new Promise((resolve, reject) => {
-        console.log(`Fetching: /api/${ collection }/${ id }?secret=${ secret }`)
-        fetch(`/api/${ collection }/${ id }?secret=${ secret }`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(res => res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
-
 export default ({body, method, query: {collection, id, secret}}, res) => {
     const client = new faunadb.Client({
         secret: body.secret ?? secret

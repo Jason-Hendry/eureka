@@ -5,36 +5,6 @@ import btoa from "btoa"
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-export function DocPostService(collection, data, secret) {
-    return new Promise((resolve, reject) => {
-
-        fetch(`/api/${collection}`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({secret, ...data})
-        })
-            .then(res => res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
-
-export function DocListService(collection, id, secret) {
-    return new Promise((resolve, reject) => {
-        console.log(`Fetching: /api/${ collection }?secret=${ secret }`)
-        fetch(`/api/${ collection }/${ id }?secret=${ secret }`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(res => res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
 
 export default ({body,method,query:{collection, id, secret}}, res) => {
     const client = new faunadb.Client({
@@ -61,7 +31,7 @@ export default ({body,method,query:{collection, id, secret}}, res) => {
             q.Map(
                 q.Paginate(
                     q.Match(
-                        q.Index("all_races")
+                        q.Index(`all${collection}`)
                     )
                 ),
                 q.Lambda("x", q.Get(q.Var("x")))

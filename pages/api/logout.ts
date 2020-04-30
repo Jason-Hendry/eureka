@@ -17,11 +17,6 @@ export default ({body: {password, email}}, res) => {
     const client = new faunadb.Client({
         secret: process.env.FAUNADB_SECRET
     })
-    // const secretRaw = crypto.randomBytes(20);
-    // const hash = crypto.createHmac('sha256', secretRaw).update(password).digest('hex');
-    // const secret = btoa(secretRaw)
-    // const roles = [];
-
     client.query(
         q.Logout(
             q.Match(q.Index('users_by_email'), email),

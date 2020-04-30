@@ -14,7 +14,8 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListRaces, DocPostRaces} from "../../services/DocumentService";
+import {DocListCourses, DocPostCourse} from "../../services/DocumentService";
+import {CourseList} from "../../models/Course";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -30,47 +31,45 @@ const useStyles = makeStyles((theme: Theme) => ({
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1)
     },
-    newRace: {
+    newCourse: {
         marginRight: theme.spacing(1)
     }
 }))
 
 export default function Index(props) {
     const secret = useContext(Secret)
-    const [races, setRaces] = useState([])
+    const [courses, setCourses] = useState<CourseList>([])
     const classes = useStyles()
     const router = useRouter()
 
     if (process.browser) {
-        if (races.length === 0) {
-            DocListRaces(secret).then(list => setRaces(list)).catch(e => setRaces([{Title:"Error"}]))
+        if (courses.length === 0) {
+            DocListCourses(secret).then(list => setCourses(list)).catch(e => setCourses([]))
         }
     }
 
-    const newRace = () => {
-        DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/${id}`)).catch(e => {});
+    const newCourse = () => {
+        DocPostCourse( {Title:""}, secret).then(({id}) => router.push(`/admin/course/${id}`)).catch(e => {});
     }
 
-    const list = races.map((r, i) => {
+    const list = courses.map((r, i) => {
         console.log(r)
         return <TableRow key={i} className={classes.row}>
-            <TableCell>{r.data?.Date ?? "- no date -"}</TableCell>
-            <TableCell>{r.data?.Title ? r.data.Title : '- No name -'}</TableCell>
+            <TableCell>{r.data.Title ? r.data.Title : '- No name -'}</TableCell>
             <TableCell>
-                <Button variant={"text"}><Link href={"/admin/race/" + r.id}>Edit</Link></Button>
+                <Button variant={"text"}><Link href={"/admin/course/" + r.id}><a>Edit</a></Link></Button>
             </TableCell>
         </TableRow>
     })
 
     return <TableContainer component={Paper}>
             <Toolbar className={classes.tableHeading}>
-                <Typography variant={"h6"} component={"div"}>Manage Races</Typography>
-                <Button variant={"contained"} color={"primary"} className={classes.newRace} onClick={newRace}>New Race</Button>
+                <Typography variant={"h6"} component={"div"}>Manage Courses</Typography>
+                <Button variant={"contained"} color={"primary"} className={classes.newCourse} onClick={newCourse}>New Course</Button>
             </Toolbar>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell variant={"head"}>Date</TableCell>
                         <TableCell variant={"head"}>Title</TableCell>
                         <TableCell variant={"head"}>Actions</TableCell>
                     </TableRow>

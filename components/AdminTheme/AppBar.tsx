@@ -48,8 +48,10 @@ export default function AdminAppBar({logout}) {
                     onClose={handleClose}
                 >
                     <MenuItem onClick={() => handleLink("/admin/races")}>Races</MenuItem>
-                    <MenuItem onClick={() => handleLink("/admin/races")}>My account</MenuItem>
-                    <MenuItem onClick={() => handleLink("/admin/races")}>Logout</MenuItem>
+                    <MenuItem onClick={() => handleLink("/admin/courses")}>Courses</MenuItem>
+                    <MenuItem onClick={() => handleLink("/admin/results")}>Results</MenuItem>
+                    <MenuItem onClick={() => handleLink("/admin/news")}>News</MenuItem>
+                    <MenuItem onClick={() => handleLink("/admin/users")}>Users</MenuItem>
                 </Menu>
                 <Typography variant="h6" className={classes.title}>
                     Eureka Cycling - Admin

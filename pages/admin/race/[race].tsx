@@ -2,9 +2,9 @@ import React, {useContext, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocGetService, DocPutService} from "../../api/[collection]/[id]";
 import {useRouter} from "next/router";
-import {route} from "next/dist/next-server/server/router";
+import {DocGetRaces, DocPutRaces} from "../../../services/DocumentService";
+import {RaceData} from "../../../models/Race";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -25,24 +25,25 @@ function Race({raceId}) {
     const secret = useContext(Secret);
     const classes = useStyles();
     const router = useRouter()
+    const [loaded, setLoaded] = useState(false)
 
-    const [race, setRace] = useState(null)
+    const [race, setRace] = useState<RaceData>({Title:""})
     const [btnLabel, setBtnLabel] = useState("Save")
 
-    if(process.browser && race === null) {
-        console.log(raceId)
-        DocGetService("Races", raceId, secret).then(r => {
-            console.log('Race: ', r)
-            setRace(r['data'])
+    if(process.browser && !loaded) {
+        setLoaded(true)
+
+        DocGetRaces(raceId, secret).then(r => {
+            setRace(r.data)
         }).catch((err) => {
-            console.log('Race: ', err)
-            setRace({})
+            // console.log('Race.ts: ', err)
+            setRace({"Title":"Error"})
         })
     }
 
     const save = () => {
         setBtnLabel("Saving...")
-        DocPutService("Races", raceId, race, secret).then(e => {
+        DocPutRaces(race, raceId, secret).then(e => {
             setBtnLabel("Save")
             router.push("/admin/races")
         }).catch(e => setBtnLabel("Failed"));
@@ -52,7 +53,7 @@ function Race({raceId}) {
         <Toolbar className={classes.tableHeading}><Typography variant={"h6"} component={"div"}>Edit Race</Typography></Toolbar>
 
         <TextField className={classes.field} variant={"standard"}
-                   label={'Race Date'}
+                   label={'Race.ts Date'}
                    value={race?.['Date'] || ""}
                    onChange={(e) => setRace({...race, Date: e.target.value})}
                    type={"date"} InputLabelProps={{shrink: true}} fullWidth={true} />
@@ -67,7 +68,7 @@ function Race({raceId}) {
                    onChange={(e) => setRace({...race, RegistrationCutoff: e.target.value})}
                    id="time" type="time" inputProps={inputProps}  InputLabelProps={{shrink: true}} fullWidth={true}/>
         <TextField className={classes.field}
-                   label={"Race Start Time"}
+                   label={"Race.ts Start Time"}
                    value={race?.['RaceStartTime'] || ""}
                    onChange={(e) => setRace({...race, RaceStartTime: e.target.value})}
                    id="time" type="time" inputProps={inputProps}  InputLabelProps={{shrink: true}} fullWidth={true}/>

@@ -108,7 +108,7 @@ export default function LandingPage(props) {
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={4}>
                                     <InfoArea
-                                        title="Race Results"
+                                        title="Race.ts Results"
                                         description="..."
                                         icon={DirectionsBikeIcon}
                                         iconColor="danger"
