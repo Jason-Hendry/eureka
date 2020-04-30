@@ -136,8 +136,6 @@ export default function RacePage(props: Props) {
             />
             <Parallax filter responsive image={require("assets/img/bg3.jpg")}>
                 <div className={classes.container}>
-                    <GridContainer>
-                        <Grid xs={12} sm={12} md={6}>
                             <h1 className={classes.title}>Eureka Cycling Club</h1>
                             <h4>
                                 The Eureka Veterans Cycling Club was formed at the beginning of 2009 by a small group of
@@ -152,18 +150,14 @@ export default function RacePage(props: Props) {
                                     target="_blank"
                                     rel="noopener noreferrer"
                             >Join Eureka</Button>
-                        </Grid>
-                    </GridContainer>
+
                 </div>
             </Parallax>
             <div className={classNames(classes.main, classes.mainRaised)}>
                 <div className={classes.container}>
                     <div className={classes.section}>
-                        <GridContainer>
-                            <Grid xs={12} sm={12} md={8}>
+
                                 {RaceList}
-                            </Grid>
-                        </GridContainer>
                     </div>
                 </div>
             </div>
