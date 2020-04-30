@@ -1,8 +1,3 @@
-import {IncomingMessage, ServerResponse} from "http";
-import {Interface} from "readline";
-import btoa from "btoa"
-import {reject} from "q";
-
 const faunadb = require('faunadb')
 const q = faunadb.query
 
