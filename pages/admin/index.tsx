@@ -1,12 +1,14 @@
 import React, {useContext, useState} from "react"
-import AdminActions from "../../pages-sections/Admin/AdminActions";
-import Login from "../../pages-sections/Admin/Login"
-import AdminTheme from "../../components/AdminTheme/AdminTheme";
-import {Secret} from "../../components/AdminTheme/Secret";
+import {Paper, Typography} from "@material-ui/core";
 
 export default function Index(props) {
 
-    return <AdminActions/>
+    return <Paper>
+        <Typography variant={"h6"}>Admin</Typography>
+    </Paper>
 
+}
+export async function getStaticProps(props) {
+    return {props}
 }
 

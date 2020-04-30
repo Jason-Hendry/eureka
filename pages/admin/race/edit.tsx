@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
@@ -21,7 +21,7 @@ const inputProps = {
     step: 300,
 };
 
-function Race({raceId}) {
+function Race() {
     const secret = useContext(Secret);
     const classes = useStyles();
     const router = useRouter()
@@ -30,10 +30,14 @@ function Race({raceId}) {
     const [race, setRace] = useState<RaceData>({Title:""})
     const [btnLabel, setBtnLabel] = useState("Save")
 
-    if(process.browser && !loaded) {
+    const [id, setId] = useState("")
+    useEffect(() => setId(document.location.hash.replace('#','')))
+
+    if(process.browser && id && !loaded) {
+
         setLoaded(true)
 
-        DocGetRaces(raceId, secret).then(r => {
+        DocGetRaces(id, secret).then(r => {
             setRace(r.data)
         }).catch((err) => {
             // console.log('Race.ts: ', err)
@@ -43,7 +47,7 @@ function Race({raceId}) {
 
     const save = () => {
         setBtnLabel("Saving...")
-        DocPutRaces(race, raceId, secret).then(e => {
+        DocPutRaces(race, id, secret).then(e => {
             setBtnLabel("Save")
             router.push("/admin/races")
         }).catch(e => setBtnLabel("Failed"));
@@ -77,7 +81,7 @@ function Race({raceId}) {
     </Paper>
 
 }
-Race.getInitialProps = async ctx => {
-    return { raceId: ctx.query.race }
+export async function getStaticProps(props) {
+    return {props}
 }
 export default Race

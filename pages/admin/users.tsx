@@ -49,7 +49,7 @@ export default function Index(props) {
     }
 
     const newUser = () => {
-        DocPostUser( {email:""}, secret).then(({id}) => router.push(`/admin/user/${id}`)).catch(e => {});
+        DocPostUser( {email:""}, secret).then(({id}) => router.push(`/admin/user/edit#${id}`)).catch(e => {});
     }
 
     const list = users.map((r, i) => {
@@ -57,7 +57,7 @@ export default function Index(props) {
         return <TableRow key={i} className={classes.row}>
             <TableCell>{r.data.email}</TableCell>
             <TableCell>
-                <Button variant={"text"}><Link href={"/admin/user/" + r.id}>Edit</Link></Button>
+                <Button variant={"text"}><Link href={"/admin/user/edit#" + r.id}>Edit</Link></Button>
             </TableCell>
         </TableRow>
     })
@@ -80,4 +80,7 @@ export default function Index(props) {
             </Table>
         </TableContainer>
 
+}
+export async function getStaticProps(props) {
+    return {props}
 }

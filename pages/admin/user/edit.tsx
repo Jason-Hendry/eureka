@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
@@ -21,7 +21,7 @@ const inputProps = {
     step: 300,
 };
 
-function User({id}) {
+function User() {
     const secret = useContext(Secret);
     const classes = useStyles();
     const router = useRouter()
@@ -30,7 +30,10 @@ function User({id}) {
     const [user, setUser] = useState<UserData>({email:""})
     const [btnLabel, setBtnLabel] = useState("Save")
 
-    if(process.browser && !loaded) {
+    const [id, setId] = useState("")
+    useEffect(() => setId(document.location.hash.replace('#','')))
+
+    if(process.browser && id && !loaded) {
         setLoaded(true)
 
         DocGetUser(id, secret).then(r => {
@@ -62,7 +65,7 @@ function User({id}) {
     </Paper>
 
 }
-User.getInitialProps = async ctx => {
-    return { id: ctx.query.id }
+export async function getStaticProps(props) {
+    return {props}
 }
 export default User

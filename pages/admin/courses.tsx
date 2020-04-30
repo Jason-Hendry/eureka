@@ -49,7 +49,7 @@ export default function Index(props) {
     }
 
     const newCourse = () => {
-        DocPostCourse( {Title:""}, secret).then(({id}) => router.push(`/admin/course/${id}`)).catch(e => {});
+        DocPostCourse( {Title:""}, secret).then(({id}) => router.push(`/admin/course/edit#${id}`)).catch(e => {});
     }
 
     const list = courses.map((r, i) => {
@@ -57,7 +57,7 @@ export default function Index(props) {
         return <TableRow key={i} className={classes.row}>
             <TableCell>{r.data.Title ? r.data.Title : '- No name -'}</TableCell>
             <TableCell>
-                <Button variant={"text"}><Link href={"/admin/course/" + r.id}><a>Edit</a></Link></Button>
+                <Button variant={"text"}><Link href={"/admin/course/edit#" + r.id}><a>Edit</a></Link></Button>
             </TableCell>
         </TableRow>
     })
@@ -81,3 +81,8 @@ export default function Index(props) {
         </TableContainer>
 
 }
+export async function getStaticProps(props) {
+    return {props}
+}
+
+

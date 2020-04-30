@@ -48,7 +48,7 @@ export default function Index(props) {
     }
 
     const newRace = () => {
-        DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/${id}`)).catch(e => {});
+        DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/edit#${id}`)).catch(e => {});
     }
 
     const list = races.map((r, i) => {
@@ -57,7 +57,7 @@ export default function Index(props) {
             <TableCell>{r.data?.Date ?? "- no date -"}</TableCell>
             <TableCell>{r.data?.Title ? r.data.Title : '- No name -'}</TableCell>
             <TableCell>
-                <Button variant={"text"}><Link href={"/admin/race/" + r.id}>Edit</Link></Button>
+                <Button variant={"text"}><Link href={"/admin/race/edit#" + r.id}>Edit</Link></Button>
             </TableCell>
         </TableRow>
     })
@@ -81,4 +81,7 @@ export default function Index(props) {
             </Table>
         </TableContainer>
 
+}
+export async function getStaticProps(props) {
+    return {props}
 }

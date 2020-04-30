@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
 import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
@@ -21,7 +21,7 @@ const inputProps = {
     step: 300,
 };
 
-function Result({id}) {
+function Result() {
     const secret = useContext(Secret);
     const classes = useStyles();
     const router = useRouter()
@@ -30,7 +30,11 @@ function Result({id}) {
     const [result, setResult] = useState<ResultsData>({Title:""})
     const [btnLabel, setBtnLabel] = useState("Save")
 
-    if(process.browser && !loaded) {
+    const [id, setId] = useState("")
+    useEffect(() => setId(document.location.hash.replace('#','')))
+
+    if(process.browser && id && !loaded) {
+
         setLoaded(true)
         DocGetResults(id, secret).then(r => {
             setResult(r.data)
@@ -66,7 +70,7 @@ function Result({id}) {
     </Paper>
 
 }
-Result.getInitialProps = async ctx => {
-    return { id: ctx.query.id }
+export async function getStaticProps(props) {
+    return {props}
 }
 export default Result
