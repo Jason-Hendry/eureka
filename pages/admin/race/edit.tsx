@@ -51,14 +51,17 @@ export default function EditRace() {
     const id = process.browser ? document.location.hash.replace('#', '') : "";
     const key = `/api/Races/${id}?secret=${secret}`
     const {data, error} = useSWR<Race>(key, RaceFetcher)
+    const [edit, setEdit] = useState<Race>(null)
+
+    const race = {...data?.data, ...edit}
 
     const courseListSWR = useSWR<CourseList>(`/api/Courses?secret=${secret}`, CourseListFetcher)
     const userListSWR = useSWR<UserList>(`/api/User?secret=${secret}`, UserListFetcher)
-    const race = data?.data
     const courseList = courseListSWR?.data
     const userList = userListSWR?.data
 
     const setRace = (raceData) => {
+        setEdit(raceData)
         mutate(key, {...data, data: raceData}, false)
     }
 
