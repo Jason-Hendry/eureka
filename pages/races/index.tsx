@@ -31,18 +31,18 @@ const cvc = require("../../assets/img/vcv.svg")
 
 const useStyles = makeStyles((theme) => createStyles({
     container: {
+        ...container,
         zIndex: 12,
-        color: "#FFFFFF",
-        ...container
+        color: "#FFFFFF"
     },
     title: {
+        ...title,
         display: "inline-block",
         // position: "relative",
         marginTop: 30,
         minHeight: 32,
         color: "#FFFFFF",
         textDecoration: "none",
-        ...title,
     },
     subtitle: {
         fontSize: "1.313rem",
