@@ -27,6 +27,8 @@ import {Avatar, Button, Card, CardContent, CardHeader, Grid, Typography} from "@
 import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectService";
 import {Race, RaceList} from "../../models/Race";
 
+const cvc = require("../../assets/img/vcv.svg")
+
 const useStyles = makeStyles((theme) => createStyles({
     container: {
         zIndex: 12,
@@ -84,6 +86,23 @@ const useStyles = makeStyles((theme) => createStyles({
     },
     Graded: {
         backgroundColor: "#5ae54e",
+    },
+    TimeTrial: {
+        backgroundColor: "#f840c9",
+    },
+    Cancelled: {
+        backgroundColor: "#ff9191",
+    },
+    Postponed: {
+        backgroundColor: "#ffba88",
+    },
+    TitleCancelled: {
+        color: "#ff0000",
+        fontWeight: 700
+    },
+    TitlePostponed: {
+        color: "#ff6c00",
+        fontWeight: 700
     }
 }));
 
@@ -98,22 +117,43 @@ export default function RacePage(props: Props) {
 
     const RaceList = races.map(r => {
         console.log(r.data.Date)
+
+        const vcv = r.data?.VCVEvent ?
+            <a href={"http://www.veterancycling.com.au/events.html"} title="VCV Events" target="_blank"><img height={50}
+                                                                                                             src={cvc}/></a> : null
+
+        const laps = r.data?.CourseLaps ? r.data?.CourseLaps : 0
+        const lapsDistance = laps && r.data?.CourseData?.data?.LapDistance ? laps * r.data?.CourseData?.data?.LapDistance : 0
+        const lapDisTab = lapsDistance ? <span> - {lapsDistance}Km ({laps} Laps)</span> : laps ?
+            <span>({laps} Laps)</span> : null;
+
+        const headerClass = r.data?.Cancelled ? classes.Cancelled :
+            r.data?.Postponed ? classes.Postponed : null;
+
+        const RaceTitlePrefix = r.data?.VCVEvent ? <strong>VCV Event - </strong> : null;
+
+        const RaceTitleSuffix = r.data?.Cancelled ? <span className={classes.TitleCancelled}> - Cancelled</span> :
+            r.data?.Postponed ? <span className={classes.TitlePostponed}> - Postponed (new date TBD)</span>:
+            null;
+
+        const RaceTitle = <span>{RaceTitlePrefix}{r.data.Title}{RaceTitleSuffix}</span>
+
         const raceDate = r.data.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
         const day = raceDate ? format(raceDate, 'eeee MMM do') : null;
-        const rf = r.data?.RaceFormat ? r.data.RaceFormat.substr(0,1) : "-"
+        const rf = r.data?.RaceFormat ? r.data.RaceFormat.substr(0, 1) : "-"
         const marshalList = r.data.MarshallNames.map((n, i) => <span className={classes.marshal} key={i}>{n}</span>)
         return <Card className={classes.raceCard} key={r.id}>
-            <CardHeader avatar={
+            <CardHeader className={headerClass} avatar={
                 <Avatar aria-label="recipe" title={r.data?.RaceFormat} className={classes[r.data?.RaceFormat]}>
                     {rf}
                 </Avatar>
-            } title={r.data.Title} subheader={day} />
+            } title={RaceTitle} subheader={day} action={vcv}/>
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    {r.data.RaceFormat} - {r.data?.CourseData?.data?.Title}
+                    {r.data.RaceFormat} - {r.data?.CourseData?.data?.Title}{lapDisTab}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                Marshalls: {marshalList}
+                    Marshalls: {marshalList}
                 </Typography>
             </CardContent>
 
@@ -134,30 +174,15 @@ export default function RacePage(props: Props) {
                 }}
                 {...rest}
             />
-            <Parallax filter responsive image={require("assets/img/bg3.jpg")}>
+            <Parallax filter small responsive image={require("assets/img/bg3.jpg")}>
                 <div className={classes.container}>
-                            <h1 className={classes.title}>Eureka Cycling Club</h1>
-                            <h4>
-                                The Eureka Veterans Cycling Club was formed at the beginning of 2009 by a small group of
-                                cyclists who believed there was a need for the type of racing that only a veterans club
-                                can offer.
-                            </h4>
-                            <br/>
-                            <Button color="primary"
-                                    variant={"contained"}
-                                    size={"large"}
-                                    href="void"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                            >Join Eureka</Button>
-
+                    <h1 className={classes.title}>Eureka Race Calendar</h1>
                 </div>
             </Parallax>
             <div className={classNames(classes.main, classes.mainRaised)}>
                 <div className={classes.container}>
                     <div className={classes.section}>
-
-                                {RaceList}
+                        {RaceList}
                     </div>
                 </div>
             </div>
@@ -180,7 +205,7 @@ export async function getStaticProps() {
     }).map<Race>(r => {
         r.sortKey = parseInt(format(parse(r.data.Date, "yyyy-MM-dd", new Date()), 'yyyyDDD'))
         const courseData = courses.filter(c => c.id == r.data.Course).pop()
-        if (courseData)  {
+        if (courseData) {
             r.data.CourseData = courseData
         }
         r.data.MarshallNames = r.data?.Marshalls ? users.filter(c => r.data.Marshalls.indexOf(c.id) != -1).map(u => u.data.name) : [];
@@ -188,6 +213,6 @@ export async function getStaticProps() {
     }).sort((a, b): number => {
         return a.sortKey - b.sortKey
     })
-    console.log(props.races[0].data)
+    // console.log(props.races[0].data)
     return {props}
 }

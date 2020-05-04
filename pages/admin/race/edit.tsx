@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: 0
     },
     field: {
-        marginBottom: theme.spacing(2),
+        marginBottom: theme.spacing(4),
         marginLeft: theme.spacing(2)
     }
 }))
@@ -178,7 +178,7 @@ export default function EditRace() {
             <Switch
                 color={"primary"}
                 checked={Boolean(race?.VCVEvent || false)}
-                onChange={(e) => setRace({...race, VCVEvent: e.target.checked})}
+                onChange={(e) => setRace({...race, VCVEvent: e.target.checked, ClubChamps: false, Interclub: false, Trophy: false})}
             />
         </FormControl>
         <FormControl className={classes.field}>
@@ -186,7 +186,23 @@ export default function EditRace() {
             <Switch
                 color={"primary"}
                 checked={Boolean(race?.Interclub || false)}
-                onChange={(e) => setRace({...race, Interclub: e.target.checked})}
+                onChange={(e) => setRace({...race, Interclub: e.target.checked, VCVEvent: false, ClubChamps: false, Trophy: false})}
+            />
+        </FormControl>
+        <FormControl className={classes.field}>
+            <FormLabel>Trophy</FormLabel>
+            <Switch
+                color={"primary"}
+                checked={Boolean(race?.Trophy || false)}
+                onChange={(e) => setRace({...race, Trophy: e.target.checked, VCVEvent: false, Interclub: false, ClubChamps: false})}
+            />
+        </FormControl>
+        <FormControl className={classes.field}>
+            <FormLabel>Club Championship</FormLabel>
+            <Switch
+                color={"primary"}
+                checked={Boolean(race?.ClubChamps || false)}
+                onChange={(e) => setRace({...race, ClubChamps: e.target.checked, VCVEvent: false, Interclub: false, Trophy: false})}
             />
         </FormControl>
 

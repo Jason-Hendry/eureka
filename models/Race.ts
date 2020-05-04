@@ -17,7 +17,8 @@ export enum RaceFormat {
     Criterium = 'Criterium',
     Handicap = 'Handicap' ,
     GradedPointsRace = 'Graded Points Race' ,
-    Graded = 'Graded'
+    Graded = 'Graded',
+    TimeTrial = 'Time Trial'
 }
 
 export interface RaceData {
@@ -35,7 +36,10 @@ export interface RaceData {
     Postponed?: Boolean
     VCVEvent?: Boolean
     Interclub?: Boolean
+    Trophy?: Boolean
+    ClubChamps?: Boolean
     RegistrationURL? :string
+    Series? :string
 }
 
 

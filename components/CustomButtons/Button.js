@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 // core components
 
 import buttonStyle from "assets/jss/nextjs-material-kit/components/buttonStyle.js";
+import Link from "next/link";
 
 const makeComponentStyles = makeStyles(() => ({
   ...buttonStyle
@@ -18,6 +19,7 @@ const makeComponentStyles = makeStyles(() => ({
 
 const RegularButton = React.forwardRef((props, ref) => {
   const {
+    href,
     color,
     round,
     children,
@@ -47,12 +49,28 @@ const RegularButton = React.forwardRef((props, ref) => {
     [classes.justIcon]: justIcon,
     [className]: className
   });
+
+  if(href === undefined) {
+    return <Button {...rest} href={href} classes={{ root: btnClasses }}>
+      {children}
+    </Button>
+
+  }
+
   return (
-    <Button {...rest} ref={ref} classes={{ root: btnClasses }}>
+    <Button component={ButtonLink} {...rest} href={href} classes={{ root: btnClasses }}>
       {children}
     </Button>
   );
 });
+
+const ButtonLink = ({ className, href, hrefAs, children }) => (
+    <Link href={href} as={hrefAs}>
+      <a className={className}>
+        {children}
+      </a>
+    </Link>
+)
 
 RegularButton.propTypes = {
   color: PropTypes.oneOf([

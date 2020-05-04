@@ -54,6 +54,12 @@ export default function EditCourse() {
                    onChange={(e) => setCourse({...course, Title: e.target.value})}
                    value={course?.['Title'] || ""} InputLabelProps={{shrink: true}} fullWidth={true} />
 
+        <TextField className={classes.field} variant={"standard"}
+                   label={'Lap Distance (Kms)'}
+                   type={'number'}
+                   onChange={(e) => setCourse({...course, LapDistance: parseFloat(e.target.value)})}
+                   value={course?.LapDistance} InputLabelProps={{shrink: true}} fullWidth={true} />
+
 
         <Button variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
     </Paper>

@@ -1,6 +1,5 @@
 /*eslint-disable*/
 import React from "react";
-import Link from "next/link";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,9 +15,9 @@ import AnnouncementIcon from '@material-ui/icons/Announcement';
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/nextjs-material-kit/components/headerLinksStyle.js";
+import Button from "../../components/CustomButtons/Button";
 
 const useStyles = makeStyles(styles);
 
@@ -29,7 +28,7 @@ export default function HeaderLinks(props) {
 
         <ListItem className={classes.listItem}>
             <Button
-                href={"/races/race"}
+                href={"/races"}
                 color="transparent"
                 className={classes.navLink}
             >
@@ -37,7 +36,7 @@ export default function HeaderLinks(props) {
             </Button>
         </ListItem>        <ListItem className={classes.listItem}>
             <Button
-                href={"/races/race"}
+                href={"/races"}
                 color="transparent"
                 className={classes.navLink}
             >
@@ -46,7 +45,7 @@ export default function HeaderLinks(props) {
         </ListItem>
         <ListItem className={classes.listItem}>
             <Button
-                href="https://www.creative-tim.com/product/nextjs-material-kit?ref=njsmk-navbar"
+                href={"/races"}
                 color="transparent"
                 className={classes.navLink}
             >
@@ -55,7 +54,7 @@ export default function HeaderLinks(props) {
         </ListItem>
         <ListItem className={classes.listItem}>
             <Button
-                href="https://www.creative-tim.com/product/nextjs-material-kit?ref=njsmk-navbar"
+                href={"/races"}
                 color="transparent"
                 target="_blank"
                 className={classes.navLink}
@@ -73,7 +72,7 @@ export default function HeaderLinks(props) {
         >
           <Button
             color="transparent"
-            href="https://www.facebook.com/EurekaVeteransCyclingClub/"
+            href={"https://www.facebook.com/EurekaVeteransCyclingClub/"}
             target="_blank"
             className={classes.navLink}
           >
