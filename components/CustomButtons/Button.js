@@ -64,13 +64,18 @@ const RegularButton = React.forwardRef((props, ref) => {
   );
 });
 
-const ButtonLink = ({ className, href, hrefAs, children }) => (
-    <Link href={href} as={hrefAs}>
-      <a className={className}>
-        {children}
-      </a>
-    </Link>
-)
+const ButtonLink = ({ className, href, hrefAs, children }) => {
+  if (href.indexOf('http') === 0) {
+    return <a href={href} target={"_blank"} className={className}>
+      {children}
+    </a>
+  }
+  return <Link href={href} as={hrefAs}>
+    <a className={className}>
+      {children}
+    </a>
+  </Link>
+}
 
 RegularButton.propTypes = {
   color: PropTypes.oneOf([

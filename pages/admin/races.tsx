@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {DocListRaces, DocPostRaces} from "../../services/APIService";
+import {raceSortCompare} from "../../services/race";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -43,7 +44,10 @@ export default function Index(props) {
 
     if (process.browser) {
         if (races.length === 0) {
-            DocListRaces(secret).then(list => setRaces(list)).catch(e => setRaces([{Title:"Error"}]))
+            DocListRaces(secret).then(list => {
+                // const sorted = list.sort(raceSortCompare)
+                setRaces(list)
+            }).catch(e => setRaces([{Title:"Error"}]))
         }
     }
 
@@ -52,7 +56,7 @@ export default function Index(props) {
     }
 
     const list = races.map((r, i) => {
-        console.log(r)
+        // console.log(r)
         return <TableRow key={i} className={classes.row}>
             <TableCell>{r.data?.Date ?? "- no date -"}</TableCell>
             <TableCell>{r.data?.Title ? r.data.Title : '- No name -'}</TableCell>

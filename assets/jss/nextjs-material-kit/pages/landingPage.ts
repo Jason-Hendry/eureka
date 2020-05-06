@@ -1,8 +1,10 @@
-import { container, title } from "assets/jss/nextjs-material-kit.js";
+import { container, title } from "../../nextjs-material-kit";
+import {Styles} from "@material-ui/styles";
+import {Theme} from "@material-ui/core";
 
-const landingPageStyle = {
+const landingPageStyle: Styles<Theme, any> = {
   container: {
-    zIndex: "12",
+    zIndex: 12,
     color: "#FFFFFF",
     ...container
   },
@@ -23,7 +25,7 @@ const landingPageStyle = {
   main: {
     background: "#FFFFFF",
     position: "relative",
-    zIndex: "3"
+    zIndex: 3
   },
   mainRaised: {
     margin: "-60px 30px 0px",
@@ -37,6 +39,11 @@ const landingPageStyle = {
   },
   description: {
     color: "#999"
+  },
+  races: {
+    // TODO: use theme spacing
+    marginBottom: 8,
+    textAlign: "left"
   }
 };
 
