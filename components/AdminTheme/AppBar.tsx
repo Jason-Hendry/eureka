@@ -1,8 +1,9 @@
 import {AppBar, Button, IconButton, Menu, MenuItem, Theme, Toolbar, Typography} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import {useRouter} from "next/router";
 import {makeStyles} from "@material-ui/styles";
+import {Secret} from "./Secret";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -17,8 +18,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 export default function AdminAppBar({logout}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [deployStatus, setDeployStatus] = React.useState(null);
     const classes = useStyles();
     const router = useRouter();
+    const secret = useContext(Secret);
+
+    useEffect(() => {
+        if(deployStatus !== null && process.browser) {
+            setTimeout(() => {
+                // TODO: check the real status
+                setDeployStatus(null)
+            }, 90*1000)
+        }
+    })
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -31,6 +43,13 @@ export default function AdminAppBar({logout}) {
     const handleLink = (link) => {
         setAnchorEl(null);
         router.push(link)
+    }
+
+    const publish = () => {
+        if(deployStatus === null) {
+            setDeployStatus("Publishing")
+            fetch(`/api/deploy?deploy=yes&secret=${secret}`, {method:"POST"} ).then(d => console.log(d)).catch(e => console.log(e))
+        }
     }
 
     return <div className={classes.root}>
@@ -56,6 +75,7 @@ export default function AdminAppBar({logout}) {
                 <Typography variant="h6" className={classes.title}>
                     Eureka Cycling - Admin
                 </Typography>
+                <Button onClick={publish} color="default" variant={"outlined"} disabled={deployStatus !== null}>{deployStatus === null ? "Publish" : deployStatus}</Button>
                 <Button onClick={logout} color="inherit">Logout</Button>
             </Toolbar>
         </AppBar>
