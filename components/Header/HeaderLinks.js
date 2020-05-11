@@ -28,13 +28,14 @@ export default function HeaderLinks(props) {
 
         <ListItem className={classes.listItem}>
             <Button
-                href={"/races"}
+                href={"/news"}
                 color="transparent"
                 className={classes.navLink}
             >
                 <AnnouncementIcon className={classes.icons} /> News
             </Button>
-        </ListItem>        <ListItem className={classes.listItem}>
+        </ListItem>
+        <ListItem className={classes.listItem}>
             <Button
                 href={"/races"}
                 color="transparent"
@@ -43,25 +44,25 @@ export default function HeaderLinks(props) {
                 <EventIcon className={classes.icons} /> Calendar
             </Button>
         </ListItem>
-        <ListItem className={classes.listItem}>
-            <Button
-                href={"/races"}
-                color="transparent"
-                className={classes.navLink}
-            >
-                <DirectionsBikeIcon className={classes.icons} /> Results
-            </Button>
-        </ListItem>
-        <ListItem className={classes.listItem}>
-            <Button
-                href={"/races"}
-                color="transparent"
-                target="_blank"
-                className={classes.navLink}
-            >
-                <MapIcon className={classes.icons} /> Circuits
-            </Button>
-        </ListItem>
+        {/*<ListItem className={classes.listItem}>*/}
+        {/*    <Button*/}
+        {/*        href={"/races"}*/}
+        {/*        color="transparent"*/}
+        {/*        className={classes.navLink}*/}
+        {/*    >*/}
+        {/*        <DirectionsBikeIcon className={classes.icons} /> Results*/}
+        {/*    </Button>*/}
+        {/*</ListItem>*/}
+        {/*<ListItem className={classes.listItem}>*/}
+        {/*    <Button*/}
+        {/*        href={"/races"}*/}
+        {/*        color="transparent"*/}
+        {/*        target="_blank"*/}
+        {/*        className={classes.navLink}*/}
+        {/*    >*/}
+        {/*        <MapIcon className={classes.icons} /> Circuits*/}
+        {/*    </Button>*/}
+        {/*</ListItem>*/}
 
       <ListItem className={classes.listItem}>
         <Tooltip

@@ -44,6 +44,11 @@ const landingPageStyle: Styles<Theme, any> = {
     // TODO: use theme spacing
     marginBottom: 8,
     textAlign: "left"
+  },
+  news: {
+    // TODO: use theme spacing
+    marginBottom: 8,
+    textAlign: "left"
   }
 };
 

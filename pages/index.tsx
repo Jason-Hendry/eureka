@@ -20,10 +20,15 @@ import InfoArea from "../components/InfoArea/InfoArea";
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
-import {DocListCourses, DocListRaces, DocListUsers} from "../services/DirectService";
+import {DocListCourses, DocListNews, DocListRaces, DocListUsers} from "../services/DirectService";
 import {format, isFuture, parse} from "date-fns";
 import {Race, RaceList} from "../models/Race";
-import {Card, CardContent, CardHeader, Grid} from "@material-ui/core";
+import {Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {dateSortCompareNewestFirst, dateSortCompareOldestFirst} from "../services/sort";
+import {ISODateToPretty} from "../services/dates";
+import Link from "next/link";
+import {NewsList} from "../models/News";
+import {toURL} from "../services/url";
 
 const cvc = require("../assets/img/vcv.svg")
 
@@ -35,7 +40,7 @@ const useStyles = makeStyles(styles);
 
 export default function LandingPage(props) {
     const classes = useStyles();
-    const {races, ...rest}: {races:RaceList} = props;
+    const {races, news, ...rest}: {races:RaceList, news:NewsList} = props;
 
     // const raceList = races.sort((a,b) => a.sort-b.sort).map(r => <li>{r.Title} - {r.Course}</li>)
 
@@ -44,7 +49,7 @@ export default function LandingPage(props) {
             <a href={"http://www.veterancycling.com.au/events.html"} title="VCV Events" target="_blank"><img alt={"VCV Event"} height={50}
                                                                                                              src={cvc}/></a> : null
 
-        return <Card className={classes.races}>
+        return <Card className={classes.races} key={r.id}>
             <CardHeader title={r.data.Title} subheader={r.data?.Date} action={vcv} />
             <CardContent>
                 {r.data?.CourseData?.data?.Title}
@@ -52,6 +57,20 @@ export default function LandingPage(props) {
         </Card>
     })
 
+    const NewsList = news.map(n => {
+        const news = n.data;
+        const displayDate = ISODateToPretty(news.Date)
+        const url = "/news/"+toURL(n.id)
+        return <Card className={classes.news} key={n.id}>
+            <CardHeader title={news.Title} subheader={displayDate}/>
+            <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {news.Teaser}
+                </Typography>
+                <Link href={url}><a>Read More</a></Link>
+            </CardContent>
+        </Card>
+    })
 
     return <div>
             <Header
@@ -68,7 +87,7 @@ export default function LandingPage(props) {
             />
             <Parallax filter responsive image={require("assets/img/bg3.jpg")}>
                 <div className={classes.container}>
-                    <Grid container>
+                    <Grid container spacing={3}>
                         <Grid item xs={12} sm={12} md={6}>
                             <h1 className={classes.title}>Eureka Cycling Club</h1>
                             <h4>
@@ -93,7 +112,7 @@ export default function LandingPage(props) {
             <div className={classNames(classes.main, classes.mainRaised)}>
                 <div className={classes.container}>
                     <div className={classes.section}>
-                        <Grid container justify="center">
+                        <Grid container justify="center" spacing={2}>
                             <Grid item xs={12} sm={12} md={8}>
                                 <h2 className={classes.title}>Let{"'"}s talk product</h2>
                                 <h5 className={classes.description}>
@@ -102,7 +121,7 @@ export default function LandingPage(props) {
                             </Grid>
                         </Grid>
                         <div>
-                            <Grid container>
+                            <Grid container spacing={2}>
                                 <Grid item xs={12} sm={12} md={4}>
                                     <InfoArea
                                         title="Latest News"
@@ -111,6 +130,7 @@ export default function LandingPage(props) {
                                         iconColor="info"
                                         vertical
                                     />
+                                    {NewsList}
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={4}>
                                     <InfoArea
@@ -146,29 +166,27 @@ export async function getStaticProps() {
 
     const courses = await DocListCourses(process.env.FAUNADB_SECRET)
     const users = await DocListUsers(process.env.FAUNADB_SECRET)
-    const props = {
-        races: await DocListRaces(process.env.FAUNADB_SECRET),
-
-    }
-    props.races = props.races.filter(r => {
+    const races = (await DocListRaces(process.env.FAUNADB_SECRET)).filter(r => {
         const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
         return r.data !== undefined &&
             raceDate && isFuture(raceDate)
     }).map<Race>(r => {
-        r.sortKey = parseInt(format(parse(r.data.Date, "yyyy-MM-dd", new Date()), 'yyyyDDD'))
         const courseData = courses.filter(c => c.id == r.data.Course).pop()
         if (courseData) {
             r.data.CourseData = courseData
         }
         r.data.MarshallNames = r.data?.Marshalls ? users.filter(c => r.data.Marshalls.indexOf(c.id) != -1).map(u => u.data.name) : [];
         return r
-    }).sort((a, b): number => {
-        return a.sortKey - b.sortKey
-    }).filter((r,i)=> {return i < 3})
-    // console.log(props.races[0].data)
-    return {props}
+    }).sort(dateSortCompareOldestFirst).filter((_, i)=> {return i < 3})
 
-    return {props}
+    const news = (await DocListNews(process.env.FAUNADB_SECRET)).filter(n => {
+        console.log(n.data.Date)
+        return (n.data.Date || false) !== false
+    }).sort(dateSortCompareNewestFirst).filter((_, i)=> {return i < 3})
+
+
+    return {props:{races,news}}
+
 }
 
 

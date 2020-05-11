@@ -64,7 +64,7 @@ const RegularButton = React.forwardRef((props, ref) => {
   );
 });
 
-const ButtonLink = ({ className, href, hrefAs, children }) => {
+export const ButtonLink = ({ className, href, hrefAs, children }) => {
   if (href.indexOf('http') === 0) {
     return <a href={href} target={"_blank"} className={className}>
       {children}

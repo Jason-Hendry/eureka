@@ -24,9 +24,14 @@ const dashboardRoutes = [];
 import {container, title} from "../../assets/jss/nextjs-material-kit.js";
 import {createStyles} from "@material-ui/styles";
 import {Avatar, Button, Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
-import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectService";
+import {DocListRaces, DocListCourses, DocListUsers, DocListNews} from "../../services/DirectService";
 import {Race, RaceList} from "../../models/Race";
-import {dateSortCompareOldestFirst} from "../../services/sort";
+import {NewsList} from "../../models/News";
+import Link from "next/link";
+import {ButtonLink} from "../../components/CustomButtons/Button";
+import {ISODateToPretty} from "../../services/dates";
+import {dateSortCompareOldestFirst, dateSortCompareNewestFirst} from "../../services/sort";
+import {toURL} from "../../services/url";
 
 const cvc = require("../../assets/img/vcv.svg")
 
@@ -112,53 +117,22 @@ interface Props {
 }
 
 // Sections for this page
-export default function RacePage(props: Props) {
+export default function RacePage({news}: { news: NewsList }) {
     const classes = useStyles();
-    const {races, ...rest} = props;
 
-    const RaceList = races.map(r => {
-        console.log(r.data.Date)
-
-        const vcv = r.data?.VCVEvent ?
-            <a href={"http://www.veterancycling.com.au/events.html"} title="VCV Events" target="_blank"><img height={50}
-                                                                                                             src={cvc}/></a> : null
-
-        const laps = r.data?.CourseLaps ? r.data?.CourseLaps : 0
-        const lapsDistance = laps && r.data?.CourseData?.data?.LapDistance ? laps * r.data?.CourseData?.data?.LapDistance : 0
-        const lapDisTab = lapsDistance ? <span> - {lapsDistance}Km ({laps} Laps)</span> : laps ?
-            <span>({laps} Laps)</span> : null;
-
-        const headerClass = r.data?.Cancelled ? classes.Cancelled :
-            r.data?.Postponed ? classes.Postponed : null;
-
-        const RaceTitlePrefix = r.data?.VCVEvent ? <strong>VCV Event - </strong> : null;
-
-        const RaceTitleSuffix = r.data?.Cancelled ? <span className={classes.TitleCancelled}> - Cancelled</span> :
-            r.data?.Postponed ? <span className={classes.TitlePostponed}> - Postponed (new date TBD)</span>:
-            null;
-
-        const RaceTitle = <span>{RaceTitlePrefix}{r.data.Title}{RaceTitleSuffix}</span>
-
-        const raceDate = r.data.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
-        const day = raceDate ? format(raceDate, 'eeee MMM do') : null;
-        const rf = r.data?.RaceFormat ? r.data.RaceFormat.substr(0, 1) : "-"
-        const marshalList = r.data.MarshallNames.map((n, i) => <span className={classes.marshal} key={i}>{n}</span>)
-        return <Card className={classes.raceCard} key={r.id}>
-            <CardHeader className={headerClass} avatar={
-                <Avatar aria-label="recipe" title={r.data?.RaceFormat} className={classes[r.data?.RaceFormat]}>
-                    {rf}
-                </Avatar>
-            } title={RaceTitle} subheader={day} action={vcv}/>
+    const NewsList = news.map(n => {
+        const news = n.data;
+        const displayDate = ISODateToPretty(news.Date)
+        const url = "/news/"+n.id
+        return <Grid item xs={12} md={6} lg={4}><Card className={classes.raceCard} key={n.id}>
+            <CardHeader title={news.Title} subheader={displayDate}/>
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    {r.data.RaceFormat} - {r.data?.CourseData?.data?.Title}{lapDisTab}
+                    {news.Teaser}
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    Marshalls: {marshalList}
-                </Typography>
+                <Link href={url}><a>Read More</a></Link>
             </CardContent>
-
-        </Card>
+        </Card></Grid>
     })
 
     return (
@@ -173,17 +147,18 @@ export default function RacePage(props: Props) {
                     height: 400,
                     color: "white"
                 }}
-                {...rest}
             />
             <Parallax filter small responsive image={require("assets/img/bg3.jpg")}>
                 <div className={classes.container}>
-                    <h1 className={classes.title}>Eureka Race Calendar</h1>
+                    <h1 className={classes.title}>Eureka Club News</h1>
                 </div>
             </Parallax>
             <div className={classNames(classes.main, classes.mainRaised)}>
                 <div className={classes.container}>
                     <div className={classes.section}>
-                        {RaceList}
+                        <Grid container spacing={2}>
+                        {NewsList}
+                        </Grid>
                     </div>
                 </div>
             </div>
@@ -193,24 +168,10 @@ export default function RacePage(props: Props) {
 }
 
 export async function getStaticProps() {
-    const courses = await DocListCourses(process.env.FAUNADB_SECRET)
-    const users = await DocListUsers(process.env.FAUNADB_SECRET)
-    const props = {
-        races: await DocListRaces(process.env.FAUNADB_SECRET),
+    const news = (await DocListNews(process.env.FAUNADB_SECRET)).filter(n => {
+        console.log(n.data.Date)
+        return (n.data.Date || false) !== false
+    }).sort(dateSortCompareNewestFirst)
 
-    }
-    props.races = props.races.filter(r => {
-        const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
-        return r.data !== undefined &&
-            raceDate && isFuture(raceDate)
-    }).map<Race>(r => {
-        const courseData = courses.filter(c => c.id == r.data.Course).pop()
-        if (courseData) {
-            r.data.CourseData = courseData
-        }
-        r.data.MarshallNames = r.data?.Marshalls ? users.filter(c => r.data.Marshalls.indexOf(c.id) != -1).map(u => u.data.name) : [];
-        return r
-    }).sort(dateSortCompareOldestFirst)
-    // console.log(props.races[0].data)
-    return {props}
+    return {props:{news}}
 }

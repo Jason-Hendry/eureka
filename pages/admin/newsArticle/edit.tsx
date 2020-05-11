@@ -1,11 +1,22 @@
 import React, {useContext, useEffect, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
-import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
+import {
+    Button,
+    FormControl,
+    FormHelperText, Input,
+    InputLabel,
+    Paper, TextareaAutosize,
+    TextField,
+    Theme,
+    Toolbar,
+    Typography
+} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
 import {DocGetNews, DocPutNews, DocPutRaces, RaceFetcher} from "../../../services/APIService";
 import {News, NewsData} from "../../../models/News";
 import useSWR, {mutate} from "swr";
+import {format} from "date-fns";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -30,9 +41,12 @@ function NewsArticle() {
     const id = process.browser ? document.location.hash.replace('#','') : "";
     const key = `/api/News/${id}?secret=${secret}`
     const {data, error} = useSWR<News>(key, RaceFetcher)
-    const news = data?.data
+    const [newState, setNewsState] = useState({})
+
+    const news = {Date:format(new Date(), "yyyy-MM-dd"),...data?.data, ...newState}
 
     const setNews = (newsData: NewsData) => {
+        setNewsState(newsData)
         mutate(key, {...data, data:newsData}, false)
     }
 
@@ -46,19 +60,39 @@ function NewsArticle() {
         }).catch(e => setBtnLabel("Failed"));
     }
 
+    const defaultFieldProps = {
+        className: classes.field,
+        fullWidth: true,
+        InputLabelProps: {shrink: true},
+    }
+
     return <Paper className={classes.root}>
         <Toolbar className={classes.tableHeading}><Typography variant={"h6"} component={"div"}>Edit News</Typography></Toolbar>
 
-        <TextField className={classes.field} variant={"standard"}
-                   label={'News.ts Date'}
+        <TextField {...defaultFieldProps}
+                   label={'News Date'}
                    value={news?.['Date'] || ""}
                    onChange={(e) => setNews({...news, Date: e.target.value})}
-                   type={"date"} InputLabelProps={{shrink: true}} fullWidth={true} />
-        <TextField className={classes.field} variant={"standard"}
+                   type={"date"}/>
+        <TextField {...defaultFieldProps}
                    label={'Title'}
                    onChange={(e) => setNews({...news, Title: e.target.value})}
                    value={news?.['Title'] || ""} InputLabelProps={{shrink: true}} fullWidth={true} />
+        <TextField {...defaultFieldProps}
+                   multiline={true}
+                   inputProps={{inputComponent: TextareaAutosize}}
+                   label={'Teaser'}
+                   helperText={'Short blurb for home page. approx 15 words'}
+                   onChange={(e) => setNews({...news, Teaser: e.target.value})}
+                   value={news?.['Teaser'] || ""} InputLabelProps={{shrink: true}} fullWidth={true} />
 
+       <TextField {...defaultFieldProps}
+                   multiline={true}
+                   inputProps={{inputComponent: TextareaAutosize}}
+                   label={'Body'}
+                  helperText={"Use 2 new lines to create a new paragraph."}
+                   onChange={(e) => setNews({...news, Body: e.target.value})}
+                   value={news?.['Body'] || ""} InputLabelProps={{shrink: true}} fullWidth={true} />
 
         <Button variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
     </Paper>
