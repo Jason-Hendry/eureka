@@ -7,7 +7,7 @@ import PublicLayout from "../../layouts/public";
 export default function News({news: {Title, Teaser, Date, Body}}) {
     const niceDate = ISODateToPretty(Date)
     const leadP = `${niceDate} - ${Teaser}`
-    return <PublicLayout title={Title} heroImage={require("assets/img/bg3.jpg")} leadParagraph={leadP}>{Body}</PublicLayout>
+    return <PublicLayout small={true} title={Title} heroImage={require("assets/img/bg3.jpg")} leadParagraph={leadP}>{Body}</PublicLayout>
 }
 
 // @ts-ignore
