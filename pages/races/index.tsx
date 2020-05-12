@@ -2,7 +2,6 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {format, parse} from 'date-fns'
 
-import {container, title} from "../../assets/jss/nextjs-material-kit.js";
 import {createStyles} from "@material-ui/styles";
 import {Avatar, Card, CardContent, CardHeader, Typography} from "@material-ui/core";
 import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectService";
@@ -64,7 +63,7 @@ interface Props {
 // Sections for this page
 export default function RacePage(props: Props) {
     const classes = useStyles();
-    const {races, ...rest} = props;
+    const {races} = props;
 
     const RaceList = races.map(r => {
         console.log(r.data.Date)

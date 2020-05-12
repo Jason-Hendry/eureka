@@ -26,3 +26,19 @@ export function LimitFilter(limit) {
         return i < limit;
     }
 }
+
+interface dataTitle {
+    Title?: string
+}
+
+interface withTitle {
+    data: dataTitle
+}
+
+function getTitle(a: withTitle) {
+    return a?.data?.Title || ""
+}
+
+export function sortByTitle(a: withTitle, b:withTitle): number {
+    return getTitle(a).localeCompare(getTitle(b))
+}
