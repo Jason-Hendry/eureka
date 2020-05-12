@@ -10,8 +10,6 @@ import {ISODateToPretty} from "../../services/dates";
 import {dateSortCompareNewestFirst} from "../../services/sort";
 import PublicLayout from "../../layouts/public";
 
-const cvc = require("../../assets/img/vcv.svg")
-
 const useStyles = makeStyles((theme) => createStyles({
     raceCard: {
         marginBottom: theme.spacing(2)

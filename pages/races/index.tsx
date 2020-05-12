@@ -1,6 +1,6 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {format, isFuture, parse} from 'date-fns'
+import {format, parse} from 'date-fns'
 
 import {container, title} from "../../assets/jss/nextjs-material-kit.js";
 import {createStyles} from "@material-ui/styles";

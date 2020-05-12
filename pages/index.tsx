@@ -6,8 +6,7 @@ import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import {DocListCourses, DocListNews, DocListRaces, DocListUsers} from "../services/DirectService";
-import {isFuture, parse} from "date-fns";
-import {FilterFutureRace, MergeCourseUserData, Race, RaceList} from "../models/Race";
+import {FilterFutureRace, MergeCourseUserData, RaceList} from "../models/Race";
 import {Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
 import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, LimitFilter} from "../services/sort";
 import {ISODateToPretty} from "../services/dates";
@@ -17,8 +16,6 @@ import {toURL} from "../services/url";
 import PublicLayout from "../layouts/public";
 
 const cvc = require("../assets/img/vcv.svg")
-
-const dashboardRoutes = [];
 
 const useStyles = makeStyles((theme) => ({
     races: {
