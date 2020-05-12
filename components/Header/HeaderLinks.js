@@ -8,21 +8,15 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import MapIcon from '@material-ui/icons/Map';
 import EventIcon from '@material-ui/icons/Event';
-import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 
-// core components
-import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-
 import styles from "assets/jss/nextjs-material-kit/components/headerLinksStyle.js";
-import Button from "../../components/CustomButtons/Button";
 import Link from "next/link";
 
 const useStyles = makeStyles(styles);
 
-export default function HeaderLinks(props) {
+export default function HeaderLinks() {
     const classes = useStyles();
     return (
         <List className={classes.list}>
