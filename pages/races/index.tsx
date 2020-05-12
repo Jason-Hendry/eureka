@@ -1,32 +1,14 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// @material-ui/core components
 import {makeStyles} from "@material-ui/core/styles";
 import {format, isFuture, parse} from 'date-fns'
-// @material-ui/icons
-
-// core components
-import Header from "../../components/Header/Header.js";
-import Footer from "../../components/Footer/Footer.js";
-import GridContainer from "../../components/Grid/GridContainer.js";
-import GridItem from "../../components/Grid/GridItem.js";
-import HeaderLinks from "../../components/Header/HeaderLinks.js";
-import Parallax from "../../components/Parallax/Parallax.js";
-
-import InfoArea from "../../components/InfoArea/InfoArea";
-import EventIcon from '@material-ui/icons/Event';
-import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-
-const dashboardRoutes = [];
 
 import {container, title} from "../../assets/jss/nextjs-material-kit.js";
 import {createStyles} from "@material-ui/styles";
-import {Avatar, Button, Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {Avatar, Card, CardContent, CardHeader, Typography} from "@material-ui/core";
 import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectService";
-import {Race, RaceList} from "../../models/Race";
+import {FilterFutureRace, MergeCourseUserData, Race, RaceList} from "../../models/Race";
 import {dateSortCompareOldestFirst} from "../../services/sort";
+import PublicLayout from "../../layouts/public";
 
 const cvc = require("../../assets/img/vcv.svg")
 
@@ -120,8 +102,9 @@ export default function RacePage(props: Props) {
         console.log(r.data.Date)
 
         const vcv = r.data?.VCVEvent ?
-            <a href={"http://www.veterancycling.com.au/events.html"} title="VCV Events" target="_blank"><img height={50}
-                                                                                                             src={cvc}/></a> : null
+            <a href={"http://www.veterancycling.com.au/events.html"} title="VCV Events" target="_blank"><img
+                alt={"Veteran Cycling Victoria"} height={50}
+                src={cvc}/></a> : null
 
         const laps = r.data?.CourseLaps ? r.data?.CourseLaps : 0
         const lapsDistance = laps && r.data?.CourseData?.data?.LapDistance ? laps * r.data?.CourseData?.data?.LapDistance : 0
@@ -134,8 +117,8 @@ export default function RacePage(props: Props) {
         const RaceTitlePrefix = r.data?.VCVEvent ? <strong>VCV Event - </strong> : null;
 
         const RaceTitleSuffix = r.data?.Cancelled ? <span className={classes.TitleCancelled}> - Cancelled</span> :
-            r.data?.Postponed ? <span className={classes.TitlePostponed}> - Postponed (new date TBD)</span>:
-            null;
+            r.data?.Postponed ? <span className={classes.TitlePostponed}> - Postponed (new date TBD)</span> :
+                null;
 
         const RaceTitle = <span>{RaceTitlePrefix}{r.data.Title}{RaceTitleSuffix}</span>
 
@@ -161,56 +144,17 @@ export default function RacePage(props: Props) {
         </Card>
     })
 
-    return (
-        <div>
-            <Header
-                color="transparent"
-                // routes={dashboardRoutes}
-                brand=""
-                rightLinks={<HeaderLinks/>}
-                fixed
-                changeColorOnScroll={{
-                    height: 400,
-                    color: "white"
-                }}
-                {...rest}
-            />
-            <Parallax filter small responsive image={require("assets/img/bg3.jpg")}>
-                <div className={classes.container}>
-                    <h1 className={classes.title}>Eureka Race Calendar</h1>
-                </div>
-            </Parallax>
-            <div className={classNames(classes.main, classes.mainRaised)}>
-                <div className={classes.container}>
-                    <div className={classes.section}>
-                        {RaceList}
-                    </div>
-                </div>
-            </div>
-            <Footer/>
-        </div>
-    );
+    return <PublicLayout small={true} heroImage={require('../../assets/img/bg7.jpg')} title={"Eureka Race Calendar"}>
+        {RaceList}
+    </PublicLayout>
 }
 
 export async function getStaticProps() {
     const courses = await DocListCourses(process.env.FAUNADB_SECRET)
     const users = await DocListUsers(process.env.FAUNADB_SECRET)
-    const props = {
-        races: await DocListRaces(process.env.FAUNADB_SECRET),
-
-    }
-    props.races = props.races.filter(r => {
-        const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : null;
-        return r.data !== undefined &&
-            raceDate && isFuture(raceDate)
-    }).map<Race>(r => {
-        const courseData = courses.filter(c => c.id == r.data.Course).pop()
-        if (courseData) {
-            r.data.CourseData = courseData
-        }
-        r.data.MarshallNames = r.data?.Marshalls ? users.filter(c => r.data.Marshalls.indexOf(c.id) != -1).map(u => u.data.name) : [];
-        return r
-    }).sort(dateSortCompareOldestFirst)
-    // console.log(props.races[0].data)
-    return {props}
+    const races = (await DocListRaces(process.env.FAUNADB_SECRET))
+        .filter(FilterFutureRace())
+        .map<Race>(MergeCourseUserData(courses, users))
+        .sort(dateSortCompareOldestFirst)
+    return {props:{races}}
 }

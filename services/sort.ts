@@ -18,5 +18,11 @@ export function dateSortCompareNewestFirst(a: withDate, b: withDate) {
 }
 
 function getANum(a: withDate) {
-    return a?.data.Date ? parseInt(format(parse(a.data.Date, "yyyy-MM-dd", new Date()), 'yyyyDDD')) : 0;
+    return a?.data?.Date ? parseInt(format(parse(a.data.Date, "yyyy-MM-dd", new Date()), 'yyyyDDD')) : 0;
+}
+
+export function LimitFilter(limit) {
+    return (_:any,i:number) => {
+        return i < limit;
+    }
 }

@@ -16,7 +16,6 @@ import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
 import {
     CourseListFetcher,
-    DocGetRaces,
     DocPutRaces,
     RaceFetcher,
     UserListFetcher
@@ -50,7 +49,7 @@ export default function EditRace() {
     const secret = useContext(Secret);
     const id = process.browser ? document.location.hash.replace('#', '') : "";
     const key = `/api/Races/${id}?secret=${secret}`
-    const {data, error} = useSWR<Race>(key, RaceFetcher)
+    const {data} = useSWR<Race>(key, RaceFetcher)
     const [edit, setEdit] = useState<Race>(null)
 
     const race = {...data?.data, ...edit}
@@ -62,17 +61,17 @@ export default function EditRace() {
 
     const setRace = (raceData) => {
         setEdit(raceData)
-        mutate(key, {...data, data: raceData}, false)
+        mutate(key, {...data, data: raceData}, false).catch(e => console.log(e))
     }
 
     const [btnLabel, setBtnLabel] = useState("Save")
 
     const save = () => {
         setBtnLabel("Saving...")
-        DocPutRaces(race, id, secret).then(e => {
+        DocPutRaces(race, id, secret).then(() => {
             setBtnLabel("Save")
-            router.push("/admin/races")
-        }).catch(e => setBtnLabel("Failed"));
+            router.push("/admin/races").catch(e => console.log("Route change failed: ", e))
+        }).catch(() => setBtnLabel("Failed"));
     }
 
     const CourseItemList = courseList ? courseList.map(c => <MenuItem key={c.id}

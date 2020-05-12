@@ -17,4 +17,10 @@ export interface NewsData {
     Content?: Array<FlexibleContent>
 }
 
+export function FilterHasDate() {
+    return (n:News) => {
+        console.log(n.data.Date)
+        return (n.data.Date || false) !== false
+    }
+}
 

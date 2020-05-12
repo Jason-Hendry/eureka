@@ -14,8 +14,10 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListRaces, DocPostRaces} from "../../services/APIService";
-import {raceSortCompare} from "../../services/race";
+import {DocListRaces, DocPostRaces, RaceListFetcher} from "../../services/APIService";
+import {dateSortCompareOldestFirst} from "../../services/sort";
+import useSWR from "swr"
+import {race} from "q";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -38,18 +40,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Index(props) {
     const secret = useContext(Secret)
-    const [races, setRaces] = useState([])
+    const {data} = useSWR(`/api/Races?secret=${secret}`, RaceListFetcher)
     const classes = useStyles()
     const router = useRouter()
 
-    if (process.browser) {
-        if (races.length === 0) {
-            DocListRaces(secret).then(list => {
-                // const sorted = list.sort(raceSortCompare)
-                setRaces(list)
-            }).catch(e => setRaces([{Title:"Error"}]))
-        }
-    }
+    const races = data ? data.sort(dateSortCompareOldestFirst) : []
 
     const newRace = () => {
         DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/edit#${id}`)).catch(e => {});

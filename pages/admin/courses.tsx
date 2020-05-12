@@ -14,8 +14,8 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListCourses, DocPostCourse} from "../../services/APIService";
-import {CourseList} from "../../models/Course";
+import {CourseListFetcher, DocListCourses, DocPostCourse} from "../../services/APIService";
+import useSWR from "swr";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -38,15 +38,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Index(props) {
     const secret = useContext(Secret)
-    const [courses, setCourses] = useState<CourseList>([])
+    // const [courses, setCourses] = useState<CourseList>([])
+    const {data} = useSWR(`/api/Courses?secret=${secret}`, CourseListFetcher)
+    const courses = data ? data : []
     const classes = useStyles()
     const router = useRouter()
-
-    if (process.browser) {
-        if (courses.length === 0) {
-            DocListCourses(secret).then(list => setCourses(list)).catch(e => setCourses([]))
-        }
-    }
 
     const newCourse = () => {
         DocPostCourse( {Title:""}, secret).then(({id}) => router.push(`/admin/course/edit#${id}`)).catch(e => {});

@@ -27,6 +27,8 @@ import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 import AdminTheme from "../components/AdminTheme/AdminTheme";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 
+
+
 // Router.events.on("routeChangeStart", url => {
 //   console.log(`Loading: ${url}`);
 //   document.body.classList.add("body-page-transition");
