@@ -49,6 +49,9 @@ const landingPageStyle: Styles<Theme, any> = {
     // TODO: use theme spacing
     marginBottom: 8,
     textAlign: "left"
+  },
+  brandImage: {
+    cursor: "pointer"
   }
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Link from "next/link";
 // nodejs library that concatenates classes
 import classNames from "classnames";
@@ -19,15 +19,16 @@ import styles from "assets/jss/nextjs-material-kit/components/headerStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function Header(props) {
+export default function Header({ color, rightLinks, leftLinks, brand, fixed, absolute, changeColorOnScroll }) {
   const classes = useStyles();
+  const [theBrand,setBrand] = useState(brand);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   React.useEffect(() => {
-    if (props.changeColorOnScroll) {
+    if (changeColorOnScroll) {
       window.addEventListener("scroll", headerColorChange);
     }
     return function cleanup() {
-      if (props.changeColorOnScroll) {
+      if (changeColorOnScroll) {
         window.removeEventListener("scroll", headerColorChange);
       }
     };
@@ -36,9 +37,9 @@ export default function Header(props) {
     setMobileOpen(!mobileOpen);
   };
   const headerColorChange = () => {
-    const { color, changeColorOnScroll } = props;
     const windowsScrollTop = window.pageYOffset;
     if (windowsScrollTop > changeColorOnScroll.height) {
+      setBrand(changeColorOnScroll.scrollBrand)
       document.body
         .getElementsByTagName("header")[0]
         .classList.remove(classes[color]);
@@ -46,6 +47,7 @@ export default function Header(props) {
         .getElementsByTagName("header")[0]
         .classList.add(classes[changeColorOnScroll.color]);
     } else {
+      setBrand(brand)
       document.body
         .getElementsByTagName("header")[0]
         .classList.add(classes[color]);
@@ -54,7 +56,6 @@ export default function Header(props) {
         .classList.remove(classes[changeColorOnScroll.color]);
     }
   };
-  const { color, rightLinks, leftLinks, brand, fixed, absolute } = props;
   const appBarClasses = classNames({
     [classes.appBar]: true,
     [classes[color]]: color,
@@ -62,8 +63,8 @@ export default function Header(props) {
     [classes.fixed]: fixed
   });
   const brandComponent = (
-    <Link href="/components" as="/components">
-      <Button className={classes.title}>{brand}</Button>
+    <Link href="/" as="/">
+      {theBrand}
     </Link>
   );
   return (
@@ -130,7 +131,7 @@ Header.propTypes = {
   ]),
   rightLinks: PropTypes.node,
   leftLinks: PropTypes.node,
-  brand: PropTypes.string,
+  brand: PropTypes.node,
   fixed: PropTypes.bool,
   absolute: PropTypes.bool,
   // this will cause the sidebar to change the color from
@@ -141,6 +142,7 @@ Header.propTypes = {
   // props.color (see above)
   changeColorOnScroll: PropTypes.shape({
     height: PropTypes.number.isRequired,
+    scrollBrand: PropTypes.node,
     color: PropTypes.oneOf([
       "primary",
       "info",

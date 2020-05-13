@@ -17,6 +17,9 @@ interface LayoutProps {
 }
 const useStyles = makeStyles(styles);
 
+const eurekaLogo = require("../assets/img/eureka-logo.svg")
+const eurekaLogoWhite = require("../assets/img/eureka-logo-white.svg")
+
 export default function PublicLayout({children, heroImage, title, leadParagraph, small}: LayoutProps) {
     const classes = useStyles();
 
@@ -24,12 +27,13 @@ export default function PublicLayout({children, heroImage, title, leadParagraph,
         <Header
             color="transparent"
             // routes={dashboardRoutes}
-            brand=""
+            brand={<img className={classes.brandImage} height={80} src={eurekaLogoWhite} alt={"Eureka Cycling"} />}
             rightLinks={<HeaderLinks />}
             fixed
             changeColorOnScroll={{
-                height: 400,
-                color: "white"
+                height: small ? 200 : 400,
+                color: "white",
+                scrollBrand: <img className={classes.brandImage} height={80} src={eurekaLogo} alt={"Eureka Cycling"} />
             }}
         />
         <Parallax filter small={small} responsive image={heroImage}>

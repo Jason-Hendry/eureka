@@ -10,6 +10,9 @@ import {dateSortCompareOldestFirst} from "../../services/sort";
 import PublicLayout from "../../layouts/public";
 
 const cvc = require("../../assets/img/vcv.svg")
+const eurekaLogo = require("../../assets/img/eureka-logo.svg")
+const trophy = require("../../assets/img/Trophy.svg")
+const interclub = require("../../assets/img/victoria.svg")
 
 const useStyles = makeStyles((theme) => createStyles({
 
@@ -71,7 +74,13 @@ export default function RacePage(props: Props) {
         const vcv = r.data?.VCVEvent ?
             <a href={"http://www.veterancycling.com.au/events.html"} title="VCV Events" target="_blank"><img
                 alt={"Veteran Cycling Victoria"} height={50}
-                src={cvc}/></a> : null
+                src={cvc}/></a> :
+            r.data?.ClubChamps ?
+                <img alt={"Eureka Club Championship"} height={50} src={eurekaLogo}/> :
+            r.data?.Trophy ?
+                <img alt={"Eureka Trophy"} height={50} src={trophy}/> :
+            r.data?.Interclub ?
+                <img alt={"Interclub Raec"} height={30} src={interclub}/> : null
 
         const laps = r.data?.CourseLaps ? r.data?.CourseLaps : 0
         const lapsDistance = laps && r.data?.CourseData?.data?.LapDistance ? laps * r.data?.CourseData?.data?.LapDistance : 0
