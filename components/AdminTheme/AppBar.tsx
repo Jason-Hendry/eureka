@@ -71,6 +71,7 @@ export default function AdminAppBar({logout}) {
                     <MenuItem onClick={() => handleLink("/admin/results")}>Results</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/news")}>News</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/users")}>Users</MenuItem>
+                    <MenuItem onClick={() => handleLink("/admin/images")}>Images</MenuItem>
                 </Menu>
                 <Typography variant="h6" className={classes.title}>
                     Eureka Cycling - Admin

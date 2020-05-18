@@ -3,6 +3,7 @@ import {News, NewsData, NewsList} from "../models/News";
 import {Results, ResultsData, ResultsList} from "../models/Results";
 import {User, UserData, UserList} from "../models/User";
 import {Course, CourseData, CourseList} from "../models/Course";
+import {ImageList} from "../models/Image";
 const faunadb = require('faunadb')
 const q = faunadb.query
 
@@ -152,3 +153,4 @@ export const UserFetcher = url => fetch(url).then(r => <User><unknown>r.json())
 export const UserListFetcher = url => fetch(url).then(r => <UserList><unknown>r.json())
 export const NewsFetcher = url => fetch(url).then(r => <News><unknown>r.json())
 export const NewsListFetcher = url => fetch(url).then(r => <NewsList><unknown>r.json())
+export const ImageListFetcher = url => fetch(url).then(r => <ImageList><unknown>r.json())
