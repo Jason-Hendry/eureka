@@ -4,7 +4,7 @@ import {Results, ResultsData, ResultsList} from "../models/Results";
 import {User, UserData, UserList} from "../models/User";
 import {Course, CourseData, CourseList} from "../models/Course";
 import React from "react";
-import {ImageList} from "../models/Image";
+import {Image, ImageList, ImageData} from "../models/Image";
 
 export function DocListRaces(secret: string) :Promise<RaceList> {
     return DocListService<RaceList>("Races", secret)
@@ -80,6 +80,9 @@ export function DocPostResults(data: ResultsData, secret) :Promise<Results> {
 }
 export function DocPostUser(data: UserData, secret) :Promise<User> {
     return DocPostService<User>("User", data, secret)
+}
+export function DocPostImages(data: ImageData, secret) :Promise<Image> {
+    return DocPostService<Image>("Images", data, secret)
 }
 export function DocPostCourse(data: CourseData, secret) :Promise<Course> {
     return DocPostService<Course>("Courses", data, secret)

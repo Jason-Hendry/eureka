@@ -1,26 +1,26 @@
 import React, {useState} from 'react'
-import {AppBar, Typography, IconButton, Button, Toolbar, Container, Menu, MenuItem, Theme} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu"
-import {makeStyles} from "@material-ui/styles";
+import {Container} from "@material-ui/core";
 import Login from "../../pages-sections/Admin/Login";
-import {Secret} from "./Secret";
-import Link from "next/link";
-import {useRouter} from "next/router";
+import {Secret, AWSCredentials} from "./Secret";
 import AdminAppBar from "./AppBar";
-
-
 
 export default function AdminTheme({children}) {
 
     const [secret, setSecret] = useLocalStorage("secret", "")
+    const [awsCredentials, setAwsCredentials] = useLocalStorage("setAwsCredentials", "")
 
     const logout = () => {
         setSecret("")
     }
 
     return <Secret.Provider value={secret}>
-        {secret ? <AdminAppBar logout={logout}/> : null}
-        <Container>{secret ? <div>{children}</div> : <Login login={(s) => setSecret(s)}/>}</Container>
+        <AWSCredentials.Provider value={awsCredentials}>
+            {secret ? <AdminAppBar logout={logout}/> : null}
+            <Container>{secret ? <div>{children}</div> : <Login login={(s, c) => {
+                setSecret(s);
+                setAwsCredentials(c);
+            }}/>}</Container>
+        </AWSCredentials.Provider>
     </Secret.Provider>
 }
 

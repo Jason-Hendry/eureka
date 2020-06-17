@@ -8,8 +8,11 @@ export interface Image {
 export type ImageList = Array<Image>;
 
 export interface ImageData {
-    email: string
-    name: string
+    filename: string
+    alt: string
+    hero: string
+    poster: string
+    admin: string
 }
 
 

@@ -2,15 +2,13 @@ import {IncomingMessage, ServerResponse} from "http";
 import {Interface} from "readline";
 import btoa from "btoa"
 import React from "react";
+import {LoginResponse} from "../../services/Login";
 
 const faunadb = require('faunadb')
 const q = faunadb.query
 
 const crypto = require('crypto');
 
-interface LoginResponse {
-    secret: string
-}
 
 export function LoginService(email, password, callback, error) {
         fetch("/api/login", {
@@ -21,9 +19,12 @@ export function LoginService(email, password, callback, error) {
             body: JSON.stringify({email, password})
         })
         .then(res => <LoginResponse><unknown>res.json())
-        .then(result => callback(result.secret))
+        .then(({secret, Credentials}) => callback(secret,Credentials))
         .catch(error => error(error))
 }
+
+const AWS = require("aws-sdk");
+const sts = new AWS.STS();
 
 export default ({body: {password, email}}, res) => {
     console.log("FAUNADB_SECRET", process.env.FAUNEDB_SECRET)
@@ -43,7 +44,16 @@ export default ({body: {password, email}}, res) => {
     ).then(({instance, secret}) => {
         // console.log(ref['@ref'].id)
         client.query(q.Get(instance)).then(({data}) => {
-            res.json({data, secret})
+            // res.json({data, secret})
+            AWS.config.getCredentials(function (err) {
+                if (err) console.log(err.stack);
+                // credentials not loaded
+                else {
+                    sts.getSessionToken({
+                        DurationSeconds: 86400, // 24hrs
+                    }, (e, {Credentials}) => res.json({Credentials, secret}))
+                }
+            });
         })
             .catch(error => {
                 res.json({error: error})
