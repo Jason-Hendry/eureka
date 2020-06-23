@@ -41,7 +41,6 @@ export default function Images(props) {
 
     const awsCredentials = useContext(AWSCredContext)
     const secret = useContext(Secret)
-    // console.log('image', awsCredentials)
 
     const [src, setSrc] = useState(null)
 
