@@ -11,7 +11,6 @@ const pica = Pica();
 
 
 const AWS = require("aws-sdk");
-const s3 = new AWS.S3();
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Images(props) {
-    const bucket = process.env.AWS_S3_BUCKET || "images.eurekacycling.com.au"; // No getting env?
+    const bucket = process.env.AWS_S3_BUCKET || "images.eurekacycling.org.au"; // No getting env?
 
     const classes = useStyles()
 
@@ -80,15 +79,14 @@ export default function Images(props) {
         }, secret)
     }
     const uploadFile = (credential: AWSCredentials, key: string, data: Blob) => {
-        AWS.config.credentials = new AWS.Credentials(credential.AccessKeyId, credential.SecretAccessKey, credential.SessionToken)
-
         console.log(`Uploading https://${bucket}/${key}`)
-
+        const s3 = new AWS.S3({region:"ap-southeast-2", credentials: new AWS.Credentials(credential.AccessKeyId, credential.SecretAccessKey, credential.SessionToken)});
         const req = s3.putObject({
             Body: data,
             Key: key,
             Bucket: bucket,
-            ACL: "public-read"
+            ACL: "public-read",
+            ContentDisposition: "inline"
         }, (e, out) => {
             console.log("Error", e)
             console.log("Out", out)

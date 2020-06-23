@@ -24,7 +24,7 @@ export function LoginService(email, password, callback, error) {
 }
 
 const AWS = require("aws-sdk");
-const sts = new AWS.STS();
+const sts = new AWS.STS({region:"ap-southeast-2"});
 
 export default ({body: {password, email}}, res) => {
     console.log("FAUNADB_SECRET", process.env.FAUNADB_SECRET)
