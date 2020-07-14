@@ -17,6 +17,12 @@ import PublicLayout from "../layouts/public";
 
 const cvc = require("../assets/img/vcv.svg")
 
+const Sentry = require('@sentry/node');
+// or use es6 import statements
+// import * as Sentry from '@sentry/node';
+
+Sentry.init({ dsn: 'https://d0e7c686f2b5418c92caa122fe59794a@o391192.ingest.sentry.io/5236909', environment: process.env.SENTRY_ENV });
+
 const useStyles = makeStyles((theme) => ({
     races: {
         marginBottom: theme.spacing(2),
@@ -99,9 +105,7 @@ export default function LandingPage(props) {
                 </Grid>
             </Grid>
         </div>
-
     </PublicLayout>
-
 }
 
 
