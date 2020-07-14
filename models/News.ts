@@ -2,6 +2,7 @@
 
 // @ts-ignore
 import {FlexibleContent} from "./FlexibleContent";
+import {Image} from "./Image";
 
 export interface News {
     id: string
@@ -15,6 +16,8 @@ export interface NewsData {
     Teaser?: string
     Body?: string
     Content?: Array<FlexibleContent>
+    Images?: Image[]
+
 }
 
 export function FilterHasDate() {

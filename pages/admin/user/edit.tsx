@@ -1,12 +1,14 @@
 import React, {useContext, useEffect, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
-import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
+import {Button, FormControl, FormLabel, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
 import {DocGetUser, DocPutRaces, DocPutUser, RaceFetcher, UserFetcher} from "../../../services/APIService";
 import {User, UserData} from "../../../models/User";
 import useSWR, {mutate} from "swr";
 import {Race} from "../../../models/Race";
+import {Image} from "../../../models/Image";
+import {ImageSelector} from "../../../components/ImageSelector";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -17,6 +19,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     field: {
        marginBottom: theme.spacing(2)
+    },
+    image: {
+        marginTop: theme.spacing(2),
+        marginRight: theme.spacing(2)
     }
 }))
 const inputProps = {
@@ -35,6 +41,12 @@ export default function EditUser() {
 
     const setUser = (userData: UserData) => {
         mutate(key, {...data, data:userData}, false)
+    }
+
+    const addImage = (image: Image) => {
+        const Images = user?.Images || [];
+        Images.push(image)
+        setUser({...user, Images})
     }
 
     const [btnLabel, setBtnLabel] = useState("Save")
@@ -65,7 +77,17 @@ export default function EditUser() {
                    InputLabelProps={{shrink: true}}
                    fullWidth={true} />
 
-        <Button variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
+        <FormControl margin={"normal"} className={classes.field}>
+            <FormLabel>Images</FormLabel>
+
+            {user?.Images ? user.Images.map((i, k) => <img className={classes.image} key={k}
+                                                              src={i.data.admin}/>) : null}
+
+            <ImageSelector addImage={addImage}/>
+        </FormControl>
+
+
+        <Button fullWidth={true} variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
     </Paper> : null
 
 }

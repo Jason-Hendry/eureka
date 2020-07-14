@@ -28,13 +28,19 @@ export const ImageSelector = ({addImage}: ImageSelectorProps) => {
 
     const [showImages, setShowImages] = useState<boolean>(false);
 
+    const [skip, setSkip] = useState<number[]>([])
+
+    const imageError = (k) => {
+
+        setSkip([...skip, k])
+    }
 
     return <React.Fragment>
         <Button className={classes.selectImageButton} variant={"outlined"} onClick={e => setShowImages(!showImages)}>Select
             Images</Button>
         <Drawer anchor={"right"} open={showImages} onClose={() => setShowImages(false)}>
-            {imageList ? imageList.map((i, k) => <img onClick={() => addImage(i)} className={classes.selectImage} key={k}
-                                                      src={i.data.admin}/>) : null}
+            {imageList ? imageList.map((i, k) => skip.indexOf(k) === -1 ? <img onError={() => imageError(k)} onClick={() => addImage(i)} className={classes.selectImage} key={k}
+                                                      src={i.data.admin}/> : null)  : null}
         </Drawer>
     </React.Fragment>
 }

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react"
 import {Secret} from "../../../components/AdminTheme/Secret";
-import {Button, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
+import {Button, FormControl, FormLabel, Paper, TextField, Theme, Toolbar, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
 import {
@@ -9,6 +9,8 @@ import {
 } from "../../../services/APIService";
 import {Results, ResultsData} from "../../../models/Results";
 import useSWR, {mutate} from "swr";
+import {ImageSelector} from "../../../components/ImageSelector";
+import {Image} from "../../../models/Image";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -19,6 +21,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     field: {
        marginBottom: theme.spacing(2)
+    },
+    image: {
+        marginTop: theme.spacing(2),
+        marginRight: theme.spacing(2)
     }
 }))
 const inputProps = {
@@ -38,6 +44,13 @@ function Result() {
     const setResult = (resultData: ResultsData) => {
         mutate(key, {...data, data:resultData}, false)
     }
+
+    const addImage = (image: Image) => {
+        const Images = result?.Images || [];
+        Images.push(image)
+        setResult({...result, Images})
+    }
+
 
     const [btnLabel, setBtnLabel] = useState("Save")
 
@@ -62,8 +75,15 @@ function Result() {
                    onChange={(e) => setResult({...result, Title: e.target.value})}
                    value={result?.['Title'] || ""} InputLabelProps={{shrink: true}} fullWidth={true} />
 
+        <FormControl margin={"normal"} className={classes.field}>
+            <FormLabel>Images</FormLabel>
 
-        <Button variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
+            {result?.Images ? result.Images.map((i,k) => <img className={classes.image} key={k} src={i.data.admin}/>) : null}
+
+            <ImageSelector addImage={addImage} />
+        </FormControl>
+
+        <Button fullWidth={true} variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
     </Paper>
 
 }
