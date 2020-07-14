@@ -2,7 +2,7 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 
 import {createStyles} from "@material-ui/styles";
-import {Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
 import {DocListNews} from "../../services/DirectService";
 import {NewsList} from "../../models/News";
 import Link from "next/link";
@@ -12,8 +12,15 @@ import PublicLayout from "../../layouts/public";
 
 const useStyles = makeStyles((theme) => createStyles({
     raceCard: {
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
+
     },
+    cardContent: {
+        height: 120
+    },
+    action: {
+      textAlign: 'right'
+    }
 }));
 
 interface Props {
@@ -24,19 +31,22 @@ interface Props {
 export default function RacePage({news}: Props) {
     const classes = useStyles();
 
-    const NewsList = news.map(n => {
+    const NewsList = news.map((n, i) => {
         const news = n.data;
         const displayDate = ISODateToPretty(news.Date)
         const url = "/news/" + n.id
-        return <Grid item xs={12} md={6} lg={4}><Card className={classes.raceCard} key={n.id}>
-            <CardHeader title={news.Title} subheader={displayDate}/>
-            <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {news.Teaser}
-                </Typography>
-                <Link href={url}><a>Read More</a></Link>
-            </CardContent>
-        </Card></Grid>
+        return <Grid key={i} item xs={12} md={6} lg={4}>
+            <Card className={classes.raceCard} key={n.id}>
+                <CardHeader title={news.Title} subheader={displayDate}/>
+                <CardContent className={classes.cardContent}>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        {news.Teaser}
+                    </Typography>
+                </CardContent>
+                <CardActions className={classes.action}>
+                    <Link href={url}><a>Read More</a></Link>
+                </CardActions>
+            </Card></Grid>
     })
 
     return <PublicLayout small={true} heroImage={require("../../assets/img/bg3.jpg")} title={"Eureka News"}>

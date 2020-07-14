@@ -17,7 +17,8 @@ import PublicLayout from "../layouts/public";
 
 const cvc = require("../assets/img/vcv.svg")
 
-const Sentry = require('@sentry/node');
+
+const Sentry = process.browser ? require('@sentry/browser') : require('@sentry/node');
 // or use es6 import statements
 // import * as Sentry from '@sentry/node';
 

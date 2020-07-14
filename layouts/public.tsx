@@ -7,6 +7,7 @@ import React, {ReactChildren} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import styles from "../assets/jss/PublicLayout";
 import classNames from "classnames";
+import Link from "next/link";
 
 interface LayoutProps {
     children: React.ReactNode
@@ -27,7 +28,7 @@ export default function PublicLayout({children, heroImage, title, leadParagraph,
         <Header
             color="transparent"
             // routes={dashboardRoutes}
-            brand={<img className={classes.brandImage} height={80} src={eurekaLogoWhite} alt={"Eureka Cycling"} />}
+            brand={<Link href={"/"}><a><img className={classes.brandImage} height={80} src={eurekaLogoWhite} alt={"Eureka Cycling"} /></a></Link>}
             rightLinks={<HeaderLinks />}
             fixed
             changeColorOnScroll={{
