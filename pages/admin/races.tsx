@@ -18,6 +18,8 @@ import {DocListRaces, DocPostRaces, RaceListFetcher} from "../../services/APISer
 import {dateSortCompareOldestFirst} from "../../services/sort";
 import useSWR from "swr"
 import {race} from "q";
+import {RaceData} from "../../models/Race";
+import {Image} from "../../models/Image";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {

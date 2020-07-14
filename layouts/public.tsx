@@ -37,7 +37,7 @@ export default function PublicLayout({children, heroImage, title, leadParagraph,
                 scrollBrand: <img className={classes.brandImage} height={80} src={eurekaLogo} alt={"Eureka Cycling"} />
             }}
         />
-        <Parallax filter small={small} responsive image={heroImage}>
+        <Parallax filter small={small} responsive image={heroImage} className={classes.heroBg}>
             <div className={classes.container}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={12} md={6}>

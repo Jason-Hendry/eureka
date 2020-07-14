@@ -6,6 +6,7 @@ import {FormLabel} from "@material-ui/core";
 import React from "react";
 import {Course, CourseList} from "./Course";
 import {isFuture, parse} from "date-fns";
+import {Image} from "./Image";
 
 export interface Race {
     id: string
@@ -41,6 +42,7 @@ export interface RaceData {
     ClubChamps?: Boolean
     RegistrationURL? :string
     Series? :string
+    Images?: Image[]
 }
 
 export function FilterFutureRace() {

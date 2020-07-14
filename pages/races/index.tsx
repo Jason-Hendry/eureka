@@ -8,6 +8,7 @@ import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectS
 import {FilterFutureRace, MergeCourseUserData, Race, RaceList} from "../../models/Race";
 import {dateSortCompareOldestFirst} from "../../services/sort";
 import PublicLayout from "../../layouts/public";
+import {Image} from "../../models/Image";
 
 const cvc = require("../../assets/img/vcv.svg")
 const eurekaLogo = require("../../assets/img/eureka-logo.svg")
@@ -68,6 +69,8 @@ export default function RacePage(props: Props) {
     const classes = useStyles();
     const {races} = props;
 
+    const firstImage = races.reduce<Image>((p, r) => p || ((r.data.Images && r.data.Images.length > 0) ? r.data.Images[0] : null), null)
+
     const RaceList = races.map(r => {
         console.log(r.data.Date)
 
@@ -120,7 +123,7 @@ export default function RacePage(props: Props) {
         </Card>
     })
 
-    return <PublicLayout small={true} heroImage={require('../../assets/img/bg7.jpg')} title={"Eureka Race Calendar"}>
+    return <PublicLayout small={true} heroImage={firstImage ? firstImage.data.hero : require('../../assets/img/bg7.jpg')} title={"Eureka Race Calendar"}>
         {RaceList}
     </PublicLayout>
 }

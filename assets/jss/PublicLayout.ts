@@ -52,6 +52,9 @@ const landingPageStyle: Styles<Theme, any> = {
   },
   brandImage: {
     cursor: "pointer"
+  },
+  heroBg: {
+    backgroundPositionY: "center"
   }
 };
 
