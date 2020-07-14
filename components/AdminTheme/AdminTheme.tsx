@@ -3,8 +3,12 @@ import {Container} from "@material-ui/core";
 import Login from "../../pages-sections/Admin/Login";
 import {Secret, AWSCredentials} from "./Secret";
 import AdminAppBar from "./AppBar";
+import {useRouter} from "next/router";
+import {urlEncode} from "@sentry/utils";
 
 export default function AdminTheme({children}) {
+
+    const router = useRouter()
 
     const [secret, setSecret] = useLocalStorage("secret", "")
     const [awsCredentials, setAwsCredentials] = useLocalStorage("setAwsCredentials", "")
@@ -13,13 +17,14 @@ export default function AdminTheme({children}) {
         setSecret("")
     }
 
+    if(process.browser && !secret) {
+        router.push("/login#"+encodeURIComponent(router.asPath))
+    }
+
     return <Secret.Provider value={secret}>
         <AWSCredentials.Provider value={awsCredentials}>
             {secret ? <AdminAppBar logout={logout}/> : null}
-            <Container>{secret ? <div>{children}</div> : <Login login={(s, c) => {
-                setSecret(s);
-                setAwsCredentials(c);
-            }}/>}</Container>
+            <Container>{secret ? <div>{children}</div> : null }</Container>
         </AWSCredentials.Provider>
     </Secret.Provider>
 }

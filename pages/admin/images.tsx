@@ -6,6 +6,7 @@ import Pica from 'pica';
 import {AWSCredentials as AWSCredContext, Secret} from "../../components/AdminTheme/Secret";
 import {AWSCredentials} from "../../services/Login";
 import {DocPostImages} from "../../services/APIService";
+import {ConfigBase} from "aws-sdk/lib/config";
 
 const pica = Pica();
 
