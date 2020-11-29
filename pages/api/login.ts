@@ -92,10 +92,10 @@ function doLogin(client: Client, email: string, password: string, res: NextApiRe
 
 function doResetRequest(client: Client, email: string, req: NextApiRequest, res: NextApiResponse) {
     const _hash = crypto.createHash("sha256")
-    _hash.push(email+new Date().toISOString(), 'utf-8')
+    _hash.update(email+new Date().toISOString())
     const hash = _hash.digest("hex")
 
-    console.log(`Email: ${email} Hash: ${hash}`)
+    console.log(`Email: ${email} (${email+new Date().toISOString()}) Hash: ${hash}`)
 
     client.query(
         q.Map(
