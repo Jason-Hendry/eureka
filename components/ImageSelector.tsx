@@ -27,11 +27,9 @@ export const ImageSelector = ({addImage}: ImageSelectorProps) => {
     const imageList = imageListSWR?.data
 
     const [showImages, setShowImages] = useState<boolean>(false);
-
     const [skip, setSkip] = useState<number[]>([])
 
     const imageError = (k) => {
-
         setSkip([...skip, k])
     }
 
