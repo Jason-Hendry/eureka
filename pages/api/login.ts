@@ -63,7 +63,6 @@ const AWS = require("aws-sdk");
 const sts = new AWS.STS({region: "ap-southeast-2", credentials: new AWS.Credentials(process.env.RAIN_AWS_ACCESS_KEY_ID, process.env.RAIN_AWS_SECRET_ACCESS_KEY)});
 const ses = new AWS.SES({region: "ap-southeast-2", credentials: new AWS.Credentials(process.env.RAIN_AWS_ACCESS_KEY_ID, process.env.RAIN_AWS_SECRET_ACCESS_KEY)});
 
-
 interface LoginMatch {
     instance: ExprArg
     secret: string
@@ -96,6 +95,8 @@ function doResetRequest(client: Client, email: string, req: NextApiRequest, res:
     _hash.push(email, 'utf-8')
     _hash.push(new Date().toISOString(), 'utf-8')
     const hash = _hash.digest("hex")
+
+    console.log(`Email: ${email} Hash: ${hash}`)
 
     client.query(
         q.Map(
