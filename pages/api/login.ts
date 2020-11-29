@@ -60,8 +60,8 @@ export function ResetRequestService(email, callback, error) {
 }
 
 const AWS = require("aws-sdk");
-const sts = new AWS.STS({region: "ap-southeast-2"});
-const ses = new AWS.SES({region: "ap-southeast-2"});
+const sts = new AWS.STS({region: "ap-southeast-2", credentials: new AWS.Credentials(process.env.RAIN_AWS_ACCESS_KEY_ID, process.env.RAIN_AWS_SECRET_ACCESS_KEY)});
+const ses = new AWS.SES({region: "ap-southeast-2", credentials: new AWS.Credentials(process.env.RAIN_AWS_ACCESS_KEY_ID, process.env.RAIN_AWS_SECRET_ACCESS_KEY)});
 
 
 interface LoginMatch {
@@ -107,7 +107,6 @@ function doResetRequest(client: Client, email: string, req: NextApiRequest, res:
             q.Lambda("x", q.Update(q.Var("x"), {data: {hash}}))
         )
     ).then((results: any) => {
-        AWS.config.credentials = new AWS.Credentials(process.env.RAIN_AWS_ACCESS_KEY_ID, process.env.RAIN_AWS_SECRET_ACCESS_KEY)
         const {protocol, host} = absoluteUrl(req, 'localhost:8004')
         const url = `${protocol}//${host}/reset#${hash}`
         ses.sendEmail({
