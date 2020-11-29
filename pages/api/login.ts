@@ -118,6 +118,8 @@ function doResetRequest(client: Client, email: string, req: NextApiRequest, res:
                 Subject: {Data:"Eureka Cycling Password Reset"}
             }
         }, (err: AWSError, data: SendEmailResponse) => {
+            console.log('Error: ', err)
+            console.log('Data: ',data)
             res.json({"email-sent": data?.MessageId || err})
         })
     }).catch((error) => {

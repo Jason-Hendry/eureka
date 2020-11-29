@@ -25,7 +25,7 @@ export default function Index(props) {
 
     const submitResetRequest: (event: React.FormEvent<HTMLFormElement>) => void = (e: React.FormEvent<HTMLFormElement>) => {
         ResetRequestService(email, (e) => {
-            console.log(e)
+            console.log('Success: ', e)
             setEmail("")
             setResetSent(true)
 
