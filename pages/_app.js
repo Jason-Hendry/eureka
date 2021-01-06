@@ -58,6 +58,9 @@ export default class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx);
     }
 
+    const handleRouteChange = (url) => GTMPageView(url);
+    router.events.on('routeChangeComplete', handleRouteChange);
+
     const admin = ctx.pathname.match(/^\/admin/)
 
     return { pageProps, admin };
