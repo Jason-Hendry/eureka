@@ -68,7 +68,7 @@ export default function LandingPage(props) {
         </Card>
     })
 
-    const leadP = `The Eureka Veterans Cycling Club was formed at the beginning of 2009 by a small group of
+    const leadP = `The Eureka Cycling Club was formed at the beginning of 2009 by a small group of
                                 cyclists who believed there was a need for the type of racing that only a veterans club
                                 can offer.`
 

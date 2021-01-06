@@ -49,6 +49,9 @@ import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 const theme = createMuiTheme({
 });
 
+
+const handleRouteChange = (url) => GTMPageView(url);
+
 export default class MyApp extends App {
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
@@ -58,13 +61,20 @@ export default class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    const handleRouteChange = (url) => GTMPageView(url);
-    router.events.on('routeChangeComplete', handleRouteChange);
-
     const admin = ctx.pathname.match(/^\/admin/)
 
     return { pageProps, admin };
   }
+
+  componentDidMount() {
+    Router.events.on('routeChangeComplete', handleRouteChange);
+  }
+
+  componentWillUnmount() {
+    Router.events.off('routeChangeComplete', handleRouteChange);
+  }
+
+
   render() {
     const { Component, pageProps, admin } = this.props;
 
