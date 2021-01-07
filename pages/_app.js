@@ -26,6 +26,7 @@ import PageChange from "components/PageChange/PageChange.js";
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 import AdminTheme from "../components/AdminTheme/AdminTheme";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
+import {GTMPageView} from "../services/gtm";
 
 
 

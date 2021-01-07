@@ -136,7 +136,7 @@ function doReset(client: Client, email: string, password: string, hash: string, 
             ),
             q.Lambda("x", q.Update(q.Var("x"),
                 {
-                    data: {hash: ""},
+                    data: {hash: null},
                     credentials: {password}
                 }
             ))
