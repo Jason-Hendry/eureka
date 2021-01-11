@@ -17,9 +17,6 @@ import {makeStyles} from "@material-ui/styles";
 import {DocListRaces, DocPostRaces, RaceListFetcher} from "../../services/APIService";
 import {dateSortCompareOldestFirst} from "../../services/sort";
 import useSWR from "swr"
-import {race} from "q";
-import {RaceData} from "../../models/Race";
-import {Image} from "../../models/Image";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -84,5 +81,5 @@ export default function Index(props) {
 
 }
 export async function getStaticProps(props) {
-    return {props}
+    return {props: {}}
 }

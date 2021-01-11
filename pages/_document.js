@@ -1,5 +1,5 @@
 import React from "react";
-import Document, { Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheets } from "@material-ui/styles";
 
 const GTM_ID = 'GTM-MZ5KFQK';
@@ -7,7 +7,7 @@ const GTM_ID = 'GTM-MZ5KFQK';
 class MyDocument extends Document {
   render() {
     return (
-      <html lang="en">
+      <Html lang="en">
         <Head>
           {/* Google Tag Manager */}
           <script
@@ -21,10 +21,10 @@ class MyDocument extends Document {
           />
           {/* End Google Tag Manager */}
           <meta charSet="utf-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-          />
+          {/*<meta*/}
+          {/*  name="viewport"*/}
+          {/*  content="width=device-width, initial-scale=1, shrink-to-fit=no"*/}
+          {/*/>*/}
           <meta name="theme-color" content="#000000" />
           <link rel="shortcut icon" href={require("assets/img/favicon.png")} />
           <link
@@ -55,7 +55,7 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

@@ -9,6 +9,7 @@ export default function Index(props) {
 
 }
 export async function getStaticProps(props) {
-    return {props}
+    // console.log(props)
+    return {props: {}}
 }
 

@@ -166,6 +166,6 @@ export default function Images(props) {
 }
 
 export async function getStaticProps(props) {
-    return {props}
+    return {props: {}}
 }
 

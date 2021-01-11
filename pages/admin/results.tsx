@@ -81,5 +81,5 @@ export default function Index(props) {
         </TableContainer>
 }
 export async function getStaticProps(props) {
-    return {props}
+    return {props: {}}
 }

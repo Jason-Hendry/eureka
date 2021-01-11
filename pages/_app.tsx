@@ -16,36 +16,14 @@
 
 */
 import React from "react";
-import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-
-import PageChange from "components/PageChange/PageChange.js";
 
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 import AdminTheme from "../components/AdminTheme/AdminTheme";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import {GTMPageView} from "../services/gtm";
-
-
-
-// Router.events.on("routeChangeStart", url => {
-//   console.log(`Loading: ${url}`);
-//   document.body.classList.add("body-page-transition");
-//   ReactDOM.render(
-//     <PageChange path={url} />,
-//     document.getElementById("page-transition")
-//   );
-// });
-// Router.events.on("routeChangeComplete", () => {
-//   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
-//   document.body.classList.remove("body-page-transition");
-// });
-// Router.events.on("routeChangeError", () => {
-//   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
-//   document.body.classList.remove("body-page-transition");
-// });
 
 const theme = createMuiTheme({
 });
@@ -54,18 +32,6 @@ const theme = createMuiTheme({
 const handleRouteChange = (url) => GTMPageView(url);
 
 export default class MyApp extends App {
-  static async getInitialProps({ Component, router, ctx }) {
-    let pageProps = {};
-    // console.log("ctx", ctx)
-
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-
-    const admin = ctx.pathname.match(/^\/admin/)
-
-    return { pageProps, admin };
-  }
 
   componentDidMount() {
     Router.events.on('routeChangeComplete', handleRouteChange);
@@ -75,9 +41,10 @@ export default class MyApp extends App {
     Router.events.off('routeChangeComplete', handleRouteChange);
   }
 
-
   render() {
-    const { Component, pageProps, admin } = this.props;
+    const { Component, pageProps, router } = this.props;
+
+    const admin = router.pathname.match('^/admin');
 
     const wrap = admin ? <AdminTheme>
       <Component {...pageProps} />
