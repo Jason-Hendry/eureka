@@ -42,6 +42,7 @@ export interface RaceData {
     ClubChamps?: Boolean
     RegistrationURL? :string
     Series? :string
+    Notes? :string
     Images?: Image[]
 }
 

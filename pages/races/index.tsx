@@ -27,7 +27,14 @@ const useStyles = makeStyles((theme) => createStyles({
         paddingRight: theme.spacing(1)
     },
     raceCard: {
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
+        CardHeader: {
+            textAlign: 'left',
+        },
+        CardContent: {
+            textAlign: 'left',
+        },
+
     },
     Criterium: {
         backgroundColor: "#fd7b7b",
@@ -115,9 +122,14 @@ export default function RacePage(props: Props) {
                 <Typography variant="body2" color="textSecondary" component="p">
                     {r.data.RaceFormat} - {r.data?.CourseData?.data?.Title}{lapDisTab}
                 </Typography>
+                {r.data.Notes ?
                 <Typography variant="body2" color="textSecondary" component="p">
-                    Marshalls: {marshalList}
-                </Typography>
+                    <strong>Notes</strong>: {r.data.Notes}
+                </Typography> : null }
+                {marshalList.length ?
+                <Typography variant="body2" color="textSecondary" component="p">
+                    <strong>Marshalls</strong>: {marshalList}
+                </Typography> : null }
             </CardContent>
 
         </Card>

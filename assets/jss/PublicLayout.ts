@@ -35,7 +35,7 @@ const landingPageStyle: Styles<Theme, any> = {
   },
   section: {
     padding: "70px 0",
-    textAlign: "center"
+    // textAlign: "center"
   },
   description: {
     color: "#999"

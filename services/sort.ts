@@ -17,8 +17,18 @@ export function dateSortCompareNewestFirst(a: withDate, b: withDate) {
     return getANum(b) - getANum(a)
 }
 
+export function thisYear(year) {
+    return (a: withDate) => {
+        return getAYear(a) == year
+    }
+}
+
+
 function getANum(a: withDate) {
     return a?.data?.Date ? parseInt(format(parse(a.data.Date, "yyyy-MM-dd", new Date()), 'yyyyDDD')) : 0;
+}
+function getAYear(a: withDate) {
+    return a?.data?.Date ? parseInt(format(parse(a.data.Date, "yyyy-MM-dd", new Date()), 'yyyy')) : 0;
 }
 
 export function LimitFilter(limit) {

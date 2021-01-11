@@ -10,7 +10,7 @@ import {
     Theme,
     Toolbar,
     Typography,
-    Select, Switch, TextFieldProps, Drawer
+    Select, Switch, TextFieldProps, Drawer, TextareaAutosize
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {useRouter} from "next/router";
@@ -252,6 +252,15 @@ export default function EditRace() {
                        onChange={(e) => setRace({...race, RegistrationURL: e.target.value})}
             />
 
+            <TextField {...defaultFieldProps}
+                       multiline={true}
+                       inputProps={{inputComponent: TextareaAutosize}}
+                       label={'Notes'}
+                       helperText={"Use 2 new lines to create a new paragraph."}
+                       onChange={(e) => setRace({...race, Notes: e.target.value})}
+                       value={race?.['Notes'] || ""} InputLabelProps={{shrink: true}} fullWidth={true}/>
+
+
             <FormControl margin={"normal"} className={classes.field}>
                 <FormLabel>Images</FormLabel>
 
@@ -259,7 +268,6 @@ export default function EditRace() {
 
                 <ImageSelector addImage={addImage} />
             </FormControl>
-
 
             <FormControl className={classes.field} fullWidth={true} margin={"normal"}>
                 <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>

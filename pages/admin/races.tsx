@@ -15,8 +15,9 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {DocListRaces, DocPostRaces, RaceListFetcher} from "../../services/APIService";
-import {dateSortCompareOldestFirst} from "../../services/sort";
+import {dateSortCompareOldestFirst, thisYear} from "../../services/sort";
 import useSWR from "swr"
+import {Race} from "../../models/Race";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -43,7 +44,7 @@ export default function Index(props) {
     const classes = useStyles()
     const router = useRouter()
 
-    const races = data ? data.sort(dateSortCompareOldestFirst) : []
+    const races = data ? data.sort(dateSortCompareOldestFirst).filter(thisYear('2021')) : []
 
     const newRace = () => {
         DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/edit#${id}`)).catch(e => {});
