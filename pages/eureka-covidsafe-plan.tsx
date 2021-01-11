@@ -64,7 +64,3 @@ export default function Index(props) {
     </PublicLayout>
 
 }
-export async function getStaticProps(props) {
-    // console.log(props)
-    return {props: {}}
-}

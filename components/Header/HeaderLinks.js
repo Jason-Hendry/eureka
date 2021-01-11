@@ -15,6 +15,7 @@ import MapIcon from '@material-ui/icons/Map'
 import styles from "assets/jss/nextjs-material-kit/components/headerLinksStyle.js";
 import Link from "next/link";
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const useStyles = makeStyles(styles);
 
@@ -41,6 +42,11 @@ export default function HeaderLinks() {
             <ListItem className={classes.listItem}>
                 <Link href={"/eureka-covidsafe-plan"}>
                     <a className={classes.navLink}><AssignmentIcon className={classes.icons}/> COVIDSafe Plan</a>
+                </Link>
+            </ListItem>
+            <ListItem className={classes.listItem}>
+                <Link href={"/join"}>
+                    <a className={classes.navLink}><PersonAddIcon className={classes.icons}/> Join</a>
                 </Link>
             </ListItem>
 
