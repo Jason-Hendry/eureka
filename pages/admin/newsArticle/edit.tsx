@@ -122,7 +122,7 @@ function NewsArticle() {
 }
 
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }
 
 export default NewsArticle

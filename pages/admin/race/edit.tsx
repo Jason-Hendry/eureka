@@ -270,5 +270,5 @@ export default function EditRace() {
 }
 
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }

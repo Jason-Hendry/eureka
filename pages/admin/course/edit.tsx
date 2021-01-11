@@ -88,5 +88,5 @@ export default function EditCourse() {
 }
 
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }

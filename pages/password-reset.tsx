@@ -56,6 +56,6 @@ export default function Index(props) {
 }
 
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }
 

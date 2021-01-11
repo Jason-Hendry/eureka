@@ -102,5 +102,5 @@ export default function EditImage() {
 }
 
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }

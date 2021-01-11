@@ -88,6 +88,6 @@ function Result() {
 
 }
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }
 export default Result

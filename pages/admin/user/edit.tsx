@@ -92,5 +92,5 @@ export default function EditUser() {
 
 }
 export async function getStaticProps(props) {
-    return {props}
+    return {props:{}}
 }
