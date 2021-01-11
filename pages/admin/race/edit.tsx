@@ -26,6 +26,7 @@ import {CourseList} from "../../../models/Course";
 import {UserList} from "../../../models/User";
 import {Image, ImageList} from "../../../models/Image";
 import {ImageSelector} from "../../../components/ImageSelector";
+import {sortByTitle} from "../../../services/sort";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -62,7 +63,7 @@ export default function EditRace() {
 
     const courseListSWR = useSWR<CourseList>(`/api/Courses?secret=${secret}`, CourseListFetcher)
     const userListSWR = useSWR<UserList>(`/api/User?secret=${secret}`, UserListFetcher)
-    const courseList = courseListSWR?.data
+    const courseList = courseListSWR?.data.sort(sortByTitle)
     const userList = userListSWR?.data
 
     const setRace = (raceData) => {

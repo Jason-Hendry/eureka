@@ -16,6 +16,7 @@ import {
 import {makeStyles} from "@material-ui/styles";
 import {CourseListFetcher, DocListCourses, DocPostCourse} from "../../services/APIService";
 import useSWR from "swr";
+import {sortByTitle} from "../../services/sort";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -40,7 +41,7 @@ export default function Index(props) {
     const secret = useContext(Secret)
     // const [courses, setCourses] = useState<CourseList>([])
     const {data} = useSWR(`/api/Courses?secret=${secret}`, CourseListFetcher)
-    const courses = data ? data : []
+    const courses = data ? data.sort(sortByTitle) : []
     const classes = useStyles()
     const router = useRouter()
 
