@@ -8,7 +8,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
+        <Head title={"Eureka Cycling"}>
           {/* Google Tag Manager */}
           <script
               dangerouslySetInnerHTML={{

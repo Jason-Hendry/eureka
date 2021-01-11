@@ -22,7 +22,7 @@ const eurekaLogo = require("../assets/img/eureka-logo.svg")
 const eurekaLogoWhite = require("../assets/img/eureka-logo-white.svg")
 
 export default function PublicLayout({children, heroImage, title, leadParagraph, small}: LayoutProps) {
-    const classes = useStyles();
+    const classes = useStyles({});
 
     return <div>
         <Header
