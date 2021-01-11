@@ -54,6 +54,10 @@ export default class MyApp extends App {
       <React.Fragment>
         <Head>
           <title>Eureka Cycling</title>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+          />
         </Head>
         <ThemeProvider theme={theme}>
           {wrap}

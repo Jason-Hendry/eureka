@@ -58,7 +58,7 @@ export default function Index(props) {
             </ul>
 
 
-            <img src={require('../assets/img/Eureka-COVIDSafe-Plan-the-basics-25112020.jpg')}/>
+            <img style={{maxWidth:'100%'}} src={require('../assets/img/Eureka-COVIDSafe-Plan-the-basics-25112020.jpg')}/>
 
         </Paper>
     </PublicLayout>
