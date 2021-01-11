@@ -14,10 +14,11 @@ import {
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {DocListRaces, DocPostRaces, RaceListFetcher} from "../../services/APIService";
+import {CourseListFetcher, DocPostRaces, RaceListFetcher} from "../../services/APIService";
 import {dateSortCompareOldestFirst, thisYear} from "../../services/sort";
 import useSWR from "swr"
-import {Race} from "../../models/Race";
+import {Course} from "../../models/Course";
+import {ISODateToPretty} from "../../services/dates";
 
 const useStyles = makeStyles((theme: Theme) => ({
     row: {
@@ -41,8 +42,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function Index(props) {
     const secret = useContext(Secret)
     const {data} = useSWR(`/api/Races?secret=${secret}`, RaceListFetcher)
+    const coursesData = useSWR(`/api/Courses?secret=${secret}`, CourseListFetcher).data
     const classes = useStyles()
     const router = useRouter()
+
+    const getCourse = (course: string): Course | undefined => {
+        return coursesData?.find(c => c.id === course)
+    }
 
     const races = data ? data.sort(dateSortCompareOldestFirst).filter(thisYear('2021')) : []
 
@@ -53,8 +59,8 @@ export default function Index(props) {
     const list = races.map((r, i) => {
         // console.log(r)
         return <TableRow key={i} className={classes.row}>
-            <TableCell>{r.data?.Date ?? "- no date -"}</TableCell>
-            <TableCell>{r.data?.Title ? r.data.Title : '- No name -'}</TableCell>
+            <TableCell>{ISODateToPretty(r.data?.Date) ?? "- no date -"}</TableCell>
+            <TableCell>{r.data?.Title ? r.data.Title : getCourse(r.data.Course)?.data?.Title ?? '- No name -'}</TableCell>
             <TableCell>
                 <Button variant={"text"}><Link href={"/admin/race/edit#" + r.id}>Edit</Link></Button>
             </TableCell>

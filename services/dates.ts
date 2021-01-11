@@ -5,5 +5,5 @@ export function NowISODate(): string {
 }
 
 export function ISODateToPretty(isoDate: string): string {
-    return format(parse(isoDate, 'yyyy-MM-dd', new Date()), 'eeee eo LLLL yyyy')
+    return format(parse(isoDate, 'yyyy-MM-dd', new Date()), 'eeee do MMM yyyy')
 }
