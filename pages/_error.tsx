@@ -1,10 +1,13 @@
-import React, {Component, FC} from "react";
+import React, { Component } from "react";
+import Router from "next/router";
 
-export const _error: FC = () => {
+export default class _error extends Component {
 
+  render() {
     return <div>
       <h1>Error</h1>
 
       <pre>{JSON.stringify(this.props)}</pre>
     </div>;
+  }
 }
