@@ -7,7 +7,7 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import {DocListCourses, DocListNews, DocListRaces, DocListUsers} from "../services/DirectService";
 import {FilterFutureRace, MergeCourseUserData, RaceList} from "../models/Race";
-import {Card, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
 import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, LimitFilter} from "../services/sort";
 import {ISODateToPretty} from "../services/dates";
 import Link from "next/link";
@@ -50,6 +50,9 @@ export default function LandingPage(props) {
             <CardContent>
                 {r.data?.CourseData?.data?.Title}
             </CardContent>
+            {r.data?.RegistrationURL ? <CardActions>
+                <Button variant={"contained"} color={"primary"} href={r.data?.RegistrationURL}>Register Online Now</Button>
+            </CardActions> : null}
         </Card>
     })
 

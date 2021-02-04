@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {format, parse} from 'date-fns'
 
 import {createStyles} from "@material-ui/styles";
-import {Avatar, Card, CardContent, CardHeader, Typography} from "@material-ui/core";
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography} from "@material-ui/core";
 import {DocListRaces, DocListCourses, DocListUsers} from "../../services/DirectService";
 import {FilterFutureRace, MergeCourseUserData, Race, RaceList} from "../../models/Race";
 import {dateSortCompareOldestFirst} from "../../services/sort";
@@ -28,12 +28,28 @@ const useStyles = makeStyles((theme) => createStyles({
     },
     raceCard: {
         marginBottom: theme.spacing(2),
+        overflow: "normal",
         CardHeader: {
             textAlign: 'left',
+            title: {
+
+            }
         },
         CardContent: {
             textAlign: 'left',
         },
+        "CardHeader-title": {
+            backgroundColor: "#fd7b7b",
+            display: 'inline-block',
+            padding: "8px 24px",
+// display: inline-block;
+// padding: 8px 24px;
+// margin: -90px 0 0 0;
+// position: relative;
+// top: -21px;
+// box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+// font-weight: bold;
+        }
 
     },
     Criterium: {
@@ -131,7 +147,9 @@ export default function RacePage(props: Props) {
                     <strong>Marshalls</strong>: {marshalList}
                 </Typography> : null }
             </CardContent>
-
+            {r.data?.RegistrationURL ? <CardActions>
+                <Button variant={"contained"} color={"primary"} href={r.data?.RegistrationURL}>Register Online Now</Button>
+            </CardActions> : null}
         </Card>
     })
 

@@ -100,7 +100,3 @@ export default function EditImage() {
     </Paper>
 
 }
-
-export async function getStaticProps(props) {
-    return {props:{}}
-}
