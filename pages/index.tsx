@@ -5,7 +5,14 @@ import InfoArea from "../components/InfoArea/InfoArea";
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
-import {DocListCourses, DocListNews, DocListRaces, DocListUsers} from "../services/DirectService";
+import {
+    DocGetImage,
+    DocGetSiteSetting,
+    DocListCourses,
+    DocListNews,
+    DocListRaces,
+    DocListUsers
+} from "../services/DirectService";
 import {FilterFutureRace, MergeCourseUserData, RaceList} from "../models/Race";
 import {Button, Card, CardActions, CardContent, CardHeader, Grid, Typography} from "@material-ui/core";
 import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, LimitFilter} from "../services/sort";
@@ -14,6 +21,7 @@ import Link from "next/link";
 import {FilterHasDate, NewsList} from "../models/News";
 import {toURL} from "../services/url";
 import PublicLayout from "../layouts/public";
+import {SiteSetting} from "../models/SiteSetting";
 
 const cvc = require("../assets/img/vcv.svg")
 
@@ -22,7 +30,10 @@ const Sentry = process.browser ? require('@sentry/browser') : require('@sentry/n
 // or use es6 import statements
 // import * as Sentry from '@sentry/node';
 
-Sentry.init({ dsn: 'https://d0e7c686f2b5418c92caa122fe59794a@o391192.ingest.sentry.io/5236909', environment: process.env.SENTRY_ENV });
+Sentry.init({
+    dsn: 'https://d0e7c686f2b5418c92caa122fe59794a@o391192.ingest.sentry.io/5236909',
+    environment: process.env.SENTRY_ENV
+});
 
 const useStyles = makeStyles((theme) => ({
     races: {
@@ -35,9 +46,15 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function LandingPage(props) {
+interface IndexPageProps {
+    races: RaceList
+    news: NewsList
+    siteSetting: SiteSetting
+}
+
+export default function LandingPage(props: IndexPageProps) {
     const classes = useStyles();
-    const {races, news}: { races: RaceList, news: NewsList } = props;
+    const {races, news, siteSetting} = props;
 
     const nextRaces = races.map(r => {
         const vcv = r.data?.VCVEvent ?
@@ -51,7 +68,8 @@ export default function LandingPage(props) {
                 {r.data?.CourseData?.data?.Title}
             </CardContent>
             {r.data?.RegistrationURL ? <CardActions>
-                <Button variant={"contained"} color={"primary"} href={r.data?.RegistrationURL}>Register Online Now</Button>
+                <Button variant={"contained"} color={"primary"} href={r.data?.RegistrationURL}>Register Online
+                    Now</Button>
             </CardActions> : null}
         </Card>
     })
@@ -75,7 +93,11 @@ export default function LandingPage(props) {
                                 cyclists who believed there was a need for the type of racing that only a veterans club
                                 can offer.`
 
-    return <PublicLayout title={"Eureka Cycling Club"} leadParagraph={leadP} heroImage={require("assets/img/bg3.jpg")}>
+    const image = siteSetting.data?.HomePageImages?.length ?
+        siteSetting.data.HomePageImages[0].data.hero :
+        require("assets/img/bg3.jpg");
+
+    return <PublicLayout title={"Eureka Cycling Club"} leadParagraph={leadP} heroImage={image}>
         <div>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={12} md={4}>
@@ -130,7 +152,12 @@ export async function getStaticProps() {
         .filter(LimitFilter(3))
 
 
-    return {props: {races, news}}
+    console.log("Loading site setting: ", process.env.SITE_SETTINGS_ID)
+    const siteSetting = (await DocGetSiteSetting(process.env.SITE_SETTINGS_ID, process.env.FAUNADB_SECRET))
+    console.log("Loading site setting: ", siteSetting)
+
+
+    return {props: {races, news, siteSetting}}
 
 }
 

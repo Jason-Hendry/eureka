@@ -3,7 +3,8 @@ import {News, NewsData, NewsList} from "../models/News";
 import {Results, ResultsData, ResultsList} from "../models/Results";
 import {User, UserData, UserList} from "../models/User";
 import {Course, CourseData, CourseList} from "../models/Course";
-import {ImageList} from "../models/Image";
+import {Image, ImageList} from "../models/Image";
+import {SiteSetting} from "../models/SiteSetting";
 const faunadb = require('faunadb')
 const q = faunadb.query
 
@@ -58,6 +59,12 @@ export function DocGetUser(id, secret) :Promise<User> {
 }
 export function DocGetCourse(id, secret) :Promise<Course> {
     return DocGetService<Course>("Courses", id, secret)
+}
+export function DocGetSiteSetting(id, secret) :Promise<SiteSetting> {
+    return DocGetService<SiteSetting>("SiteSettings", id, secret)
+}
+export function DocGetImage(id, secret) :Promise<Image> {
+    return DocGetService<Image>("Images", id, secret)
 }
 
 

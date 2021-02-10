@@ -5,6 +5,7 @@ import {User, UserData, UserList} from "../models/User";
 import {Course, CourseData, CourseList} from "../models/Course";
 import React from "react";
 import {Image, ImageList, ImageData} from "../models/Image";
+import {SiteSetting, SiteSettingData} from "../models/SiteSetting";
 
 export function DocListRaces(secret: string) :Promise<RaceList> {
     return DocListService<RaceList>("Races", secret)
@@ -116,7 +117,10 @@ export function DocPutUser(data: UserData, id: string, secret: string) :Promise<
     return DocPutService<User>("User", data, id, secret)
 }
 export function DocPutCourse(data: CourseData, id: string, secret: string) :Promise<Course> {
-    return DocPutService<Results>("Courses", data, id, secret)
+    return DocPutService<Course>("Courses", data, id, secret)
+}
+export function DocPutSiteSetting(data: SiteSettingData, id: string, secret?: string) :Promise<SiteSetting> {
+    return DocPutService<SiteSetting>("SiteSettings", data, id, secret)
 }
 
 function DocPutService<T>(collection: string, data: object, id: string, secret: string): Promise<T> {
@@ -142,6 +146,7 @@ export const RaceListFetcher = url => fetch(url).then(r => <RaceList><unknown>r.
 export const ResultsFetcher = url => fetch(url).then(r => <Results><unknown>r.json())
 export const ResultsListFetcher = url => fetch(url).then(r => <ResultsList><unknown>r.json())
 export const CourseFetcher = url => fetch(url).then(r => <Course><unknown>r.json())
+export const SiteSettingFetcher = url => fetch(url).then(r => <SiteSetting><unknown>r.json())
 export const CourseListFetcher = url => fetch(url).then(r => <CourseList><unknown>r.json())
 export const UserFetcher = url => fetch(url).then(r => <User><unknown>r.json())
 export const UserListFetcher = url => fetch(url).then(r => <UserList><unknown>r.json())

@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useRef, useState} from "react"
-import {Button, Paper, TextField, Typography} from "@material-ui/core";
+import {Button, Paper, TextField, Theme, Typography} from "@material-ui/core";
 import {useDropzone} from "react-dropzone";
 import {makeStyles} from "@material-ui/styles";
 import Pica from 'pica';
@@ -13,12 +13,16 @@ const pica = Pica();
 
 const AWS = require("aws-sdk");
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
-        padding: 16
+        padding: theme.spacing(4)
     },
     hideImage: {
         display: 'none'
+    },
+    dropImages: {
+      border: `2px solid ${theme.palette.primary.main}`,
+        padding: theme.spacing(2)
     }
 }))
 
@@ -103,41 +107,12 @@ export default function Images(props) {
             setSrc(URL.createObjectURL(file))
         })
 
-        // acceptedFiles.forEach((file) => {
-        //
-        //     console.log(file)
-        //
-        //     const reader = new FileReader()
-        //
-        //     reader.onabort = () => console.log('file reading was aborted')
-        //     reader.onerror = () => console.log('file reading has failed')
-        //     reader.onload = () => {
-        //         // Do whatever you want with the file contents
-        //         // const binaryStr = reader.readAsArrayBuffer()
-        //         // canvas.current
-        //         // console.log(binaryStr)
-        //
-        //         var data = reader.result;
-        //         // @ts-ignore
-        //         var array = new Int8Array(data);
-        //
-        //         const blob = new Blob(array, {type : file.type});
-        //         createImageBitmap(blob).then(img => {
-        //             console.log(img)
-        //             const canvasContext = canvas.current.getContext("2d")
-        //             canvasContext.drawImage(img, 0, 0)
-        //         })
-        //
-        //     }
-        //     reader.readAsArrayBuffer(file)
-        // })
-
     }, [])
     const {getRootProps, getInputProps} = useDropzone({onDrop})
 
     return (
         <div>
-            <Paper>
+            <Paper className={classes.root}>
 
                 <p>Hero Resized: {heroBlob?.size}bytes</p>
                 <p>Poster Resized: {posterBlob?.size}bytes</p>
@@ -149,12 +124,11 @@ export default function Images(props) {
                 <Button onClick={upload}>Upload</Button>
 
                 <Typography variant={"h6"}>Images</Typography>
-                <div {...getRootProps()}>
+                <div {...getRootProps()} className={classes.dropImages}>
                     <input {...getInputProps()} />
-
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <p>Drag 'n' drop 1 file here, or click to select files</p>
                 </div>
-                <canvas ref={canvas} width={'800'} height={'500'}/>
+                <canvas ref={canvas} width={1500} height={750}/>
                 <canvas className={classes.hideImage} ref={heroCanvas} width={1500} height={750}/>
                 <canvas className={classes.hideImage} ref={posterCanvas} width={600} height={400}/>
                 <canvas className={classes.hideImage} ref={adminCanvas} width={200} height={130}/>

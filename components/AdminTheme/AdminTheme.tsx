@@ -11,7 +11,7 @@ export default function AdminTheme({children}) {
     const router = useRouter()
 
     const [secret, setSecret] = useLocalStorage("secret", "")
-    const [awsCredentials, setAwsCredentials] = useLocalStorage("setAwsCredentials", "")
+    const [awsCredentials] = useLocalStorage("setAwsCredentials", "")
 
     const logout = () => {
         setSecret("")
