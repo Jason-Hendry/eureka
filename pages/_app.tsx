@@ -10,7 +10,7 @@ import {ThemeProvider} from "@material-ui/styles";
 import {useEffect} from "react";
 import {createMuiTheme} from "@material-ui/core";
 
-const theme = createMuiTheme({
+export const theme = createMuiTheme({
 
 })
 
@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         if (jssStyles) {
             jssStyles?.parentElement?.removeChild(jssStyles);
         }
+        router.push(document.location.pathname)
     }, []);
 
     return <>
