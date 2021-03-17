@@ -12,7 +12,7 @@ export const s3 = (stsCredentials: Credentials) => new AWS.S3({region: "ap-south
 export const ses = new AWS.SES({region: "ap-southeast-2", credentials});
 const sts = new AWS.STS({region: "ap-southeast-2", credentials});
 
-function awsCredentialsAreValid(awsCredentials: Credentials | undefined):boolean  {
+function awsCredentialsAreValid(awsCredentials: Credentials | undefined):awsCredentials is Credentials  {
     if(!awsCredentials) {
         return false
     }
@@ -37,7 +37,7 @@ export async function getCredential(secret: string): Promise<Credentials> {
                     console.log(data.Credentials)
                     if (process.env.SITE_SETTINGS_ID) {
                         SiteSettingsCollection(secret).put({
-                            ...r,
+                            ...r.data,
                             awsCredentials: data.Credentials
                         }, process.env.SITE_SETTINGS_ID)
                     }
