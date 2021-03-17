@@ -2,7 +2,7 @@ import {AppProps} from "next/app";
 
 import '../assets/scss/nextjs-material-kit.scss'
 import AdminTheme from "../layout/Admin/AdminTheme";
-import {Head} from "next/document";
+import Head from "next/head";
 import {GTMPageView} from "../services/gtm";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     }
     return <>
         <Head>
-            {GTMPageView}
+            <title>Eureka Cycling</title>
         </Head>
         <Component {...pageProps} />
     </>

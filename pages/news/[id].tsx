@@ -1,6 +1,5 @@
 import {FC} from "react";
-import {Theme, WithTheme, withTheme} from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
+import Head from "next/head";
 import {BaseModel} from "../../models/base";
 import {NewsData} from "../../models/News";
 import {GetStaticPaths, GetStaticProps} from "next";
@@ -18,23 +17,21 @@ interface NewsPageParams extends ParsedUrlQuery {
     id: string
 }
 
-const useStyles = ({spacing}: Theme) => makeStyles({
-
-})
-
-export const NewsPage: FC<NewsPageProps & WithTheme> = ({theme, newsItem, siteSetting}) => {
+export const NewsPage: FC<NewsPageProps> = ({ newsItem, siteSetting}) => {
     const image = siteSetting.data?.HomePageImages?.length ?
         siteSetting.data.HomePageImages[0].data.hero :
         '';
 
-    const classes = useStyles(theme)()
     return (
         <PublicLayout title={newsItem.data.Title} leadParagraph={""} heroImage={image} small>
+            <Head>
+                <title>{newsItem.data.Title}</title>
+            </Head>
             {nl2br(newsItem.data.Body)}
         </PublicLayout>
     )
 }
-export default withTheme(NewsPage);
+export default NewsPage;
 
 export const getStaticProps: GetStaticProps<NewsPageProps, NewsPageParams> = async ({params}) => {
     const {id} = params || {}

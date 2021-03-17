@@ -1,22 +1,17 @@
-import Head from 'next/head'
 import '../styles/Home.module.css'
 import PublicLayout from "../layout/public";
 import {
-  CoursesCollection, NewsCollection,
-  RaceCollection, SiteSettingsCollection, UserCollection
+   NewsCollection,
+  SiteSettingsCollection
 } from "../services/DirectService";
-import {FilterFutureRace, MergeCourseUserData, RaceMergeData} from "../models/Race";
-import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, LimitFilter} from "../services/sort";
+import {dateSortCompareNewestFirst,  LimitFilter} from "../services/sort";
 import {FilterHasDate, NewsData} from "../models/News";
 import {FC} from "react";
 import {GetStaticProps} from "next";
 import {SiteSetting} from "../models/SiteSetting";
 import {BaseList} from "../models/base";
-import Three, {ColumnThird} from "../layout/columns/Three";
-import InfoArea from "../layout/InfoArea/InfoArea";
-import AnnouncementIcon from '@material-ui/icons/Announcement';
 import NewsList from "../components/NewsList";
-import RaceList from "../components/RaceList";
+import Head from "next/head";
 
 type NewsProps = {
   siteSetting: SiteSetting
@@ -30,6 +25,9 @@ export const News: FC<NewsProps> = ({siteSetting, news}) =>{
 
   return (
     <PublicLayout title={"Eureka Cycling News"} leadParagraph={""} heroImage={image} small>
+      <Head>
+        <title>Eureka Cycling News</title>
+      </Head>
        <NewsList news={news} />
     </PublicLayout>
   )

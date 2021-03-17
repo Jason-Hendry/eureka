@@ -1,7 +1,6 @@
-import React, {FC, ReactChildren} from "react";
+import React, {FC} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import classNames from "classnames";
-import Link from "next/link";
 import {HeroHeading} from "./hero/HeroHeading";
 import Parallax from "./parallax/Parallax";
 import {container} from "./container/container";
