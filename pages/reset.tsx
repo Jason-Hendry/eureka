@@ -1,6 +1,6 @@
-import React, {FormEventHandler, useEffect, useState} from "react"
+import React, {FC, useState} from "react"
 import {
-    Button, CardActions,
+    Button, ,
     CardContent,
     Container,
     IconButton,
@@ -12,21 +12,17 @@ import {
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import {useRouter} from 'next/router'
-import {useLocalStorage} from "../components/AdminTheme/AdminTheme";
-import Link from "next/link";
-import {AdminFormTheme} from "../components/AdminTheme/AdminFormTheme";
-import {LoginService} from "../auth/login";
-import {ResetRequestService, ResetService} from "../auth/reset";
+import { ResetService} from "../auth/reset";
+import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
+import {useLocalStorage} from "../layout/Admin/AdminTheme";
 
-export default function Index(props) {
+export const Index: FC<unknown> = (props) => {
     const router = useRouter()
 
     const [secret, setSecret] = useLocalStorage("secret", "")
-    const [awsCredentials, setAwsCredentials] = useLocalStorage("setAwsCredentials", "")
 
     const [showPass, setShowPass] = useState<boolean>(false)
     const [pass, setPass] = useState<string>("")
-    const [resetSent, setResetSent] = useState<boolean>(false)
 
     const hash = process.browser ?
         (document.location.hash.substring(1)) : ""
@@ -38,9 +34,8 @@ export default function Index(props) {
         onClick={() => setShowPass(!showPass)}><ShowPassIcon/></IconButton></InputAdornment>
 
     const submitReset: (event: React.FormEvent<HTMLFormElement>) => void = (e: React.FormEvent<HTMLFormElement>) => {
-        ResetService(hash, pass, (s, c) => {
+        ResetService(hash, pass, (s) => {
             setSecret(s);
-            setAwsCredentials(c);
             router.push("/admin")
         }, e => {
             console.log(e)
@@ -65,8 +60,4 @@ export default function Index(props) {
     </AdminFormTheme>
 
 }
-
-export async function getStaticProps(props) {
-    return {props:{}}
-}
-
+export default Index
