@@ -1,23 +1,21 @@
-import React, {FormEventHandler, useEffect, useState} from "react"
+import React, {FC, FormEventHandler, useEffect, useState} from "react"
 import {
     Button, CardActions,
     CardContent,
-    Container,
     IconButton,
     InputAdornment,
-    Paper,
     TextField,
     Typography
 } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import {LoginService, ResetRequestService, ResetService} from "./api/login";
 import {useRouter} from 'next/router'
-import {useLocalStorage} from "../components/AdminTheme/AdminTheme";
 import Link from "next/link";
-import {AdminFormTheme} from "../components/AdminTheme/AdminFormTheme";
+import {LoginService} from "../auth/login";
+import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
+import {useLocalStorage} from "../layout/Admin/AdminTheme";
 
-export default function Index(props) {
+export const Login:FC<unknown> = () => {
     const router = useRouter()
 
     const [secret, setSecret] = useLocalStorage("secret", "")
@@ -38,10 +36,10 @@ export default function Index(props) {
 
 
     const submitLogin: (event: React.FormEvent<HTMLFormElement>) => void = (e: React.FormEvent<HTMLFormElement>) => {
-        LoginService(email, pass, (s, c) => {
+        LoginService(email, pass, (s) => {
+            console.log(s)
             setSecret(s);
-            setAwsCredentials(c);
-            if(hash) {
+            if (hash) {
                 return router.push(decodeURIComponent(hash))
             }
             router.push("/admin")
@@ -53,27 +51,24 @@ export default function Index(props) {
 
 
     return <AdminFormTheme>
-
-        <CardContent><form onSubmit={submitLogin}>
-            <Typography variant={"h6"}>Login</Typography>
-            {resetSent ? <Typography variant={"h6"}>Reset link has been sent, please check your email</Typography> : null}
-            <TextField margin={"normal"} fullWidth label={"Email"} onChange={e => setEmail(e.target.value)} value={email}
-                       type={"text"}/>
-            <TextField margin={"normal"} fullWidth label={"Password"} onChange={e => setPass(e.target.value)} value={pass}
-                       type={hideShowType} InputProps={{endAdornment: showPassAdornment}}/>
-            <Button fullWidth variant={"contained"} color={"primary"} type={"submit"} value={"Login"}>Login</Button>
-
-        </form>
+        <CardContent>
+            <form onSubmit={submitLogin}>
+                <Typography variant={"h6"}>Login</Typography>
+                {resetSent ?
+                    <Typography variant={"h6"}>Reset link has been sent, please check your email</Typography> : null}
+                <TextField margin={"normal"} fullWidth label={"Email"} onChange={e => setEmail(e.target.value)}
+                           value={email}
+                           type={"text"}/>
+                <TextField margin={"normal"} fullWidth label={"Password"} onChange={e => setPass(e.target.value)}
+                           value={pass}
+                           type={hideShowType} InputProps={{endAdornment: showPassAdornment}}/>
+                <Button fullWidth variant={"contained"} color={"primary"} type={"submit"} value={"Login"}>Login</Button>
+            </form>
             <CardActions>
                 <Link href={"/password-reset"}>Forgetting your password? Reset it now</Link>
-            </CardActions></CardContent>
-
-
+            </CardActions>
+        </CardContent>
     </AdminFormTheme>
 
 }
-
-export async function getStaticProps(props) {
-    return {props: {}}
-}
-
+export default Login

@@ -1,34 +1,62 @@
-import {Race, RaceData, RaceList} from "../models/Race";
-import {News, NewsData, NewsList} from "../models/News";
-import {Results, ResultsData, ResultsList} from "../models/Results";
-import {User, UserData, UserList} from "../models/User";
-import {Course, CourseData, CourseList} from "../models/Course";
-import {Image, ImageList} from "../models/Image";
-import {SiteSetting} from "../models/SiteSetting";
-const faunadb = require('faunadb')
-const q = faunadb.query
+import {RaceData} from "../models/Race";
+import {NewsData} from "../models/News";
+import {ResultsData} from "../models/Results";
+import {UserData} from "../models/User";
+import {CourseData} from "../models/Course";
+import {SiteSettingData} from "../models/SiteSetting";
+import {client, q} from "./faunadb";
+import {BaseList, BaseModel, ModelCollection} from "../models/base";
+import {FileData} from "../models/File";
 
-export function DocListRaces(secret: string) :Promise<RaceList> {
-    return DocListService<RaceList>("Races", secret)
-}
-export function DocListNews(secret: string) :Promise<NewsList> {
-    return DocListService<NewsList>("News", secret)
-}
-export function DocListResults(secret: string) :Promise<ResultsList> {
-    return DocListService<ResultsList>("Results", secret)
-}
-export function DocListUsers(secret: string) :Promise<UserList> {
-    return DocListService<UserList>("User", secret)
-}
-export function DocListCourses(secret: string) :Promise<CourseList> {
-    return DocListService<CourseList>("Courses", secret)
+
+export class Collection<T> {
+    protected readonly collection: ModelCollection;
+    protected readonly secret: string;
+
+    constructor(collection: ModelCollection, secret: string) {
+        this.collection = collection;
+        this.secret = secret;
+    }
+
+    list(): Promise<BaseList<T>> {
+        return DocListService<T>(this.collection, this.secret)
+    }
+
+    get(id: string): Promise<BaseModel<T>> {
+        return DocGetService<T>(this.collection, id, this.secret)
+    }
+
+    post(data: T): Promise<BaseModel<T>> {
+        return DocPostService<T>(this.collection, data, this.secret)
+    }
+
+    put(data: T, id: string): Promise<BaseModel<T>>  {
+        return DocPutService<T>(this.collection, data, id, this.secret)
+    }
 }
 
-function DocListService<T>(collection, secret): Promise<T> {
-    const client = new faunadb.Client({secret})
+export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret)
+export const NewsCollection = (secret: string) => new Collection<NewsData>(ModelCollection.News, secret)
+export const ResultsCollection = (secret: string) => new Collection<ResultsData>(ModelCollection.Results, secret)
+export const UserCollection = (secret: string) => new Collection<UserData>(ModelCollection.User, secret)
+export const CoursesCollection = (secret: string) => new Collection<CourseData>(ModelCollection.Courses, secret)
+export const ImagesCollection = (secret: string) => new Collection<ImageData>(ModelCollection.Images, secret)
+export const SiteSettingsCollection = (secret: string) => new Collection<SiteSettingData>(ModelCollection.SiteSettings, secret)
+export const FilesCollection = (secret: string) => new Collection<FileData>(ModelCollection.Files, secret)
 
+export type FaunaDBList<T> = {
+    data: FaunaDBItem<T>[];
+}
+export type FaunaDBItem<T> = {
+    ref: { id: string },
+    data: T
+}
+
+
+
+function DocListService<T>(collection: string, secret: string): Promise<BaseList<T>> {
     return new Promise((resolve, reject) => {
-        client.query(
+        client.query<FaunaDBList<T>>(
             q.Map(
                 q.Paginate(
                     q.Match(
@@ -38,126 +66,62 @@ function DocListService<T>(collection, secret): Promise<T> {
                 q.Lambda("x", q.Get(q.Var("x")))
             )
         ).then(({data}) => {
-            resolve(data.map(({data, ref:{id}}) => ({id, data})))
+
+            const mapped: BaseList<T> = data.map(({data, ref: {id}}) => {
+                const i: BaseModel<T> = {id, data};
+                return i;
+            });
+
+            resolve(mapped)
         }).catch((error) => {
             reject({error: error})
         })
     })
 }
 
-export function DocGetRaces(id, secret) :Promise<Race> {
-    return DocGetService<Race>("Races", id, secret)
-}
-export function DocGetNews(id, secret) :Promise<News> {
-    return DocGetService<News>("News", id, secret)
-}
-export function DocGetResults(id, secret) :Promise<Results> {
-    return DocGetService<Results>("Results", id, secret)
-}
-export function DocGetUser(id, secret) :Promise<User> {
-    return DocGetService<User>("User", id, secret)
-}
-export function DocGetCourse(id, secret) :Promise<Course> {
-    return DocGetService<Course>("Courses", id, secret)
-}
-export function DocGetSiteSetting(id, secret) :Promise<SiteSetting> {
-    return DocGetService<SiteSetting>("SiteSettings", id, secret)
-}
-export function DocGetImage(id, secret) :Promise<Image> {
-    return DocGetService<Image>("Images", id, secret)
-}
-
-
-function DocGetService<T>(collection, id, secret): Promise<T> {
-    const client = new faunadb.Client({secret})
+function DocGetService<T>(collection: string, id: string, secret: string): Promise<BaseModel<T>> {
     return new Promise((resolve, reject) => {
-        client.query(
+        client.query<FaunaDBItem<T>>(
             q.Get(
                 q.Ref(q.Collection(collection), id)
             )
         ).then(({data}) => {
-            resolve(<T><unknown>{id, data})
+            resolve({id, data})
         }).catch((error) => {
             reject({error: error})
         })
     })
 }
 
-export function DocPostRaces(data: RaceData, secret) :Promise<Race> {
-    return DocPostService<Race>("Races", data, secret)
-}
-export function DocPostNews(data: NewsData, secret) :Promise<News> {
-    return DocPostService<News>("News", data, secret)
-}
-export function DocPostResults(data: ResultsData, secret) :Promise<Results> {
-    return DocPostService<Results>("Results", data, secret)
-}
-export function DocPostUser(data: UserData, secret) :Promise<User> {
-    return DocPostService<User>("User", data, secret)
-}
-export function DocPostCourse(data: CourseData, secret) :Promise<Course> {
-    return DocPostService<Course>("Courses", data, secret)
-}
-
-function DocPostService<T>(collection: string, data: any, secret: string): Promise<T> {
-    const client = new faunadb.Client({secret})
+function DocPostService<T>(collection: string, data: any, secret: string): Promise<BaseModel<T>> {
     return new Promise((resolve, reject) => {
-        client.query(
+        client.query<FaunaDBItem<T>>(
             q.Create(
                 q.Collection(collection),
                 {
                     data,
                 }
             )
-        ).then(({ref:{id}, data}) => {
-            resolve(<T><unknown>{id, data})
+        ).then(({ref: {id}, data}) => {
+            resolve({id, data})
         }).catch((error) => {
             reject({error: error})
         })
     })
 }
 
-export function DocPutRaces(data: RaceData, id: string, secret: string) :Promise<Race> {
-    return DocPutService<Race>("Races", data, id, secret)
-}
-export function DocPutNews(data: NewsData, id: string, secret: string) :Promise<News> {
-    return DocPutService<News>("News", data, id, secret)
-}
-export function DocPutResults(data: ResultsData, id: string, secret: string) :Promise<Results> {
-    return DocPutService<Results>("Results", data, id, secret)
-}
-export function DocPutUser(data: UserData, id: string, secret: string) :Promise<User> {
-    return DocPutService<User>("User", data, id, secret)
-}
-export function DocPutCourse(data: CourseData, id: string, secret: string) :Promise<Course> {
-    return DocPutService<Results>("Courses", data, id, secret)
-}
-
-function DocPutService<T>(collection: string, data: object, id: string, secret: string): Promise<T> {
+function DocPutService<T>(collection: string, data: T, id: string, secret: string): Promise<BaseModel<T>> {
     return new Promise((resolve, reject) => {
-        const client = new faunadb.Client({secret})
-        client.query(
+        client.query<FaunaDBItem<T>>(
             q.Update(
                 q.Ref(q.Collection(collection), id),
                 {data}
             )
-        ).then(({ref:{id}, data}) => {
-            resolve(<T><unknown>{id, data})
+        ).then(({ref: {id}, data}) => {
+            resolve({id, data})
         }).catch((error) => {
             reject({error: error})
         })
     })
 }
 
-
-export const RaceFetcher = url => fetch(url).then(r => <Race><unknown>r.json())
-export const RaceListFetcher = url => fetch(url).then(r => <RaceList><unknown>r.json())
-export const ResultsFetcher = url => fetch(url).then(r => <Results><unknown>r.json())
-export const ResultsListFetcher = url => fetch(url).then(r => <ResultsList><unknown>r.json())
-export const CourseFetcher = url => fetch(url).then(r => <Course><unknown>r.json())
-export const CourseListFetcher = url => fetch(url).then(r => <CourseList><unknown>r.json())
-export const UserFetcher = url => fetch(url).then(r => <User><unknown>r.json())
-export const UserListFetcher = url => fetch(url).then(r => <UserList><unknown>r.json())
-export const NewsFetcher = url => fetch(url).then(r => <News><unknown>r.json())
-export const NewsListFetcher = url => fetch(url).then(r => <NewsList><unknown>r.json())
-export const ImageListFetcher = url => fetch(url).then(r => <ImageList><unknown>r.json())

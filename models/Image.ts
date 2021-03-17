@@ -1,11 +1,7 @@
+import {BaseList, BaseModel} from "./base";
 
-
-// @ts-ignore
-export interface Image {
-    id: string
-    data: ImageData
-}
-export type ImageList = Array<Image>;
+export type Image = BaseModel<ImageData>
+export type ImageList = BaseList<ImageData>;
 
 export interface ImageData {
     filename: string

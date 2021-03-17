@@ -2,17 +2,19 @@
 
 // @ts-ignore
 import {Image} from "./Image";
+import {BaseList, BaseModel} from "./base";
+import {AWSCredentials} from "../services/Login";
+import {Credentials} from "aws-sdk/clients/sts";
 
-export interface SiteSetting {
-    id: string
-    data: SiteSettingData
-}
-export type CourseList = Array<SiteSetting>;
+export type SiteSetting = BaseModel<SiteSettingData>
+export type SiteSettingList = BaseList<SiteSettingData>;
 
 export interface SiteSettingData {
     // Title: string
     // LapDistance?: number
     HomePageImages?: Image[]
+    HomePageImage: string
+    awsCredentials?: Credentials
 }
 
 

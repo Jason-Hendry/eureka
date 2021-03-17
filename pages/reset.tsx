@@ -11,11 +11,12 @@ import {
 } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import {LoginService, ResetRequestService, ResetService} from "./api/login";
 import {useRouter} from 'next/router'
 import {useLocalStorage} from "../components/AdminTheme/AdminTheme";
 import Link from "next/link";
 import {AdminFormTheme} from "../components/AdminTheme/AdminFormTheme";
+import {LoginService} from "../auth/login";
+import {ResetRequestService, ResetService} from "../auth/reset";
 
 export default function Index(props) {
     const router = useRouter()

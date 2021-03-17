@@ -2,12 +2,10 @@
 
 // @ts-ignore
 import {Image} from "./Image";
+import {BaseList, BaseModel} from "./base";
 
-export interface User {
-    id: string
-    data: UserData
-}
-export type UserList = Array<User>;
+export type User = BaseModel<UserData>
+export type UserList = BaseList<UserData>;
 
 export interface UserData {
     email: string

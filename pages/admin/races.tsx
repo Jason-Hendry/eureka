@@ -1,92 +1,70 @@
-import React, {useContext, useState} from "react"
-import {useRouter} from "next/router";
-import Link from "next/link";
-import {Secret} from "../../components/AdminTheme/Secret";
+import React, {FC, useContext, useEffect, useState} from "react"
 import {
-    Button,
+    Checkbox,
+    Container, FormControlLabel,
     Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow, Theme, Toolbar,
+    Table, TableCell,
+    TableContainer, TableHead, TableRow,
     Typography
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
-import {CourseListFetcher, DocPostRaces, RaceListFetcher} from "../../services/APIService";
+import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
+import {Secret} from "../../layout/Admin/Secret";
 import {dateSortCompareOldestFirst, thisYear} from "../../services/sort";
-import useSWR from "swr"
-import {Course} from "../../models/Course";
-import {ISODateToPretty} from "../../services/dates";
+import {FilterFutureRace, Race, RaceData} from "../../models/Race";
+import {BaseList, BaseModel} from "../../models/base";
+import Link from "next/link";
+import {CourseData, GetCourse} from "../../models/Course";
+import {useAdminEffects, useAdminListHooks} from "../../effects/loadApiEffect";
 
-const useStyles = makeStyles((theme: Theme) => ({
-    row: {
-        '&:hover': {
-            background: theme.palette.action.hover,
-        }
-    },
-    heading: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2)
-    },
-    tableHeading: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1)
-    },
-    newRace: {
-        marginRight: theme.spacing(1)
-    }
-}))
 
-export default function Index(props) {
-    const secret = useContext(Secret)
-    const {data} = useSWR(`/api/Races?secret=${secret}`, RaceListFetcher)
-    const coursesData = useSWR(`/api/Courses?secret=${secret}`, CourseListFetcher).data
-    const classes = useStyles()
-    const router = useRouter()
+export const AdminIndex:FC<unknown> = () => {
 
-    const getCourse = (course: string): Course | undefined => {
-        return coursesData?.find(c => c.id === course)
+    const {list: upcomingRaces, secret} = useAdminListHooks(RaceCollectionApi)
+    const [courses, setCourses] = useState<BaseList<CourseData>>([])
+
+    const year = (new Date()).getFullYear();
+
+    useEffect(() => {
+        CoursesCollectionApi(secret).list().then(setCourses)
+    }, [secret])
+
+    const [ hidePrevious, setHidePrevious ] = useState<boolean>(true);
+    const hidePreviousFilter = (a: BaseModel<RaceData>): boolean => {
+        return hidePrevious? FilterFutureRace()(a) : true
     }
 
-    const races = data ? data.sort(dateSortCompareOldestFirst).filter(thisYear('2021')) : []
-
-    const newRace = () => {
-        DocPostRaces( {Title:""}, secret).then(({id}) => router.push(`/admin/race/edit#${id}`)).catch(e => {});
-    }
-
-    const list = races.map((r, i) => {
-        // console.log(r)
-        return <TableRow key={i} className={classes.row}>
-            <TableCell>{ISODateToPretty(r.data?.Date) ?? "- no date -"}</TableCell>
-            <TableCell>{r.data?.Title ? r.data.Title : getCourse(r.data.Course)?.data?.Title ?? '- No name -'}</TableCell>
-            <TableCell>
-                <Button variant={"text"}><Link href={"/admin/race/edit#" + r.id}>Edit</Link></Button>
-            </TableCell>
-        </TableRow>
-    })
-
-    return <TableContainer component={Paper}>
-            <Toolbar className={classes.tableHeading}>
-                <Typography variant={"h6"} component={"div"}>Manage Races</Typography>
-                <Button variant={"contained"} color={"primary"} className={classes.newRace} onClick={newRace}>New Race</Button>
-            </Toolbar>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell variant={"head"}>Date</TableCell>
-                        <TableCell variant={"head"}>Title</TableCell>
-                        <TableCell variant={"head"}>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {list}
-                </TableBody>
-            </Table>
-        </TableContainer>
+    return <Paper>
+        <Container>
+            <br/>
+            <Typography variant={"h5"}>{year} Races</Typography>
+            <br/>
+            <FormControlLabel
+                control={<Checkbox checked={hidePrevious} onChange={e => setHidePrevious(e.target.checked)} />}
+                label="Hide Past Events"
+            />
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell variant={"head"}>Date</TableCell>
+                                    <TableCell>Title</TableCell>
+                                    <TableCell>Course</TableCell>
+                                    <TableCell variant={"head"} align={"right"}><Link href={"/admin/race"}>Add New Race</Link></TableCell>
+                                </TableRow>
+                            </TableHead>
+                        {upcomingRaces.sort(dateSortCompareOldestFirst).filter(thisYear(year)).filter(hidePreviousFilter).map(race => (
+                            <TableRow>
+                                <TableCell>{race.data.Date}</TableCell>
+                                <TableCell>{race.data.Title || race.data.RaceFormat}</TableCell>
+                                <TableCell>{GetCourse(courses, race.data.Course || '')?.Title}</TableCell>
+                                <TableCell align={"right"}><Link href={`/admin/race#${race.id}`}>Edit</Link></TableCell>
+                            </TableRow>
+                    ))}
+                        </Table>
+                        </TableContainer>
+        </Container>
+    </Paper>
 
 }
-export async function getStaticProps(props) {
-    return {props: {}}
-}
+
+export default AdminIndex

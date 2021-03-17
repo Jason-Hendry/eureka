@@ -1,74 +1,52 @@
-import React, {useContext, useState} from "react"
-import {Secret} from "../../components/AdminTheme/Secret";
-import {Button, FormControl, FormLabel, Paper, Theme, Toolbar, Typography} from "@material-ui/core";
+import React, {FC, useContext, useState} from "react"
+import {
+    Button,
+    Container,
+    FormControl, Paper,
+    TextField, Theme,
+    Typography, withTheme
+} from "@material-ui/core";
+import {CoursesCollectionApi, RaceCollectionApi, SiteSettingsCollectionApi} from "../../services/APIService";
+import {Secret} from "../../layout/Admin/Secret";
 import {makeStyles} from "@material-ui/styles";
-import useSWR, {mutate} from "swr";
-import {Image} from "../../models/Image";
-import {ImageSelector} from "../../components/ImageSelector";
-import {SiteSetting, SiteSettingData} from "../../models/SiteSetting";
-import {DocPutSiteSetting, SiteSettingFetcher} from "../../services/APIService";
+import {loadApiEffectAndSave, useAdminEffects} from "../../effects/loadApiEffect";
+import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
+import {CourseData} from "../../models/Course";
+import {SiteSettingData} from "../../models/SiteSetting";
+import ImageField, {HeroSize} from "../../components/form/ImageField";
 
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        padding: theme.spacing(4),
-    },
-    tableHeading: {
-        padding: 0
-    },
-    field: {
-        marginBottom: theme.spacing(2)
-    },
-    image: {
-        marginTop: theme.spacing(2),
-        marginRight: theme.spacing(2)
-    }
-}))
-const inputProps = {
-    step: 300,
-};
+type RaceProps = {
+    theme: Theme;
+}
 
-export default function EditCourse() {
-    const classes = useStyles();
+const BlankSiteSetting = ():SiteSettingData => ({
+    HomePageImages: [],
+    HomePageImage: ""
+})
 
-    const secret = useContext(Secret);
-    const id = process.browser ? document.location.hash.replace('#', '') : "";
-    const key = `/api/SiteSettings/${id}?secret=${secret}`
-    const {data, error} = useSWR<SiteSetting>(key, SiteSettingFetcher)
-    const siteSetting = data?.data
+const AdminIndex:FC<RaceProps> = ({theme}) => {
+    const {save, merge, data: siteSettings} = useAdminEffects(SiteSettingsCollectionApi, BlankSiteSetting)
 
-    const setSiteSetting = (siteSettingData: SiteSettingData) => {
-        mutate(key, {...data, data: siteSettingData}, false)
+    if(!siteSettings) {
+        return <Paper>
+            <Container>Loading...</Container>
+        </Paper>
     }
 
-    const addImage = (image: Image) => {
-        const HomePageImages = siteSetting?.HomePageImages || [];
-        HomePageImages.push(image)
-        setSiteSetting({...siteSetting, HomePageImages})
-    }
+    return <Paper>
+        <Container>
+            <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Site Settings</Typography>
 
-    const [btnLabel, setBtnLabel] = useState("Save")
+            <ImageField value={siteSettings.HomePageImage} label={'Home Page Image'} onChange={v => merge({HomePageImage: v})} {...HeroSize} />
 
-    const save = () => {
-        setBtnLabel("Saving...")
-        DocPutSiteSetting(siteSetting, id, secret as string).then(e => {
-            setBtnLabel("Save")
-        }).catch(e => setBtnLabel("Failed"));
-    }
-
-    return <Paper className={classes.root}>
-        <Toolbar className={classes.tableHeading}><Typography variant={"h6"} component={"div"}>Site Settings</Typography></Toolbar>
-
-
-        <FormControl margin={"normal"} className={classes.field}>
-            <FormLabel>Home Page Image</FormLabel>
-
-            {siteSetting?.HomePageImages ? siteSetting.HomePageImages.map((i, k) => <img alt={i.data.alt} className={classes.image} key={k}
-                                                          src={i.data.admin}/>) : null}
-
-            <ImageSelector addImage={addImage}/>
-        </FormControl>
-
-        <Button fullWidth={true} variant={"contained"} color={"primary"} onClick={save}>{btnLabel}</Button>
+            <form onSubmit={e => e.preventDefault()}>
+                <FormControl fullWidth={true} margin={"normal"}>
+                    <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{document.location.hash.length ? 'Save' : 'Create'}</Button>
+                </FormControl>
+            </form>
+        </Container>
     </Paper>
 
 }
+
+export default withTheme(AdminIndex)

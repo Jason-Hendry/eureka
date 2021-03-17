@@ -1,25 +1,16 @@
-import React, {FormEventHandler, useEffect, useState} from "react"
+import React, {FC, useState} from "react"
 import {
-    Button,
-    Card,
+    Button, CardActions,
     CardContent,
-    Container, Grid,
-    IconButton,
-    InputAdornment,
-    Paper,
     TextField,
     Typography
 } from "@material-ui/core";
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import {ResetRequestService, ResetService} from "./api/login";
-import {useRouter} from 'next/router'
-import {useLocalStorage} from "../components/AdminTheme/AdminTheme";
-import {makeStyles} from "@material-ui/styles";
-import {AdminFormTheme} from "../components/AdminTheme/AdminFormTheme";
+import Link from "next/link";
+import {ResetRequestService} from "../auth/reset";
+import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
 
 
-export default function Index(props) {
+export const PasswordReset: FC<unknown> = () => {
     const [email, setEmail] = useState<string>("")
     const [resetSent, setResetSent] = useState<boolean>(false)
 
@@ -34,7 +25,6 @@ export default function Index(props) {
         })
         e.preventDefault();
     }
-
 
     return (
         <AdminFormTheme>
@@ -51,11 +41,12 @@ export default function Index(props) {
                         Password</Button>
                 </form>
             </CardContent>
+            <CardActions>
+                <Link href={'/login'}>Go to Login</Link>
+            </CardActions>
         </AdminFormTheme>)
 
 }
 
-export async function getStaticProps(props) {
-    return {props:{}}
-}
+export default PasswordReset
 

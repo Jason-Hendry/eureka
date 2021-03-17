@@ -1,14 +1,9 @@
-
-
-// @ts-ignore
 import {FlexibleContent} from "./FlexibleContent";
 import {Image} from "./Image";
+import {BaseList, BaseModel} from "./base";
 
-export interface News {
-    id: string
-    data: NewsData
-}
-export type NewsList = Array<News>;
+export type News = BaseModel<NewsData>
+export type NewsList = BaseList<NewsData>;
 
 export interface NewsData {
     Title: string
@@ -17,7 +12,6 @@ export interface NewsData {
     Body?: string
     Content?: Array<FlexibleContent>
     Images?: Image[]
-
 }
 
 export function FilterHasDate() {

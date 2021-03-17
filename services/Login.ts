@@ -6,5 +6,5 @@ export interface AWSCredentials {
     AccessKeyId: string,
     SecretAccessKey: string,
     SessionToken: string,
-    Expiration: string,
+    Expiration: Date,
 }

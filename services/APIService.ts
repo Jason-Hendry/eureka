@@ -1,155 +1,73 @@
-import {Race, RaceData, RaceList} from "../models/Race";
-import {News, NewsData, NewsList} from "../models/News";
-import {Results, ResultsData, ResultsList} from "../models/Results";
-import {User, UserData, UserList} from "../models/User";
-import {Course, CourseData, CourseList} from "../models/Course";
-import React from "react";
-import {Image, ImageList, ImageData} from "../models/Image";
-import {SiteSetting, SiteSettingData} from "../models/SiteSetting";
+import {RaceData} from "../models/Race";
+import {NewsData} from "../models/News";
+import {ResultsData} from "../models/Results";
+import {UserData} from "../models/User";
+import {CourseData} from "../models/Course";
+import {SiteSettingData} from "../models/SiteSetting";
+import {ImageData} from "../models/Image";
+import {BaseList, BaseModel, ModelCollection} from "../models/base";
+import {Collection} from "./DirectService";
+import {
+    CreateRequest,
+    CrudBaseRequest,
+    CrudBaseRequestWithId,
+    CrudlRequest,
+    ListRequest,
+    ReadRequest, UpdateRequest
+} from "../pages/api/crud";
+import {FileData} from "../models/File";
 
-export function DocListRaces(secret: string) :Promise<RaceList> {
-    return DocListService<RaceList>("Races", secret)
-}
-export function DocListNews(secret: string) :Promise<NewsList> {
-    return DocListService<NewsList>("News", secret)
-}
-export function DocListResults(secret: string) :Promise<ResultsList> {
-    return DocListService<ResultsList>("Results", secret)
-}
-export function DocListUsers(secret: string) :Promise<UserList> {
-    return DocListService<UserList>("User", secret)
-}
-export function DocListCourses(secret: string) :Promise<CourseList> {
-    return DocListService<CourseList>("Courses", secret)
+export class CollectionAPI<T> extends Collection<T> {
+
+    constructor(collection: ModelCollection, secret: string) {
+        super(collection, secret)
+    }
+
+    baseRequest(): CrudBaseRequest {
+        return {query: { collection: this.collection, secret: this.secret }};
+    };
+    baseRequestId(id: string): CrudBaseRequestWithId {
+        return {query: { collection: this.collection, secret: this.secret, id: id }};
+    };
+
+    list(): Promise<BaseList<T>> {
+        return DoCrudRequest<BaseList<T>, ListRequest>({...this.baseRequest(), method: "GET"})
+    }
+
+    get(id: string): Promise<BaseModel<T>> {
+        const req: ReadRequest = {...this.baseRequestId(id) , method: "GET"}
+        return DoCrudRequest<BaseModel<T>, ReadRequest>(req)
+    }
+
+    post(data: T): Promise<BaseModel<T>> {
+        const req: CreateRequest = {...this.baseRequest() , method: "POST"}
+        return DoCrudRequest<BaseModel<T>, CreateRequest>(req, data)
+    }
+
+    put(data: T, id: string): Promise<BaseModel<T>>  {
+        const req: UpdateRequest = {...this.baseRequestId(id) , method: "PUT"}
+        return DoCrudRequest<BaseModel<T>, UpdateRequest>(req, data)
+    }
 }
 
-function DocListService<T>(collection, secret): Promise<T> {
-    return new Promise((resolve, reject) => {
-        console.log(`Fetching: /api/${ collection }?secret=${ secret }`)
-        fetch(`/api/${ collection }?secret=${ secret }`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(res => <T><unknown>res.json())
-            .then((result: T) => resolve(result))
-            .catch(error => reject(error))
+export const RaceCollectionApi = (secret: string) => new CollectionAPI<RaceData>(ModelCollection.Races, secret)
+export const NewsCollectionApi = (secret: string) => new CollectionAPI<NewsData>(ModelCollection.News, secret)
+export const ResultsCollectionApi = (secret: string) => new CollectionAPI<ResultsData>(ModelCollection.Results, secret)
+export const UserCollectionApi = (secret: string) => new CollectionAPI<UserData>(ModelCollection.User, secret)
+export const CoursesCollectionApi = (secret: string) => new CollectionAPI<CourseData>(ModelCollection.Courses, secret)
+export const ImagesCollectionApi = (secret: string) => new CollectionAPI<ImageData>(ModelCollection.Images, secret)
+export const SiteSettingsCollectionApi = (secret: string) => new CollectionAPI<SiteSettingData>(ModelCollection.SiteSettings, secret)
+export const FilesCollectionApi = (secret: string) => new CollectionAPI<FileData>(ModelCollection.Files, secret)
+
+export const DoCrudRequest = <T, K extends CrudlRequest>(req: K, body?: unknown): Promise<T> => {
+    const queryString: string = (Object.keys(req.query) as (keyof typeof req.query)[]).map((k)=> `${k}=${req.query[k]}`).join('&');
+
+    return fetch(`/api/crud?${queryString}`, {
+        method: req.method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: body ? JSON.stringify(body) : undefined
     })
+        .then(res => <T><unknown>res.json())
 }
-
-export function DocGetRaces(id, secret) :Promise<Race> {
-    return DocGetService<Race>("Races", id, secret)
-}
-export function DocGetNews(id, secret) :Promise<News> {
-    return DocGetService<News>("News", id, secret)
-}
-export function DocGetResults(id, secret) :Promise<Results> {
-    return DocGetService<Results>("Results", id, secret)
-}
-export function DocGetUser(id, secret) :Promise<User> {
-    return DocGetService<User>("User", id, secret)
-}
-export function DocGetCourse(id, secret) :Promise<Course> {
-    return DocGetService<Course>("Courses", id, secret)
-}
-
-
-function DocGetService<T>(collection, id, secret): Promise<T> {
-    return new Promise((resolve, reject) => {
-        console.log(`Fetching: /api/${ collection }/${ id }?secret=${ secret }`)
-        fetch(`/api/${ collection }/${ id }?secret=${ secret }`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(res => <T><unknown>res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
-
-export function DocPostRaces(data: RaceData, secret) :Promise<Race> {
-    return DocPostService<Race>("Races", data, secret)
-}
-export function DocPostNews(data: NewsData, secret) :Promise<News> {
-    return DocPostService<News>("News", data, secret)
-}
-export function DocPostResults(data: ResultsData, secret) :Promise<Results> {
-    return DocPostService<Results>("Results", data, secret)
-}
-export function DocPostUser(data: UserData, secret) :Promise<User> {
-    return DocPostService<User>("User", data, secret)
-}
-export function DocPostImages(data: ImageData, secret) :Promise<Image> {
-    return DocPostService<Image>("Images", data, secret)
-}
-export function DocPostCourse(data: CourseData, secret) :Promise<Course> {
-    return DocPostService<Course>("Courses", data, secret)
-}
-
-function DocPostService<T>(collection: string, data: any, secret: string): Promise<T> {
-    return new Promise((resolve, reject) => {
-        fetch(`/api/${collection}`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({secret, ...data})
-        })
-            .then(res => <T><unknown>res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
-
-export function DocPutRaces(data: RaceData, id: string, secret: string) :Promise<Race> {
-    return DocPutService<Race>("Races", data, id, secret)
-}
-export function DocPutNews(data: NewsData, id: string, secret: string) :Promise<News> {
-    return DocPutService<News>("News", data, id, secret)
-}
-export function DocPutResults(data: ResultsData, id: string, secret: string) :Promise<Results> {
-    return DocPutService<Results>("Results", data, id, secret)
-}
-export function DocPutUser(data: UserData, id: string, secret: string) :Promise<User> {
-    return DocPutService<User>("User", data, id, secret)
-}
-export function DocPutCourse(data: CourseData, id: string, secret: string) :Promise<Course> {
-    return DocPutService<Course>("Courses", data, id, secret)
-}
-export function DocPutSiteSetting(data: SiteSettingData, id: string, secret?: string) :Promise<SiteSetting> {
-    return DocPutService<SiteSetting>("SiteSettings", data, id, secret)
-}
-
-function DocPutService<T>(collection: string, data: object, id: string, secret: string): Promise<T> {
-    return new Promise((resolve, reject) => {
-
-
-        fetch(`/api/${collection}/${id}`, {
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({secret, ...data})
-        })
-            .then(res => <T><unknown>res.json())
-            .then(result => resolve(result))
-            .catch(error => reject(error))
-    })
-}
-
-
-export const RaceFetcher = url => fetch(url).then(r => <Race><unknown>r.json())
-export const RaceListFetcher = url => fetch(url).then(r => <RaceList><unknown>r.json())
-export const ResultsFetcher = url => fetch(url).then(r => <Results><unknown>r.json())
-export const ResultsListFetcher = url => fetch(url).then(r => <ResultsList><unknown>r.json())
-export const CourseFetcher = url => fetch(url).then(r => <Course><unknown>r.json())
-export const SiteSettingFetcher = url => fetch(url).then(r => <SiteSetting><unknown>r.json())
-export const CourseListFetcher = url => fetch(url).then(r => <CourseList><unknown>r.json())
-export const UserFetcher = url => fetch(url).then(r => <User><unknown>r.json())
-export const UserListFetcher = url => fetch(url).then(r => <UserList><unknown>r.json())
-export const NewsFetcher = url => fetch(url).then(r => <News><unknown>r.json())
-export const NewsListFetcher = url => fetch(url).then(r => <NewsList><unknown>r.json())
-export const ImageListFetcher = url => fetch(url).then(r => <ImageList><unknown>r.json())

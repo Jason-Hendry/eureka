@@ -1,88 +1,51 @@
-import React, {useContext, useState} from "react"
-import {useRouter} from "next/router";
-import Link from "next/link";
-import {Secret} from "../../components/AdminTheme/Secret";
+import React, {FC, useContext, useEffect, useState} from "react"
 import {
     Button,
+    Checkbox,
+    Container, FormControlLabel,
     Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow, Theme, Toolbar,
+    Table, TableCell,
+    TableContainer, TableHead, TableRow,
     Typography
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
-import {DocListUsers, DocPostUser} from "../../services/APIService";
-import {UserList} from "../../models/User";
+import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
+import {Secret} from "../../layout/Admin/Secret";
+import {dateSortCompareOldestFirst, sortByName, sortByTitle, thisYear} from "../../services/sort";
+import {FilterFutureRace, Race, RaceData} from "../../models/Race";
+import {BaseList, BaseModel} from "../../models/base";
+import Link from "next/link";
+import {CourseData, GetCourse} from "../../models/Course";
+import Three, {ColumnThird} from "../../layout/columns/Three";
+import {useAdminListHooks} from "../../effects/loadApiEffect";
+import {UserData} from "../../models/User";
 
-const useStyles = makeStyles((theme: Theme) => ({
-    row: {
-        '&:hover': {
-            background: theme.palette.action.hover,
-        }
-    },
-    heading: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2)
-    },
-    tableHeading: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1)
-    },
-    newUser: {
-        marginRight: theme.spacing(1)
-    }
-}))
 
-export default function Index(props) {
-    const secret = useContext(Secret)
-    const [users, setUsers] = useState<UserList>([])
-    const classes = useStyles()
-    const router = useRouter()
+export const AdminUsers: FC<unknown> = () => {
+    const {list: users} = useAdminListHooks<UserData>(UserCollectionApi)
 
-    if (process.browser) {
-        if (users.length === 0) {
-            DocListUsers(secret).then(list => setUsers(list)).catch(e => setUsers([]))
-        }
-    }
-
-    const newUser = () => {
-        DocPostUser( {email:"",name:""}, secret).then(({id}) => router.push(`/admin/user/edit#${id}`)).catch(e => {});
-    }
-
-    const list = users.map((r, i) => {
-        console.log(r)
-        return <TableRow key={i} className={classes.row}>
-            <TableCell>{r.data.name}</TableCell>
-            <TableCell>{r.data.email}</TableCell>
-            <TableCell>
-                <Button variant={"text"}><Link href={"/admin/user/edit#" + r.id}>Edit</Link></Button>
-            </TableCell>
-        </TableRow>
-    })
-
-    return <TableContainer component={Paper}>
-            <Toolbar className={classes.tableHeading}>
-                <Typography variant={"h6"} component={"div"}>Manage Users</Typography>
-                <Button variant={"contained"} color={"primary"} className={classes.newUser} onClick={newUser}>New User</Button>
-            </Toolbar>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell variant={"head"}>Name</TableCell>
-                        <TableCell variant={"head"}>Email</TableCell>
-                        <TableCell variant={"head"}>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {list}
-                </TableBody>
-            </Table>
-        </TableContainer>
-
+    return <Paper>
+        <Container>
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell variant={"head"}><Typography variant={"h6"}>Users</Typography></TableCell>
+                            <TableCell variant={"head"}>email</TableCell>
+                            <TableCell variant={"head"} align={"right"}><Link href={"/admin/user"}>Add New
+                                User</Link></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    {users.sort(sortByName).map(user => (
+                        <TableRow key={user.id}>
+                            <TableCell>{user.data.name}</TableCell>
+                            <TableCell>{user.data.email}</TableCell>
+                            <TableCell align={"right"}><Link href={`/admin/user#${user.id}`}>Edit</Link></TableCell>
+                        </TableRow>
+                    ))}
+                </Table>
+            </TableContainer>
+        </Container>
+    </Paper>
 }
-export async function getStaticProps(props) {
-    return {props: {}}
-}
+
+export default AdminUsers

@@ -1,86 +1,56 @@
-import React, {useContext, useState} from "react"
-import {useRouter} from "next/router";
-import Link from "next/link";
-import {Secret} from "../../components/AdminTheme/Secret";
+import React, {FC, useContext, useEffect, useState} from "react"
 import {
     Button,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow, Theme, Toolbar,
+    Checkbox,
+    Container, FormControlLabel,
+    Paper, Snackbar,
+    Table, TableCell,
+    TableContainer, TableHead, TableRow,
     Typography
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
-import {DocListNews, DocPostNews} from "../../services/APIService";
-import {NewsList} from "../../models/News";
+import MuiAlert from "@material-ui/lab/Alert";
+import {
+    CoursesCollectionApi,
+    ImagesCollectionApi,
+    NewsCollectionApi,
+    RaceCollectionApi
+} from "../../services/APIService";
+import {Secret} from "../../layout/Admin/Secret";
+import {dateSortCompareOldestFirst, sortByTitle, thisYear} from "../../services/sort";
+import {FilterFutureRace, Race, RaceData} from "../../models/Race";
+import {BaseList, BaseModel} from "../../models/base";
+import Link from "next/link";
+import {CourseData, GetCourse} from "../../models/Course";
+import Three, {ColumnThird} from "../../layout/columns/Three";
+import {NewsData} from "../../models/News";
+import {useAdminListHooks} from "../../effects/loadApiEffect";
 
-const useStyles = makeStyles((theme: Theme) => ({
-    row: {
-        '&:hover': {
-            background: theme.palette.action.hover,
-        }
-    },
-    heading: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2)
-    },
-    tableHeading: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1)
-    },
-    newNews: {
-        marginRight: theme.spacing(1)
-    }
-}))
 
-export default function Index(props) {
-    const secret = useContext(Secret)
-    const [news, setNews] = useState<NewsList>([])
-    const classes = useStyles()
-    const router = useRouter()
+export const AdminIndex: FC<unknown> = () => {
+    const {list: news} = useAdminListHooks(NewsCollectionApi)
 
-    if (process.browser) {
-        if (news.length === 0) {
-            DocListNews(secret).then(list => setNews(list)).catch(e => setNews([]))
-        }
-    }
-
-    const newNews = () => {
-        DocPostNews( {Title:""}, secret).then(({id}) => router.push(`/admin/newsArticle/edit#${id}`)).catch(e => {});
-    }
-
-    const list = news.map((r, i) => {
-        console.log(r)
-        return <TableRow key={i} className={classes.row}>
-            <TableCell>{r.data.Title ? r.data.Title : '- No name -'}</TableCell>
-            <TableCell>
-                <Button variant={"text"}><Link href={"/admin/newsArticle/edit#" + r.id}>Edit</Link></Button>
-            </TableCell>
-        </TableRow>
-    })
-
-    return <TableContainer component={Paper}>
-            <Toolbar className={classes.tableHeading}>
-                <Typography variant={"h6"} component={"div"}>Manage News</Typography>
-                <Button variant={"contained"} color={"primary"} className={classes.newNews} onClick={newNews}>New News</Button>
-            </Toolbar>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell variant={"head"}>Title</TableCell>
-                        <TableCell variant={"head"}>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {list}
-                </TableBody>
-            </Table>
-        </TableContainer>
+    return <Paper>
+        <Container>
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell variant={"head"}><Typography variant={"h6"}>News</Typography></TableCell>
+                            <TableCell variant={"head"} align={"right"}><Link href={"/admin/newsItem"}>Add New
+                                Article</Link></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    {news.sort(sortByTitle).map(n => (
+                        <TableRow key={n.id}>
+                            <TableCell>{n.data.Title}</TableCell>
+                            <TableCell align={"right"}><Link href={`/admin/newsItem#${n.id}`}>Edit</Link></TableCell>
+                        </TableRow>
+                    ))}
+                </Table>
+            </TableContainer>
+        </Container>
+    </Paper>
 
 }
-export async function getStaticProps(props) {
-    return {props: {}}
-}
+
+export default AdminIndex
