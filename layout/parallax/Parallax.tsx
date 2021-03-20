@@ -48,7 +48,7 @@ const useStyles = ({breakpoints}: Theme) => makeStyles(({
 }));
 
 interface ParallaxProps {
-  filter: unknown
+  filter: boolean
   className: string
   style?: CSSProperties
   image : unknown
@@ -71,9 +71,9 @@ const Parallax: FC<ParallaxProps> = (props) => {
   });
   const resetTransform = () => {
     var windowScrollTop = window.pageYOffset / 3;
-    setTransform("translate3d(0," + windowScrollTop + "px,0)");
+    setTransform(`translate3d(0,${windowScrollTop}px,0)`);
   };
-  const { filter, className, children, style, image, small, responsive, theme } = props;
+  const { filter=true, className, children, style, image, small, responsive, theme } = props;
   const classes = useStyles(theme)();
   const parallaxClasses = classNames({
     [classes.parallax]: true,
@@ -87,7 +87,7 @@ const Parallax: FC<ParallaxProps> = (props) => {
       className={parallaxClasses}
       style={{
         ...style,
-        backgroundImage: "url(" + image + ")",
+        backgroundImage: `url(${image})`,
         transform: transform
       }}
     >

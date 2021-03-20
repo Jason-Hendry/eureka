@@ -26,7 +26,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         if (jssStyles) {
             jssStyles?.parentElement?.removeChild(jssStyles);
         }
-        router.push(document.location.pathname)
     }, []);
 
     return <>
@@ -37,8 +36,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
             <Component {...pageProps} />
-        </ThemeProvider>
-    </>
+        </ThemeProvider></>
 }
 
 export default MyApp;
