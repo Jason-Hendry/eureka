@@ -4,11 +4,13 @@ import Document, {Html, Head, Main, NextScript} from 'next/document';
 import {DocumentContext, DocumentInitialProps, DocumentProps} from "next/dist/next-server/lib/utils";
 import {theme} from "./_app";
 import {createGenerateClassName, Styles, StylesProvider} from "@material-ui/styles";
-import {SheetsManager, SheetsRegistry} from "jss";
+import {GenerateId, SheetsManager, SheetsRegistry} from "jss";
 
 const GTM_ID = 'GTM-MZ5KFQK';
 
 export default class MyDocument extends Document<DocumentProps & {ssrCss: string}> {
+
+
     render() {
         return (
             <Html lang="en">
@@ -29,7 +31,7 @@ export default class MyDocument extends Document<DocumentProps & {ssrCss: string
                 })(window,document,'script','dataLayer','${GTM_ID}');`,
                         }}
                     />
-                    <style data-jss dangerouslySetInnerHTML={{ __html: this.props.ssrCss }} />
+                    <style data-jss-eur dangerouslySetInnerHTML={{ __html: this.props.ssrCss }} />
                     {/* End Google Tag Manager */}
                 </Head>
                 <body>
@@ -48,20 +50,45 @@ export default class MyDocument extends Document<DocumentProps & {ssrCss: string
     }
 }
 
-const generateClassName = createGenerateClassName({
-    productionPrefix: 'c',
-    disableGlobal: false,
-    seed: 'Eureka'
-});
+// `getInitialProps` belongs to `_document` (instead of `_app`),
+// it's compatible with server-side generation (SSG).
+MyDocument.getInitialProps = async (ctx) => {
+    // Resolution order
+    //
+    // On the server:
+    // 1. app.getInitialProps
+    // 2. page.getInitialProps
+    // 3. document.getInitialProps
+    // 4. app.render
+    // 5. page.render
+    // 6. document.render
+    //
+    // On the server with error:
+    // 1. document.getInitialProps
+    // 2. app.render
+    // 3. page.render
+    // 4. document.render
+    //
+    // On the client
+    // 1. app.getInitialProps
+    // 2. page.getInitialProps
+    // 3. app.render
+    // 4. page.render
 
-export const getInitialProps = async ({renderPage}: DocumentContext) => {
-    const sheets = new SheetsRegistry()
+    // Render app and page and get the context of the page with collected side effects.
+    const sheets = new ServerStyleSheets();
+    const originalRenderPage = ctx.renderPage;
 
-    const page = renderPage((Page) => (props: PropsWithChildren<unknown>) => (
-        <StylesProvider sheetsRegistry={sheets}>
-            <Page {...props} />
-        </StylesProvider>
-    ))
-    const ssrCss = sheets.toString();
-    return { ...page, ssrCss }
-}
+    ctx.renderPage = () =>
+        originalRenderPage({
+            enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+        });
+
+    const initialProps = await Document.getInitialProps(ctx);
+
+    return {
+        ...initialProps,
+        // Styles fragment is rendered after the app and page rendering finish.
+        styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+    };
+};

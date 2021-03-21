@@ -8,7 +8,7 @@ import {StylesProvider, ThemeProvider} from "@material-ui/styles";
 import {createMuiTheme} from "@material-ui/core";
 import {red} from '@material-ui/core/colors';
 import React, {useEffect, useState} from "react";
-import {SheetsRegistry} from "jss";
+import {GenerateId} from "jss";
 
 export const theme = createMuiTheme({
     palette: {
@@ -29,14 +29,6 @@ export const theme = createMuiTheme({
 
 function MyApp({Component, pageProps, router}: AppProps) {
     const admin = router.pathname.match('^/admin');
-    const [firstLoad, setFirstLoad] = useState(true)
-
-    useEffect(() => {
-        if(firstLoad) {
-            setTimeout(() =>setFirstLoad(false), 10)
-        }
-    },[])
-
 
     if (admin) {
         return <AdminTheme><Component {...pageProps} /></AdminTheme>
