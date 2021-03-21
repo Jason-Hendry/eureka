@@ -56,3 +56,17 @@ export function MergeCourseUserData(courses: CourseList, users: UserList) {
         return {...r, data: {...r.data, CourseData, MarshallNames}}
     }
 }
+
+export const RaceTitle: (r: RaceMergeData) => string = (r) => {
+    if (r.Title) {
+        return r.Title
+    }
+    const title = [];
+    if (r.RaceFormat) {
+        title.push(r.RaceFormat)
+    }
+    if (r.CourseData?.data?.Title) {
+        title.push(r.CourseData?.data?.Title)
+    }
+    return title.join(' - ')
+}

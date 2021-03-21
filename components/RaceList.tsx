@@ -2,7 +2,7 @@ import {FC} from "react";
 import {Button, Card, CardActions, CardContent, CardHeader, Theme, withTheme} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {BaseList} from "../models/base";
-import {RaceData, RaceMergeData} from "../models/Race";
+import {RaceMergeData, RaceTitle} from "../models/Race";
 
 interface RaceListProps {
     races: BaseList<RaceMergeData>
@@ -18,18 +18,23 @@ const useStyles = ({spacing}: Theme) => makeStyles({
 
 export const RaceList: FC<RaceListProps> = ({theme, races}) => {
     const classes = useStyles(theme)()
+
+
     return (
         <>
             {races.map(r => (
                 <Card className={classes.races} key={r.id}>
-                    <CardHeader title={r.data.Title} subheader={r.data?.Date}/>
+                    <CardHeader title={RaceTitle(r.data)} subheader={r.data?.Date}/>
                     <CardContent>
                         {r.data?.CourseData?.data?.Title}
                     </CardContent>
-                    {r.data?.RegistrationURL ? <CardActions>
+                    <CardActions>
+                        {r.data?.RegistrationURL &&
                         <Button variant={"contained"} color={"primary"} href={r.data?.RegistrationURL}>Register Online
                             Now</Button>
-                    </CardActions> : null}
+                        }
+                        <Button href={`/races/${r.id}`}>More Info</Button>
+                    </CardActions>
                 </Card>
             ))}
         </>

@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, ReactChild, ReactChildren} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {HeroHeading} from "./hero/HeroHeading";
 import Parallax from "./parallax/Parallax";
@@ -34,7 +34,7 @@ interface PublicLayoutProps {
     children: React.ReactNode
     heroImage: string
     title: string
-    leadParagraph?: string
+    leadParagraph?: string|JSX.Element
     small?: boolean
 }
 

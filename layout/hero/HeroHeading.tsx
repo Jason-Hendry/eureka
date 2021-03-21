@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, ReactChild, ReactChildren} from "react";
 import {Container, createStyles, Grid, Typography, TypographyClassKey} from "@material-ui/core"
 import {makeStyles} from "@material-ui/styles";
 import {container} from "../container/container";
@@ -6,7 +6,7 @@ import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
 
 interface HeroHeadingProps {
     title: string
-    leadParagraph?: string
+    leadParagraph?: string|JSX.Element
 }
 
 const useTypographyStyle: () => Partial<ClassNameMap<TypographyClassKey>> = makeStyles({
