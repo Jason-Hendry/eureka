@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {StylesProvider, ThemeProvider} from "@material-ui/styles";
 import {createMuiTheme} from "@material-ui/core";
 import {red} from '@material-ui/core/colors';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {SheetsRegistry} from "jss";
 
 export const theme = createMuiTheme({
@@ -29,6 +29,14 @@ export const theme = createMuiTheme({
 
 function MyApp({Component, pageProps, router}: AppProps) {
     const admin = router.pathname.match('^/admin');
+    const [firstLoad, setFirstLoad] = useState(true)
+
+    useEffect(() => {
+        if(firstLoad) {
+            setTimeout(() =>setFirstLoad(false), 10)
+        }
+    },[])
+
 
     if (admin) {
         return <AdminTheme><Component {...pageProps} /></AdminTheme>
@@ -39,6 +47,7 @@ function MyApp({Component, pageProps, router}: AppProps) {
             <Head>
                 <title>Eureka Cycling</title>
             </Head>
+
             <ThemeProvider theme={theme}>
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline/>
