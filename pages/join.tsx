@@ -1,30 +1,25 @@
-import React, {FC, useContext, useState} from "react"
-import {Paper} from "@material-ui/core";
+import React, {FC} from "react"
 import {SiteSetting} from "../models/SiteSetting";
-import {BaseList} from "../models/base";
-import {FilterHasDate, NewsData} from "../models/News";
 import PublicLayout from "../layout/public";
 import {GetStaticProps} from "next";
-import {NewsCollection, SiteSettingsCollection} from "../services/DirectService";
-import {dateSortCompareNewestFirst, LimitFilter} from "../services/sort";
-import Join from "../components/commonInfo/Join";
+import {SiteSettingsCollection} from "../services/DirectService";
+import {Join as JoinInfo} from "../components/commonInfo/Join";
 
 type JoinProps = {
     siteSetting: SiteSetting
 }
 
-
-export const JoinPage: FC<JoinProps> = ({siteSetting}) => {
+export const Join: FC<JoinProps> = ({siteSetting}) => {
     const image = siteSetting.data?.HomePageImages?.length ?
         siteSetting.data.HomePageImages[0].data.hero :
         '';
 
 
     return <PublicLayout small={true} heroImage={image} title={"JoinPage Eureka Cycling"}>
-            <Join />
+            <JoinInfo />
     </PublicLayout>
 }
-export default JoinPage
+export default Join
 
 export const getStaticProps: GetStaticProps<JoinProps> = async () => {
 
