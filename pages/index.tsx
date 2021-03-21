@@ -19,6 +19,8 @@ import NewsList from "../components/NewsList";
 import RaceList from "../components/RaceList";
 import EventIcon from "@material-ui/icons/Event";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import {Button, Card, CardActions, CardContent} from "@material-ui/core";
+import Join, {membershipRaceAllDiscipline} from "../components/commonInfo/Join";
 
 type HomeProps = {
   siteSetting: SiteSetting
@@ -55,8 +57,17 @@ export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
         <ColumnThird>
           <InfoArea
               icon={<PersonAddIcon/>}
-              title={"Join Eureka"}
+              title={"JoinPage Eureka"}
               description={""} />
+          <Card>
+            <CardContent>
+              <Join />
+            </CardContent>
+            <CardActions>
+              <Button color={"primary"} variant={"contained"} href={membershipRaceAllDiscipline}>Join Eureka Cycling</Button>
+            </CardActions>
+          </Card>
+
         </ColumnThird>
       </Three>
     </PublicLayout>
