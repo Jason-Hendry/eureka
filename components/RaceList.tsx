@@ -3,6 +3,7 @@ import {Button, Card, CardActions, CardContent, CardHeader, Theme, withTheme} fr
 import {makeStyles} from "@material-ui/styles";
 import {BaseList} from "../models/base";
 import {RaceMergeData, RaceTitle} from "../models/Race";
+import {ISODateToPretty} from "../services/dates";
 
 interface RaceListProps {
     races: BaseList<RaceMergeData>
@@ -24,7 +25,7 @@ export const RaceList: FC<RaceListProps> = ({theme, races}) => {
         <>
             {races.map(r => (
                 <Card className={classes.races} key={r.id}>
-                    <CardHeader title={RaceTitle(r.data)} subheader={r.data?.Date}/>
+                    <CardHeader title={RaceTitle(r.data)} subheader={ISODateToPretty(r.data?.Date)}/>
                     <CardContent>
                         {r.data?.CourseData?.data?.Title}
                     </CardContent>

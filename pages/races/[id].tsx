@@ -10,6 +10,7 @@ import {SiteSettingData} from "../../models/SiteSetting";
 import nl2br from "react-nl2br";
 import {Button, Typography} from "@material-ui/core";
 import {RaceMergeData} from "../../models/Race";
+import {ISODateToPretty} from "../../services/dates";
 
 interface RacePageProps {
     race: BaseModel<RaceMergeData>
@@ -36,7 +37,9 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
             {nl2br(race.data?.Notes)}
             <br/>
 
-            <Typography variant={'h4'} component={"h2"}>Registration</Typography>
+            <Typography variant={'h4'} component={"h2"}>Times</Typography>
+            {race.data?.Date && <p>Date: {ISODateToPretty(race.data?.Date)}</p>}
+            {race.data?.RaceStartTime && <p>Date: {race.data?.RaceStartTime}</p>}
             {race.data?.RegistrationCutoff && <p>Registration closes: {race.data?.RegistrationCutoff || '9am'}</p>}
 
             <br/>
