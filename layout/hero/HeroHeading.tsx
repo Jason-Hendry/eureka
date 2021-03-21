@@ -1,39 +1,31 @@
 import React, {FC} from "react";
-import {Grid, Theme} from "@material-ui/core"
-import {makeStyles, Styles} from "@material-ui/styles";
+import {Container, createStyles, Grid, Typography, TypographyClassKey} from "@material-ui/core"
+import {makeStyles} from "@material-ui/styles";
 import {container} from "../container/container";
+import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
 
 interface HeroHeadingProps {
     title: string
     leadParagraph?: string
 }
 
-const useHeroHeadingStyle = makeStyles({
-    container,
-    title: {
-        margin: "1.75rem 0 0.875rem",
-        textDecoration: "none",
-        fontWeight: 700,
-        fontFamily: `"Roboto Slab", "Times New Roman", serif`,
-        display: "inline-block",
-        position: "relative",
-        marginTop: "30px",
-        minHeight: "32px",
-        color: "#FFFFFF",
+const useTypographyStyle: () => Partial<ClassNameMap<TypographyClassKey>> = makeStyles({
+    colorTextPrimary: {
+        color: "#ffffff",
+        zIndex: 2,
+        position: "relative"
     }
 })
 
 export const HeroHeading: FC<HeroHeadingProps> = ({title, leadParagraph}) => {
-    const classes = useHeroHeadingStyle()
-    return <div className={classes.container}>
+    const classes = useTypographyStyle()
+    return <Container>
         <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={6}>
-                <h1 className={classes.title}>{title}</h1>
-                {leadParagraph ? <h4>
-                    {leadParagraph}
-                </h4> : null}
+                <Typography classes={classes} variant={"h3"} component={'h1'} color={"textPrimary"}>{title}</Typography>
+                {leadParagraph && <Typography classes={classes} variant={"h6"} component={'span'} color={"textPrimary"}>{leadParagraph}</Typography>}
                 <br/>
             </Grid>
         </Grid>
-    </div>
+    </Container>
 }

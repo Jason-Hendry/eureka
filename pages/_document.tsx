@@ -3,7 +3,9 @@ import React, {FC} from "react";
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import {DocumentContext, DocumentInitialProps, DocumentProps} from "next/dist/next-server/lib/utils";
 import {theme} from "./_app";
+
 const GTM_ID = 'GTM-MZ5KFQK';
+
 export default class MyDocument extends Document {
     render() {
         return (

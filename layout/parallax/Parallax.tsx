@@ -5,10 +5,10 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import {Theme, withTheme} from "@material-ui/core";
+import {createStyles, Theme, withTheme} from "@material-ui/core";
 
 // core components
-const useStyles = ({breakpoints}: Theme) => makeStyles(({
+const useStyles = makeStyles(({breakpoints}: Theme) => createStyles({
   parallax: {
     height: "90vh",
     maxHeight: "1000px",
@@ -20,9 +20,7 @@ const useStyles = ({breakpoints}: Theme) => makeStyles(({
     padding: "0",
     border: "0",
     display: "flex",
-    alignItems: "center"
-  },
-  filter: {
+    alignItems: "center",
     "&:before": {
       background: "rgba(0, 0, 0, 0.5)"
     },
@@ -54,10 +52,9 @@ interface ParallaxProps {
   image : unknown
   small? : boolean
   responsive : boolean
-  theme: Theme
 }
 
-const Parallax: FC<ParallaxProps> = (props) => {
+const Parallax: FC<ParallaxProps> = ({ filter=true, className, children, style, image, small, responsive } ) => {
   const [transform, setTransform] = React.useState("translate3d(0,0px,0)");
   React.useEffect(() => {
     if (window.innerWidth >= 768) {
@@ -73,11 +70,9 @@ const Parallax: FC<ParallaxProps> = (props) => {
     var windowScrollTop = window.pageYOffset / 3;
     setTransform(`translate3d(0,${windowScrollTop}px,0)`);
   };
-  const { filter=true, className, children, style, image, small, responsive, theme } = props;
-  const classes = useStyles(theme)();
+  const classes = useStyles();
   const parallaxClasses = classNames({
     [classes.parallax]: true,
-    [classes.filter]: filter,
     [classes.small]: small,
     [classes.parallaxResponsive]: responsive,
     [className]: className !== undefined
@@ -96,4 +91,4 @@ const Parallax: FC<ParallaxProps> = (props) => {
   );
 }
 
-export default withTheme(Parallax)
+export default Parallax
