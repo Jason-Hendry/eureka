@@ -1,11 +1,6 @@
 import React, {CSSProperties, FC} from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import {createStyles, Theme, withTheme} from "@material-ui/core";
+import {createStyles, Theme} from "@material-ui/core";
 
 // core components
 const useStyles = makeStyles(({breakpoints}: Theme) => createStyles({
@@ -38,10 +33,8 @@ const useStyles = makeStyles(({breakpoints}: Theme) => createStyles({
   small: {
     height: "380px"
   },
-  parallaxResponsive: {
-    [breakpoints.down("md")]: {
-      minHeight: "660px"
-    }
+  [breakpoints.down("md")]: {
+    minHeight: "660px"
   }
 }));
 
@@ -54,7 +47,7 @@ interface ParallaxProps {
   responsive : boolean
 }
 
-const Parallax: FC<ParallaxProps> = ({ filter=true, className, children, style, image, small, responsive } ) => {
+const Parallax: FC<ParallaxProps> = ({  children, style, image, small } ) => {
   const [transform, setTransform] = React.useState("translate3d(0,0px,0)");
   React.useEffect(() => {
     if (window.innerWidth >= 768) {
@@ -67,19 +60,14 @@ const Parallax: FC<ParallaxProps> = ({ filter=true, className, children, style, 
     };
   });
   const resetTransform = () => {
-    var windowScrollTop = window.pageYOffset / 3;
+    const windowScrollTop = window.pageYOffset / 3;
     setTransform(`translate3d(0,${windowScrollTop}px,0)`);
   };
   const classes = useStyles();
-  const parallaxClasses = classNames({
-    [classes.parallax]: true,
-    [classes.small]: small,
-    [classes.parallaxResponsive]: responsive,
-    [className]: className !== undefined
-  });
+
   return (
     <div
-      className={parallaxClasses}
+      className={[classes.parallax, small && classes.small].filter(Boolean).join(' ')}
       style={{
         ...style,
         backgroundImage: `url(${image})`,

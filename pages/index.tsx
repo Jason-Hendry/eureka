@@ -8,7 +8,7 @@ import {
 import {FilterFutureRace, MergeCourseUserData, RaceMergeData} from "../models/Race";
 import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, LimitFilter} from "../services/sort";
 import {FilterHasDate, NewsData} from "../models/News";
-import {FC} from "react";
+import React, {FC} from "react";
 import {GetStaticProps} from "next";
 import {SiteSetting} from "../models/SiteSetting";
 import {BaseList} from "../models/base";
@@ -17,6 +17,8 @@ import InfoArea from "../layout/InfoArea/InfoArea";
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import NewsList from "../components/NewsList";
 import RaceList from "../components/RaceList";
+import EventIcon from "@material-ui/icons/Event";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 type HomeProps = {
   siteSetting: SiteSetting
@@ -45,14 +47,14 @@ export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
         </ColumnThird>
         <ColumnThird>
           <InfoArea
-              icon={<AnnouncementIcon />}
+              icon={<EventIcon/>}
               title={"Upcoming Events"}
               description={""} />
               <RaceList races={races} />
         </ColumnThird>
         <ColumnThird>
           <InfoArea
-              icon={<AnnouncementIcon />}
+              icon={<PersonAddIcon/>}
               title={"Join Eureka"}
               description={""} />
         </ColumnThird>

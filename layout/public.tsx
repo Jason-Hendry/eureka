@@ -7,9 +7,16 @@ import {container} from "./container/container";
 import HeaderLinks from "./header/HeaderLinks";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
-import {Theme, withTheme} from "@material-ui/core";
+import {Container, createStyles, Paper, PaperClassKey, Theme, withTheme} from "@material-ui/core";
+import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
 
-const useStyles = ({palette}: Theme) => makeStyles({
+const usePaperStyles: ()=>Partial<ClassNameMap<PaperClassKey>> = makeStyles(({palette, spacing}: Theme) =>  createStyles({
+    root: {
+        backgroundColor: palette.grey["100"],
+        padding: spacing(2)
+    }
+}));
+const useStyles = makeStyles(({palette}: Theme) =>  createStyles({
     brandImage: {
         cursor: "pointer"
     },
@@ -18,23 +25,10 @@ const useStyles = ({palette}: Theme) => makeStyles({
         position: "relative",
         zIndex: 3
     },
-    mainRaised: {
-        margin: "-60px 30px 0px",
-        borderRadius: "6px",
-        boxShadow:
-            "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
-    },
-    container: {
-        ...container
-    },
-    section: {
-        padding: "70px 0",
-        color:palette.text.primary
-    },
     heroBg: {
         backgroundPositionY: "center"
     }
-});
+}));
 
 const eurekaLogo = require("../assets/img/eureka-logo.svg")
 const eurekaLogoWhite = require("../assets/img/eureka-logo-white.svg")
@@ -45,36 +39,34 @@ interface PublicLayoutProps {
     title: string
     leadParagraph?: string
     small?: boolean
-    theme: Theme
 }
 
-export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title, leadParagraph, small, theme}) => {
-    const classes = useStyles(theme)();
+export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title, leadParagraph, small}) => {
+    const classes = useStyles();
+    const paperClass = usePaperStyles();
 
     return <div>
         <Header
             color="transparent"
             // routes={dashboardRoutes}
-            brand={<img className={classes.brandImage} height={80} src={eurekaLogoWhite} alt={"Eureka Cycling"} />}
-            rightLinks={<HeaderLinks />}
+            brand={<img className={classes.brandImage} height={80} src={eurekaLogoWhite} alt={"Eureka Cycling"}/>}
+            rightLinks={<HeaderLinks/>}
             fixed
             changeColorOnScroll={{
                 height: small ? 200 : 400,
                 color: "white",
-                scrollBrand: <img className={classes.brandImage} height={80} src={eurekaLogo} alt={"Eureka Cycling"} />
+                scrollBrand: <img className={classes.brandImage} height={80} src={eurekaLogo} alt={"Eureka Cycling"}/>
             }}
         />
         <Parallax filter small={small} responsive image={heroImage} className={classes.heroBg}>
             <HeroHeading title={title} leadParagraph={leadParagraph}/>
         </Parallax>
-        <div className={classNames(classes.main, classes.mainRaised)}>
-            <div className={classes.container}>
-                <div className={classes.section}>
-                    {children}
-                </div>
-            </div>
-        </div>
+        <Container>
+            <Paper classes={paperClass} elevation={10} style={{position: "relative", zIndex: 5}}>
+                {children}
+            </Paper>
+        </Container>
         <Footer/>
     </div>
 }
-export default withTheme(PublicLayout);
+export default PublicLayout;
