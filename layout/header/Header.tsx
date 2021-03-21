@@ -1,27 +1,21 @@
 import React, {FC, ReactChild, ReactNode, useState} from "react";
 import Link from "next/link";
-import classNames from "classnames";
 import {
     AppBar,
     Toolbar,
     IconButton,
     Hidden,
     Drawer,
-    Menu,
     Theme,
-    withTheme,
     makeStyles,
-    Container, createStyles, MenuItem
+    Container, createStyles
 } from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
-import {container} from "../container/container";
 import AnnouncementIcon from "@material-ui/icons/Announcement";
 import EventIcon from "@material-ui/icons/Event";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import HeaderLink from "./HeaderLink";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-
-const drawerWidth = 260;
 
 const useAppBarStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,11 +37,7 @@ const useIconButtonStyles = makeStyles(({palette}: Theme) =>
 
 interface HeaderProps {
     color: 'transparent',
-    rightLinks: ReactNode,
-    leftLinks?: ReactNode,
     brand?: ReactChild,
-    fixed: true,
-    absolute?: true,
     changeColorOnScroll: {
         color: 'white'
         height: number
@@ -56,11 +46,7 @@ interface HeaderProps {
 }
 
 export const Header: FC<HeaderProps> = ({
-                                            rightLinks,
-                                            leftLinks,
                                             brand,
-                                            fixed,
-                                            absolute,
                                             changeColorOnScroll,
                                         }) => {
     const [theBrand, setBrand] = useState(brand);
@@ -110,7 +96,6 @@ export const Header: FC<HeaderProps> = ({
         ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],
         ["/join", <><PersonAddIcon/> Join</>]
     ];
-
 
     return (
         <AppBar classes={appBarClasses} color={color} elevation={color == "default" ? 6 : 0}>

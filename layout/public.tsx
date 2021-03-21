@@ -1,13 +1,10 @@
 import React, {FC} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import classNames from "classnames";
 import {HeroHeading} from "./hero/HeroHeading";
 import Parallax from "./parallax/Parallax";
-import {container} from "./container/container";
-import HeaderLinks from "./header/HeaderLinks";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
-import {Container, createStyles, Paper, PaperClassKey, Theme, withTheme} from "@material-ui/core";
+import {Container, createStyles, Paper, PaperClassKey, Theme} from "@material-ui/core";
 import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
 
 const usePaperStyles: ()=>Partial<ClassNameMap<PaperClassKey>> = makeStyles(({palette, spacing}: Theme) =>  createStyles({
@@ -50,8 +47,6 @@ export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title,
             color="transparent"
             // routes={dashboardRoutes}
             brand={<img className={classes.brandImage} height={80} src={eurekaLogoWhite} alt={"Eureka Cycling"}/>}
-            rightLinks={<HeaderLinks/>}
-            fixed
             changeColorOnScroll={{
                 height: small ? 200 : 400,
                 color: "white",
