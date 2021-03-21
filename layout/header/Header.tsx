@@ -19,18 +19,18 @@ import AnnouncementIcon from "@material-ui/icons/Announcement";
 import EventIcon from "@material-ui/icons/Event";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import HeaderLink from "./HeaderLink";
-
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 const drawerWidth = 260;
 
-const useAppBarStyles =makeStyles((theme: Theme) =>
+const useAppBarStyles = makeStyles((theme: Theme) =>
     createStyles({
         colorDefault: {
             backgroundColor: "#fff",
         }
     }))
 
-const useIconButtonStyles =makeStyles(({palette}: Theme) =>
+const useIconButtonStyles = makeStyles(({palette}: Theme) =>
     createStyles({
         colorSecondary: {
             color: "#fff",
@@ -39,7 +39,6 @@ const useIconButtonStyles =makeStyles(({palette}: Theme) =>
             color: palette.primary.main,
         }
     }))
-
 
 
 interface HeaderProps {
@@ -66,7 +65,7 @@ export const Header: FC<HeaderProps> = ({
                                         }) => {
     const [theBrand, setBrand] = useState(brand);
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [color, setColor] = React.useState<'default'|'transparent'>('transparent');
+    const [color, setColor] = React.useState<'default' | 'transparent'>('transparent');
 
     const appBarClasses = useAppBarStyles();
     const iconButtonClasses = useIconButtonStyles();
@@ -105,13 +104,12 @@ export const Header: FC<HeaderProps> = ({
     );
 
 
-    const links: Array<[string,ReactChild]> = [
-            ["/news", <><AnnouncementIcon /> News</>],
-            ["/races", <><EventIcon/> Calendar</>],
-            ["/join", <><PersonAddIcon/> Join</>]
-            // ["/news", <a><AnnouncementIcon /> News</a>]
-            // ["/news", <a><AnnouncementIcon /> News</a>]
-        ];
+    const links: Array<[string, ReactChild]> = [
+        ["/news", <><AnnouncementIcon/> News</>],
+        ["/races", <><EventIcon/> Calendar</>],
+        ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],
+        ["/join", <><PersonAddIcon/> Join</>]
+    ];
 
 
     return (
@@ -119,21 +117,21 @@ export const Header: FC<HeaderProps> = ({
             <Container>
                 <Toolbar>
                     {brandComponent}
-                    <div style={{flexGrow: 1, textAlign: 'right'}} >
-                    <Hidden smDown>
-                        {links.map(([url,link]) => (
-                            <HeaderLink altColor={color == "default"} key={url} href={url}>{link}</HeaderLink>
-                        ))}
-                    </Hidden>
-                    <Hidden mdUp>
-                        <IconButton classes={iconButtonClasses}
-                            color={color == "default" ? "primary" : 'secondary'}
-                            aria-label="open drawer"
-                            onClick={() => setMobileOpen(!mobileOpen)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    </Hidden>
+                    <div style={{flexGrow: 1, textAlign: 'right'}}>
+                        <Hidden smDown>
+                            {links.map(([url, link]) => (
+                                <HeaderLink altColor={color == "default"} key={url} href={url}>{link}</HeaderLink>
+                            ))}
+                        </Hidden>
+                        <Hidden mdUp>
+                            <IconButton classes={iconButtonClasses}
+                                        color={color == "default" ? "primary" : 'secondary'}
+                                        aria-label="open drawer"
+                                        onClick={() => setMobileOpen(!mobileOpen)}
+                            >
+                                <MenuIcon/>
+                            </IconButton>
+                        </Hidden>
                     </div>
                 </Toolbar>
             </Container>
@@ -141,11 +139,10 @@ export const Header: FC<HeaderProps> = ({
                 variant="temporary"
                 anchor={"right"}
                 open={mobileOpen}
-                classes={{
-                }}
+                classes={{}}
                 onClose={handleDrawerToggle}
             >
-                {links.map(([url,link]) => (
+                {links.map(([url, link]) => (
                     <HeaderLink altColor={true} key={url} href={url}>{link}</HeaderLink>
                 ))}
             </Drawer>
