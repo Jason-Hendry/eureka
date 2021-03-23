@@ -59,7 +59,7 @@ export default RacePage;
 export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = async ({params}) => {
     const {id} = params || {}
     const race = id ? await RaceCollection(process.env.FAUNADB_SECRET || '').get(id) : null
-    const CourseData = race?.data.Course ? await CoursesCollection(process.env.FAUNADB_SECRET || '').get(race?.data.Course) : null
+    const CourseData = race?.data?.Course ? await CoursesCollection(process.env.FAUNADB_SECRET || '').get(race?.data?.Course) : null
 
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))
 
