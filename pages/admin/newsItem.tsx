@@ -6,12 +6,11 @@ import {
     TextField, Theme,
     Typography, withTheme
 } from "@material-ui/core";
-import {CoursesCollectionApi, NewsCollectionApi, RaceCollectionApi} from "../../services/APIService";
+import {NewsCollectionApi} from "../../services/APIService";
 import {Secret} from "../../layout/Admin/Secret";
 import {makeStyles} from "@material-ui/styles";
 import {loadApiEffectAndSave} from "../../effects/loadApiEffect";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {CourseData} from "../../models/Course";
 import {NewsData} from "../../models/News";
 
 const useStyles = (theme: Theme) => makeStyles({

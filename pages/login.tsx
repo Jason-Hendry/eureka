@@ -1,4 +1,4 @@
-import React, {FC, FormEventHandler, useEffect, useState} from "react"
+import React, {FC, useState} from "react"
 import {
     Button, CardActions,
     CardContent,
@@ -19,7 +19,6 @@ export const Login:FC<unknown> = () => {
     const router = useRouter()
 
     const [secret, setSecret] = useLocalStorage("secret", "")
-    const [awsCredentials, setAwsCredentials] = useLocalStorage("setAwsCredentials", "")
 
     const [showPass, setShowPass] = useState<boolean>(false)
     const [pass, setPass] = useState<string>("")

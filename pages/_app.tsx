@@ -4,11 +4,10 @@ import AdminTheme from "../layout/Admin/AdminTheme";
 import Head from "next/head";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {StylesProvider, ThemeProvider} from "@material-ui/styles";
+import {ThemeProvider} from "@material-ui/styles";
 import {createMuiTheme} from "@material-ui/core";
 import {red} from '@material-ui/core/colors';
-import React, {useEffect, useState} from "react";
-import {GenerateId} from "jss";
+import React from "react";
 
 export const theme = createMuiTheme({
     palette: {

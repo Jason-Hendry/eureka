@@ -1,16 +1,12 @@
 import {ServerStyleSheets} from '@material-ui/core/styles';
-import React, {FC, PropsWithChildren} from "react";
+import React from "react";
 import Document, {Html, Head, Main, NextScript} from 'next/document';
-import {DocumentContext, DocumentInitialProps, DocumentProps} from "next/dist/next-server/lib/utils";
+import {DocumentProps} from "next/dist/next-server/lib/utils";
 import {theme} from "./_app";
-import {createGenerateClassName, Styles, StylesProvider} from "@material-ui/styles";
-import {GenerateId, SheetsManager, SheetsRegistry} from "jss";
 
 const GTM_ID = 'GTM-MZ5KFQK';
 
 export default class MyDocument extends Document<DocumentProps & {ssrCss: string}> {
-
-
     render() {
         return (
             <Html lang="en">

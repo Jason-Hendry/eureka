@@ -4,7 +4,7 @@ import {
     Collection,
     CoursesCollection, FilesCollection,
     ImagesCollection, NewsCollection,
-    RaceCollection, ResultsCollection, SiteSettingsCollection,
+    RaceCollection, SiteSettingsCollection,
     UserCollection
 } from "../../services/DirectService";
 

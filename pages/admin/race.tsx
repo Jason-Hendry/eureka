@@ -1,19 +1,15 @@
-import React, {FC, useContext, useState} from "react"
+import React, {FC} from "react"
 import {
     Button,
     Container,
-    FormControl, FormLabel, Paper, Select, Switch, TextareaAutosize,
-    TextField, Theme,
-    Typography, withTheme
+    FormControl, Paper,
+    Typography
 } from "@material-ui/core";
 import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
 import {RaceData, RaceFormat} from "../../models/Race";
-import EnumSelect from "../../layout/Admin/EnumSelect";
 import {useAdminEffects} from "../../effects/loadApiEffect";
-import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import DateField from "../../components/form/DateField";
-import {type} from "os";
 import SwitchField from "../../components/form/SwitchField";
 import EnumSelectField from "../../components/form/EnumSelectField";
 import TimeField from "../../components/form/TimeField";

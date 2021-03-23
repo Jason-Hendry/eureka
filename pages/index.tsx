@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import '../styles/Home.module.css'
 import PublicLayout from "../layout/public";
 import {

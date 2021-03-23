@@ -1,9 +1,8 @@
-import {FC, ReactChildren} from "react";
+import {FC} from "react";
 import Head from "next/head";
 import {BaseModel} from "../../models/base";
-import {NewsData} from "../../models/News";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {CoursesCollection, NewsCollection, RaceCollection, SiteSettingsCollection} from "../../services/DirectService";
+import {CoursesCollection, RaceCollection, SiteSettingsCollection} from "../../services/DirectService";
 import {ParsedUrlQuery} from "querystring";
 import PublicLayout from "../../layout/public";
 import {SiteSettingData} from "../../models/SiteSetting";
@@ -33,7 +32,6 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
             <Head>
                 <title>{RaceTitle(race.data)}</title>
             </Head>
-
             <Columns>
                 <Half>
                     <Typography variant={'h4'} component={"h2"}>Race Information</Typography>
@@ -51,8 +49,6 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
                     {race.data.CourseLaps && <p>{race.data.CourseLaps} Laps</p>}
                     {race.data.CourseData?.data?.LapDistance && <p>{race.data.CourseData?.data?.LapDistance} per lap</p>}
 
-
-                    {/*{race?.data?.MapImage && <img src={race?.data?.MapImage} alt={`${RaceTitle(race.data)} Map`}/>}*/}
                     {race?.data?.MapImage && <img src={race?.data?.MapImage} style={{maxWidth: '100%'}} alt={`${RaceTitle(race.data)} Map`}/>}
                     {race?.data?.MapDownload && <a href={race?.data?.MapDownload} title={`${RaceTitle(race.data)} Map Download`}>Download Map (PDF)</a>}
 

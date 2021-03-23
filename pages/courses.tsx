@@ -1,22 +1,13 @@
-import Head from 'next/head'
 import '../styles/Home.module.css'
 import PublicLayout from "../layout/public";
 import {
-  CoursesCollection, NewsCollection,
-  RaceCollection, SiteSettingsCollection, UserCollection
+  CoursesCollection,
+   SiteSettingsCollection
 } from "../services/DirectService";
-import {FilterFutureRace, MergeCourseUserData, RaceMergeData} from "../models/Race";
-import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, LimitFilter} from "../services/sort";
-import {FilterHasDate, NewsData} from "../models/News";
 import {FC} from "react";
 import {GetStaticProps} from "next";
 import {SiteSetting} from "../models/SiteSetting";
 import {BaseList} from "../models/base";
-import Columns, {Third} from "../layout/columns/Columns";
-import InfoArea from "../layout/InfoArea/InfoArea";
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-import NewsList from "../components/NewsList";
-import RaceList from "../components/RaceList";
 import {CourseData} from "../models/Course";
 
 type CoursesProps = {
@@ -31,7 +22,7 @@ export const Courses: FC<CoursesProps> = ({siteSetting, courses}) =>{
 
   return (
     <PublicLayout title={"Courses"} leadParagraph={""} heroImage={image} small>
-
+      <h1>Courses</h1>
     </PublicLayout>
   )
 }

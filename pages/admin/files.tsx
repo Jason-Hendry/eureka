@@ -1,24 +1,15 @@
 import React, {FC, useContext, useEffect, useState} from "react"
 import {
-    Button,
-    Checkbox,
-    Container, FormControlLabel,
+    Container,
     Paper,
     Table, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
 } from "@material-ui/core";
-import {CoursesCollectionApi, FilesCollectionApi, RaceCollectionApi} from "../../services/APIService";
-import {Secret} from "../../layout/Admin/Secret";
-import {dateSortCompareOldestFirst, sortByFilename, sortByTitle, thisYear} from "../../services/sort";
-import {FilterFutureRace, Race, RaceData} from "../../models/Race";
-import {BaseList, BaseModel} from "../../models/base";
+import {FilesCollectionApi} from "../../services/APIService";
+import {sortByFilename} from "../../services/sort";
 import Link from "next/link";
-import {CourseData, GetCourse} from "../../models/Course";
-import Columns, {Third} from "../../layout/columns/Columns";
-import {FileData} from "../../models/File";
 import {useAdminListHooks} from "../../effects/loadApiEffect";
-
 
 export const AdminIndex:FC<unknown> = () => {
     const {list: files} = useAdminListHooks(FilesCollectionApi)

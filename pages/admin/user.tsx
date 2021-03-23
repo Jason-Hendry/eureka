@@ -1,17 +1,12 @@
-import React, {FC, useContext, useState} from "react"
+import React, {FC} from "react"
 import {
     Button,
     Container,
     FormControl, Paper,
-    TextField, Theme,
     Typography, withTheme
 } from "@material-ui/core";
-import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
-import {Secret} from "../../layout/Admin/Secret";
-import {makeStyles} from "@material-ui/styles";
-import {loadApiEffectAndSave, useAdminEffects} from "../../effects/loadApiEffect";
-import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {CourseData} from "../../models/Course";
+import {UserCollectionApi} from "../../services/APIService";
+import { useAdminEffects} from "../../effects/loadApiEffect";
 import {UserData} from "../../models/User";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import EmailField from "../../components/form/EmailField";

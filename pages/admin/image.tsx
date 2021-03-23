@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useRef, useState} from "react"
+import React, {FC, useEffect, useRef, useState} from "react"
 import {
     Button,
     Container,
@@ -6,12 +6,10 @@ import {
     TextField, Theme,
     Typography, withTheme
 } from "@material-ui/core";
-import {CoursesCollectionApi, ImagesCollectionApi, RaceCollectionApi} from "../../services/APIService";
-import {Secret} from "../../layout/Admin/Secret";
+import { ImagesCollectionApi} from "../../services/APIService";
 import {makeStyles} from "@material-ui/styles";
-import {loadApiEffectAndSave, useAdminEffects, useS3Upload} from "../../effects/loadApiEffect";
+import {useAdminEffects, useS3Upload} from "../../effects/loadApiEffect";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {CourseData} from "../../models/Course";
 import AdminLoading from "../../layout/Admin/AdminLoading";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import {ImageData} from "../../models/Image";
