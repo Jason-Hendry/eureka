@@ -1,20 +1,27 @@
 import React, {FC, useContext, useEffect, useState} from "react"
-import {Button, Card, CardActions, CardHeader, Container, Paper, Typography} from "@material-ui/core";
+import {Container, Paper, Typography} from "@material-ui/core";
 import Three, {ColumnThird} from "../../layout/columns/Three";
-import {RaceCollectionApi} from "../../services/APIService";
+import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
 import {Secret} from "../../layout/Admin/Secret";
 import {dateSortCompareOldestFirst, LimitFilter} from "../../services/sort";
-import {FilterFutureRace, RaceData} from "../../models/Race";
+import {FilterFutureRace, MergeCourseUserData, RaceData, RaceMergeData} from "../../models/Race";
 import {BaseList} from "../../models/base";
-import Link from "next/link";
+import RaceList from "../../components/RaceList";
+import {CourseData} from "../../models/Course";
+import {UserData} from "../../models/User";
 
 
 export const AdminIndex:FC<unknown> = () => {
     const secret = useContext(Secret)
-    const [upcomingRaces, setUpcomingRaces] = useState<BaseList<RaceData>>([])
+    const [upcomingRaces, setUpcomingRaces] = useState<BaseList<RaceMergeData>>([])
     useEffect(() => {
-        RaceCollectionApi(secret).list().then(races =>
-            setUpcomingRaces(races.sort(dateSortCompareOldestFirst).filter(FilterFutureRace()).filter(LimitFilter(5))))
+        const userData = UserCollectionApi(secret).list()
+        const courseData = CoursesCollectionApi(secret).list()
+        RaceCollectionApi(secret).list().then(races => {
+            Promise.all<BaseList<CourseData>, BaseList<UserData>>([courseData, userData]).then(([c, u]) => {
+                setUpcomingRaces(races.map(MergeCourseUserData(c, u)).sort(dateSortCompareOldestFirst).filter(FilterFutureRace()).filter(LimitFilter(5)));
+            })
+        });
     }, [secret])
 
     return <Paper>
@@ -23,14 +30,7 @@ export const AdminIndex:FC<unknown> = () => {
         <Three>
             <ColumnThird>
                 <Typography variant={"h4"}>Upcoming Races</Typography>
-                {upcomingRaces.map(race => (
-                    <Card key={race.id} >
-                        <CardHeader>{race.data.Title} - {race.data.Date}</CardHeader>
-                        <CardActions>
-                            <Link href={`/admin/race#${race.id}`}>Edit</Link>
-                        </CardActions>
-                    </Card>
-                ))}
+                <RaceList races={upcomingRaces} edit/>
             </ColumnThird>
         </Three>
         </Container>

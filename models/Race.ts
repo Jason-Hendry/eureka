@@ -34,6 +34,7 @@ export interface RaceData {
     Series? :string
     Notes? :string
     Images?: Image[]
+    Poster?: string
 }
 
 export type RaceMergeData = RaceData & {

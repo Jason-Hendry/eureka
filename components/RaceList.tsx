@@ -8,6 +8,7 @@ import {ISODateToPretty} from "../services/dates";
 interface RaceListProps {
     races: BaseList<RaceMergeData>
     theme: Theme;
+    edit?: boolean
 }
 
 const useStyles = ({spacing}: Theme) => makeStyles({
@@ -17,9 +18,8 @@ const useStyles = ({spacing}: Theme) => makeStyles({
     }
 })
 
-export const RaceList: FC<RaceListProps> = ({theme, races}) => {
+export const RaceList: FC<RaceListProps> = ({theme, races, edit= false}) => {
     const classes = useStyles(theme)()
-
 
     return (
         <>
@@ -35,6 +35,7 @@ export const RaceList: FC<RaceListProps> = ({theme, races}) => {
                             Now</Button>
                         }
                         <Button href={`/races/${r.id}`}>More Info</Button>
+                        {edit && <Button variant={"outlined"} href={`/admin/race#${r.id}`}>Edit</Button>}
                     </CardActions>
                 </Card>
             ))}

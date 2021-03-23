@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import {SiteSettingsCollection} from "./DirectService";
 import {Credentials} from "aws-sdk/clients/sts";
+import {AWSCredentials, fromAWSCredentials, toAWSCredentials} from "./Login";
 
 export const credentials = new AWS.Credentials(
     process.env.RAIN_AWS_ACCESS_KEY_ID || '',
@@ -22,12 +23,12 @@ function awsCredentialsAreValid(awsCredentials: Credentials | undefined):awsCred
     return false
 }
 
-export async function getCredential(secret: string): Promise<Credentials> {
+export async function getCredential(secret: string): Promise<AWSCredentials> {
 
     return new Promise((resolve, reject) => {
-        SiteSettingsCollection(secret).get(process.env.SITE_SETTINGS_ID || '').then(r => {
-            console.log("AWS Expiry: ", r.data.awsCredentials)
-            if (awsCredentialsAreValid(r.data?.awsCredentials)) {
+        SiteSettingsCollection(secret).get(process.env.SITE_SETTINGS_ID_AWS_SECRET || '').then(r => {
+            console.log("AWS Expiry: ", r?.data?.awsCredentials)
+            if (r?.data?.awsCredentials && awsCredentialsAreValid(fromAWSCredentials(r.data.awsCredentials))) {
                 resolve(r.data.awsCredentials)
             }
             sts.getSessionToken({
@@ -35,13 +36,13 @@ export async function getCredential(secret: string): Promise<Credentials> {
             }, (err, data) => {
                 if (data?.Credentials) {
                     console.log(data.Credentials)
-                    if (process.env.SITE_SETTINGS_ID) {
+                    if (process.env.SITE_SETTINGS_ID_AWS_SECRET) {
                         SiteSettingsCollection(secret).put({
                             ...r.data,
-                            awsCredentials: data.Credentials
-                        }, process.env.SITE_SETTINGS_ID)
+                            awsCredentials: toAWSCredentials(data.Credentials)
+                        }, process.env.SITE_SETTINGS_ID_AWS_SECRET)
                     }
-                    resolve(data.Credentials)
+                    resolve(toAWSCredentials(data.Credentials))
                 }
                 reject({error: err})
             })
@@ -49,7 +50,7 @@ export async function getCredential(secret: string): Promise<Credentials> {
     })
 }
 
-export function AWSService(secret: string): Promise<Credentials> {
+export function AWSService(secret: string): Promise<AWSCredentials> {
     const action = "aws-credentials"
     return fetch("/api/login", {
         method: "POST",
@@ -58,6 +59,6 @@ export function AWSService(secret: string): Promise<Credentials> {
         },
         body: JSON.stringify({secret, action})
     })
-        .then(res => <Credentials><unknown>res.json())
+        .then(res => <AWSCredentials><unknown>res.json())
 
 }

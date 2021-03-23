@@ -6,6 +6,7 @@ import {CourseData} from "../models/Course";
 import {Credentials} from "aws-sdk/clients/sts";
 import {AWSService, s3} from "../services/AWS";
 import {Body} from "aws-sdk/clients/s3";
+import {AWSCredentials, fromAWSCredentials} from "../services/Login";
 
 export function loadApiEffectAndSave<T>(collection: (secret: string) => CollectionAPI<T>, secret: string, data: T, setState: (value: T) => void, blank: () => T): () => void {
     useEffect(() => {
@@ -100,14 +101,13 @@ export function useAdminListHooks<T>(collection: (secret: string) => CollectionA
     }
 }
 
-
 type s3UploadReturn = {
     s3Upload: (body: Body, key: string, bucket: string) => Promise<{filename: string}>
     uploading?: boolean
 }
 export function useS3Upload(): s3UploadReturn {
     const secret = useContext(Secret)
-    const [awsCredentials, setAwsCredentials] = useState<Credentials|null>()
+    const [awsCredentials, setAwsCredentials] = useState<AWSCredentials|null>()
     const [uploading, setUploading] = useState<boolean>()
     useEffect(() => {
         AWSService(secret).then((c) => {
@@ -121,7 +121,7 @@ export function useS3Upload(): s3UploadReturn {
             if(awsCredentials && bucket) {
                 setUploading(true)
                 console.log(`Uploadings s3://${bucket}/${key} ${awsCredentials?.AccessKeyId}`)
-                const req = s3(awsCredentials).putObject({
+                const req = s3(fromAWSCredentials(awsCredentials)).putObject({
                     Body: body,
                     Key: key,
                     Bucket: bucket,
