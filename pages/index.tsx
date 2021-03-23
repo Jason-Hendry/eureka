@@ -81,7 +81,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       .filter(FilterFutureRace())
       .map(MergeCourseUserData(courses, users))
       .sort(dateSortCompareOldestFirst)
-      .filter(LimitFilter(3))
+      .filter(LimitFilter(5))
 
   const news = (await NewsCollection(process.env.FAUNADB_SECRET || '').list())
       .filter(FilterHasDate())
