@@ -55,7 +55,7 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
                     <br/>
                 </Half>
                 <Half align={'right'}>
-                    {race?.data?.Poster && <img src={race?.data?.Poster} alt={`${RaceTitle(race.data)} Poster`}/>}
+                    {race?.data?.Poster && <img src={race?.data?.Poster} style={{maxWidth: '100%'}} alt={`${RaceTitle(race.data)} Poster`}/>}
                 </Half>
             </Columns>
 
