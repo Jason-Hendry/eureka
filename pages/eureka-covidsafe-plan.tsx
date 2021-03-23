@@ -11,9 +11,8 @@ type CovidProps = {
 
 
 export const Covid: FC<CovidProps> = ({siteSetting}) => {
-    const image = siteSetting.data?.HomePageImages?.length ?
-        siteSetting.data.HomePageImages[0].data.hero :
-        '';
+    const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
+
 
     return <PublicLayout small={true} heroImage={image} title={"Eureka COVIDSafe Plan"}>
 

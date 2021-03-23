@@ -28,9 +28,7 @@ type HomeProps = {
 }
 
 export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
-  const image = siteSetting.data?.HomePageImages?.length ?
-      siteSetting.data.HomePageImages[0].data.hero :
-      '';
+  const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
 
   const leadP = `The Eureka Cycling Club was formed at the beginning of 2009 by a small group of
                                 cyclists who believed there was a need for the type of racing that only a veterans club

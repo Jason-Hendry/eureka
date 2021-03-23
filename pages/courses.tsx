@@ -16,9 +16,8 @@ type CoursesProps = {
 }
 
 export const Courses: FC<CoursesProps> = ({siteSetting, courses}) =>{
-  const image = siteSetting.data?.HomePageImages?.length ?
-      siteSetting.data.HomePageImages[0].data.hero :
-      '';
+  const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
+
 
   return (
     <PublicLayout title={"Courses"} leadParagraph={""} heroImage={image} small>

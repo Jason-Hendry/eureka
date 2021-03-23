@@ -18,9 +18,7 @@ type RaceProps = {
 }
 
 export const Races: FC<RaceProps> = ({siteSetting, races}) =>{
-  const image = siteSetting.data?.HomePageImages?.length ?
-      siteSetting.data.HomePageImages[0].data.hero :
-      '';
+  const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
 
   return (
     <PublicLayout title={"Eureka Cycling Racing Calendar"} leadParagraph={""} heroImage={image} small>

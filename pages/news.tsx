@@ -19,11 +19,10 @@ type NewsProps = {
 }
 
 export const News: FC<NewsProps> = ({siteSetting, news}) =>{
-  const image = siteSetting.data?.HomePageImages?.length ?
-      siteSetting.data.HomePageImages[0].data.hero :
-      '';
+    const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
 
-  return (
+
+    return (
     <PublicLayout title={"Eureka Cycling News"} leadParagraph={""} heroImage={image} small>
       <Head>
         <title>Eureka Cycling News</title>

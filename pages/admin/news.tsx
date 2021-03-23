@@ -13,7 +13,6 @@ import {sortByTitle} from "../../services/sort";
 import Link from "next/link";
 import {useAdminListHooks} from "../../effects/loadApiEffect";
 
-
 export const AdminIndex: FC<unknown> = () => {
     const {list: news} = useAdminListHooks(NewsCollectionApi)
 
@@ -38,7 +37,6 @@ export const AdminIndex: FC<unknown> = () => {
             </TableContainer>
         </Container>
     </Paper>
-
 }
 
 export default AdminIndex

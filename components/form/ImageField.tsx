@@ -33,16 +33,21 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
                 if(!fromCanvas.current||!toCanvas.current||!imgRef.current) {
                     return
                 }
+                console.log('Loading')
                 fromCanvas.current.width = imgRef.current.width
                 fromCanvas.current.height = imgRef.current.height
                 const canvasContext = fromCanvas.current.getContext("2d")
                 if(!canvasContext) return;
                 canvasContext.drawImage(imgRef.current, 0, 0)
-
                 pica.resize(fromCanvas.current, toCanvas.current).then(() => {
                     if(!toCanvas.current) return
+                    console.log('Resizing')
                     pica.toBlob(toCanvas.current, 'image/jpeg').then((b) => {
-                        s3Upload(b, filename+'-hero.jpg', bucket).then(f => onChange(f.filename))
+                        console.log('Uploading')
+                        s3Upload(b, filename+'-hero.jpg', bucket).then(f => {
+                            console.log(`Uploaded: ${f.filename}`)
+                            onChange(f.filename)
+                        })
                     });
                 })
             }
@@ -71,13 +76,12 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
                        label={label}
                        inputRef={fileRef}
                        inputProps={{type: 'file'}}
-                       helperText={uploading ? "...uploading" : ""}
+                       helperText={uploading ? "...uploading" : value || ''}
                        onChange={handleFile}
-                       value={value || ""}
             />
-            <img alt="Admin image loader" ref={imgRef} src={src}/>
-            <canvas ref={fromCanvas}/>
-            <canvas ref={toCanvas} width={width} height={height}/>
+            <img alt="Admin image loader" ref={imgRef} src={src} style={{ display:"none" }} />
+            <canvas ref={fromCanvas} style={{ display:"none" }} />
+            <canvas ref={toCanvas} width={width} height={height} style={{ transform: 'scale(.5)', transformOrigin: '0 0' }} />
         </>
     )
 }
