@@ -9,8 +9,9 @@ import PublicLayout from "../../layout/public";
 import {SiteSettingData} from "../../models/SiteSetting";
 import nl2br from "react-nl2br";
 import {Button, Typography} from "@material-ui/core";
-import {RaceMergeData} from "../../models/Race";
+import {RaceMergeData, RaceTitle} from "../../models/Race";
 import {ISODateToPretty} from "../../services/dates";
+import Columns, {Half} from "../../layout/columns/Columns";
 
 interface RacePageProps {
     race: BaseModel<RaceMergeData>
@@ -28,27 +29,41 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
     const leadP: JSX.Element | undefined  = race.data?.RegistrationURL ? <Button variant={"contained"} color={"primary"} href={race.data?.RegistrationURL}>Register Online Now</Button> : undefined
 
     return (
-        <PublicLayout title={race.data.Title} leadParagraph={leadP} heroImage={image} small>
+        <PublicLayout title={RaceTitle(race.data)} leadParagraph={leadP} heroImage={race?.data?.Poster || image} small blur={!!race?.data?.Poster}>
             <Head>
-                <title>{race.data.Title}</title>
+                <title>{RaceTitle(race.data)}</title>
             </Head>
 
-            <Typography variant={'h4'} component={"h2"}>Race Information</Typography>
-            {nl2br(race.data?.Notes)}
-            <br/>
+            <Columns>
+                <Half>
+                    <Typography variant={'h4'} component={"h2"}>Race Information</Typography>
+                    {nl2br(race.data?.Notes)}
+                    <br/>
 
-            <Typography variant={'h4'} component={"h2"}>Times</Typography>
-            {race.data?.Date && <p>Date: {ISODateToPretty(race.data?.Date)}</p>}
-            {race.data?.RaceStartTime && <p>Date: {race.data?.RaceStartTime}</p>}
-            {race.data?.RegistrationCutoff && <p>Registration closes: {race.data?.RegistrationCutoff || '9am'}</p>}
+                    <Typography variant={'h4'} component={"h2"}>Times</Typography>
+                    {race.data?.Date && <p>Date: {ISODateToPretty(race.data?.Date)}</p>}
+                    {race.data?.RaceStartTime && <p>Date: {race.data?.RaceStartTime}</p>}
+                    {race.data?.RegistrationCutoff && <p>Registration closes: {race.data?.RegistrationCutoff || '9am'}</p>}
 
-            <br/>
-            <Typography variant={'h4'} component={"h2"}>Course</Typography>
-            <p>{race.data.CourseData?.data?.Title}</p>
-            {race.data.CourseLaps && <p>{race.data.CourseLaps} Laps</p>}
-            {race.data.CourseData?.data?.LapDistance && <p>{race.data.CourseData?.data?.LapDistance} per lap</p>}
+                    <br/>
+                    <Typography variant={'h4'} component={"h2"}>Course</Typography>
+                    <p>{race.data.CourseData?.data?.Title}</p>
+                    {race.data.CourseLaps && <p>{race.data.CourseLaps} Laps</p>}
+                    {race.data.CourseData?.data?.LapDistance && <p>{race.data.CourseData?.data?.LapDistance} per lap</p>}
 
-            <br/>
+
+                    {/*{race?.data?.MapImage && <img src={race?.data?.MapImage} alt={`${RaceTitle(race.data)} Map`}/>}*/}
+                    {race?.data?.MapImage && <img src={race?.data?.MapImage} style={{maxWidth: '100%'}} alt={`${RaceTitle(race.data)} Map`}/>}
+                    {race?.data?.MapDownload && <a href={race?.data?.MapDownload} title={`${RaceTitle(race.data)} Map Download`}>Download Map (PDF)</a>}
+
+                    <br/>
+                </Half>
+                <Half align={'right'}>
+                    {race?.data?.Poster && <img src={race?.data?.Poster} alt={`${RaceTitle(race.data)} Poster`}/>}
+                </Half>
+            </Columns>
+
+
 
 
         </PublicLayout>

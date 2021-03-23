@@ -1,6 +1,6 @@
 import React, {FC, useContext, useEffect, useState} from "react"
 import {Container, Paper, Typography} from "@material-ui/core";
-import Three, {ColumnThird} from "../../layout/columns/Three";
+import Columns, {Third} from "../../layout/columns/Columns";
 import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
 import {Secret} from "../../layout/Admin/Secret";
 import {dateSortCompareOldestFirst, LimitFilter} from "../../services/sort";
@@ -27,12 +27,12 @@ export const AdminIndex:FC<unknown> = () => {
     return <Paper>
         <Container>
             <Typography variant={"h6"}>Admin</Typography>
-        <Three>
-            <ColumnThird>
+        <Columns>
+            <Third>
                 <Typography variant={"h4"}>Upcoming Races</Typography>
                 <RaceList races={upcomingRaces} edit/>
-            </ColumnThird>
-        </Three>
+            </Third>
+        </Columns>
         </Container>
     </Paper>
 

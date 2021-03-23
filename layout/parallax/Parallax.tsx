@@ -45,9 +45,10 @@ interface ParallaxProps {
   image : unknown
   small? : boolean
   responsive : boolean
+  blur?: boolean
 }
 
-const Parallax: FC<ParallaxProps> = ({  children, style, image, small } ) => {
+const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) => {
   const [transform, setTransform] = React.useState("translate3d(0,0px,0)");
   React.useEffect(() => {
     if (window.innerWidth >= 768) {
@@ -70,10 +71,10 @@ const Parallax: FC<ParallaxProps> = ({  children, style, image, small } ) => {
       className={[classes.parallax, small && classes.small].filter(Boolean).join(' ')}
       style={{
         ...style,
-        backgroundImage: `url(${image})`,
         transform: transform
       }}
     >
+      <div style={{backgroundImage: `url(${image})`, filter: blur && 'blur(10px)' || undefined, height: '100%', width: '100%', position: "absolute", backgroundSize: "cover"}} />
       {children}
     </div>
   );

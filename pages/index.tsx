@@ -12,7 +12,7 @@ import React, {FC} from "react";
 import {GetStaticProps} from "next";
 import {SiteSetting} from "../models/SiteSetting";
 import {BaseList} from "../models/base";
-import Three, {ColumnThird} from "../layout/columns/Three";
+import Columns, {Third} from "../layout/columns/Columns";
 import InfoArea from "../layout/InfoArea/InfoArea";
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import NewsList from "../components/NewsList";
@@ -39,22 +39,22 @@ export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
 
   return (
     <PublicLayout title={"Eureka Cycling"} leadParagraph={leadP} heroImage={image}>
-      <Three>
-        <ColumnThird>
+      <Columns>
+        <Third>
           <InfoArea
               icon={<AnnouncementIcon />}
               title={"News and Results"}
               description={""} />
               <NewsList news={news} />
-        </ColumnThird>
-        <ColumnThird>
+        </Third>
+        <Third>
           <InfoArea
               icon={<EventIcon/>}
               title={"Upcoming Events"}
               description={""} />
               <RaceList races={races} />
-        </ColumnThird>
-        <ColumnThird>
+        </Third>
+        <Third>
           <InfoArea
               icon={<PersonAddIcon/>}
               title={"JoinPage Eureka"}
@@ -68,8 +68,8 @@ export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
             </CardActions>
           </Card>
 
-        </ColumnThird>
-      </Three>
+        </Third>
+      </Columns>
     </PublicLayout>
   )
 }

@@ -77,6 +77,7 @@ const AdminIndex: FC<RaceProps> = () => {
                                                       getLabel={(v) => v.name} {...valueProps<'Marshals'>('Marshals', [])}/>
 
                 <SwitchField label={'Interclub'} {...valueProps('Interclub', false)} />
+                <SwitchField label={'BSCC'} {...valueProps('BSCC', false)} />
                 <SwitchField label={'Trophy'} {...valueProps('Trophy', false)} />
                 <SwitchField label={'Club Championship'} {...valueProps('ClubChamps', false)} />
 
@@ -85,6 +86,8 @@ const AdminIndex: FC<RaceProps> = () => {
                 <MultiLineTextField label={'Notes'} {...valueProps<'Notes'>('Notes', '')} />
 
                 <FileField label={'Poster'} {...valueProps<'Poster'>('Poster', '')} />
+                <FileField label={'Map Image'} {...valueProps<'MapImage'>('MapImage', '')} />
+                <FileField label={'Map PDF'} {...valueProps<'MapDownload'>('MapDownload', '')} />
 
                 <FormControl fullWidth={true} margin={"normal"}>
                     <Button type={"submit"} variant={"contained"} color={"primary"}

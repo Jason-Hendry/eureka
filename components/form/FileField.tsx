@@ -32,9 +32,8 @@ export const FileField: FC<BaseFieldProps<string>> = ({label, onChange, value}) 
                        label={label}
                        inputRef={fileRef}
                        inputProps={{type: 'file'}}
-                       helperText={uploading ? "...uploading" : ""}
+                       helperText={uploading ? "...uploading" : value ? value : ""}
                        onChange={handleFile}
-                       value={value || ""}
             />
         </>
     )

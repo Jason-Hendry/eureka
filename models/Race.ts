@@ -28,6 +28,7 @@ export interface RaceData {
     Postponed?: Boolean
     VCVEvent?: Boolean
     Interclub?: Boolean
+    BSCC?: Boolean
     Trophy?: Boolean
     ClubChamps?: Boolean
     RegistrationURL? :string
@@ -35,6 +36,8 @@ export interface RaceData {
     Notes? :string
     Images?: Image[]
     Poster?: string
+    MapImage?: string
+    MapDownload?: string
 }
 
 export type RaceMergeData = RaceData & {

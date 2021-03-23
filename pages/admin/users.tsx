@@ -15,7 +15,7 @@ import {FilterFutureRace, Race, RaceData} from "../../models/Race";
 import {BaseList, BaseModel} from "../../models/base";
 import Link from "next/link";
 import {CourseData, GetCourse} from "../../models/Course";
-import Three, {ColumnThird} from "../../layout/columns/Three";
+import Columns, {Third} from "../../layout/columns/Columns";
 import {useAdminListHooks} from "../../effects/loadApiEffect";
 import {UserData} from "../../models/User";
 

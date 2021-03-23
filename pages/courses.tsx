@@ -12,7 +12,7 @@ import {FC} from "react";
 import {GetStaticProps} from "next";
 import {SiteSetting} from "../models/SiteSetting";
 import {BaseList} from "../models/base";
-import Three, {ColumnThird} from "../layout/columns/Three";
+import Columns, {Third} from "../layout/columns/Columns";
 import InfoArea from "../layout/InfoArea/InfoArea";
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import NewsList from "../components/NewsList";

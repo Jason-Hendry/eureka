@@ -7,13 +7,16 @@ import Footer from "./footer/Footer";
 import {Container, createStyles, Paper, PaperClassKey, Theme} from "@material-ui/core";
 import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
 
-const usePaperStyles: ()=>Partial<ClassNameMap<PaperClassKey>> = makeStyles(({palette, spacing}: Theme) =>  createStyles({
+const usePaperStyles: () => Partial<ClassNameMap<PaperClassKey>> = makeStyles(({
+                                                                                   palette,
+                                                                                   spacing
+                                                                               }: Theme) => createStyles({
     root: {
         backgroundColor: palette.grey["100"],
         padding: spacing(2)
     }
 }));
-const useStyles = makeStyles(({palette}: Theme) =>  createStyles({
+const useStyles = makeStyles(({palette}: Theme) => createStyles({
     brandImage: {
         cursor: "pointer"
     },
@@ -24,7 +27,7 @@ const useStyles = makeStyles(({palette}: Theme) =>  createStyles({
     },
     heroBg: {
         backgroundPositionY: "center"
-    }
+    },
 }));
 
 const eurekaLogo = require("../assets/img/eureka-logo.svg")
@@ -34,11 +37,12 @@ interface PublicLayoutProps {
     children: React.ReactNode
     heroImage: string
     title: string
-    leadParagraph?: string|JSX.Element
+    leadParagraph?: string | JSX.Element
     small?: boolean
+    blur?: boolean
 }
 
-export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title, leadParagraph, small}) => {
+export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title, leadParagraph, small, blur}) => {
     const classes = useStyles();
     const paperClass = usePaperStyles();
 
@@ -53,7 +57,8 @@ export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title,
                 scrollBrand: <img className={classes.brandImage} height={80} src={eurekaLogo} alt={"Eureka Cycling"}/>
             }}
         />
-        <Parallax filter small={small} responsive image={heroImage} className={classes.heroBg}>
+        <Parallax filter small={small} responsive image={heroImage}
+                  className={classes.heroBg} blur={blur}>
             <HeroHeading title={title} leadParagraph={leadParagraph}/>
         </Parallax>
         <Container>
