@@ -2,7 +2,17 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First setup your ENV
+```dotenv
+FAUNADB_SECRET=
+GOOGLE_MAPS_KEY=
+SITE_SETTINGS_ID=
+DEPLOY=
+RAIN_AWS_SECRET_ACCESS_KEY=
+RAIN_AWS_ACCESS_KEY_ID=
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
