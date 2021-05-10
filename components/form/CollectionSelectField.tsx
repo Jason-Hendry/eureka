@@ -15,8 +15,14 @@ export function CollectionSelectField<T, M extends true|false = false>({label, o
     const secret = useContext(Secret)
     const [list, setList] =useState<BaseList<T>>([])
     useEffect(() => {
-        collection(secret).list().then(setList)
+        collection(secret).list().then(l => l.sort(collectionSort)).then(setList)
     },[])
+
+    const collectionSort = (a: T,b: T): number => {
+        if(!a || !getLabel(a)) return 1
+        if(!b || !getLabel(b)) return -1
+        return getLabel(a).localeCompare(getLabel(b))
+    }
 
     return (
         <>

@@ -69,8 +69,7 @@ const AdminIndex: FC<RaceProps> = () => {
                 <CollectionSelectField<CourseData, false> label={"Course"} collection={CoursesCollectionApi}
                                                           getLabel={(v) => v.Title} {...valueProps<'Course'>('Course', '')} />
                 <NumberField label={"Course Laps"} {...valueProps<'CourseLaps'>('CourseLaps', 1)} />
-                <CollectionMultiSelectField<UserData> label={"Marshals"} collection={UserCollectionApi}
-                                                      getLabel={(v) => v.name} {...valueProps<'Marshals'>('Marshals', [])}/>
+                <MultiLineTextField label={'Marshals'} {...valueProps<'Marshalls'>('Marshalls', '')} />
 
                 <SwitchField label={'Interclub'} {...valueProps('Interclub', false)} />
                 <SwitchField label={'BSCC'} {...valueProps('BSCC', false)} />

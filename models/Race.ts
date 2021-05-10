@@ -23,7 +23,7 @@ export interface RaceData {
     Course?: string
     CourseLaps?: number
     RaceFormat?: RaceFormat
-    Marshals?: Array<string>
+    Marshals?: string
     Cancelled?: Boolean
     Postponed?: Boolean
     VCVEvent?: Boolean
