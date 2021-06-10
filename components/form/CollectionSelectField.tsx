@@ -7,7 +7,7 @@ import EnumSelect from "../../layout/Admin/EnumSelect";
 import {RaceFormat} from "../../models/Race";
 import {Secret} from "../../layout/Admin/Secret";
 import {CollectionAPI} from "../../services/APIService";
-import {BaseList} from "../../models/base";
+import {BaseList, BaseModel} from "../../models/base";
 
 
 export function CollectionSelectField<T, M extends true|false = false>({label, onChange, value, collection, getLabel}: PropsWithChildren<BaseFieldProps<string> & {collection: (secret: string) => CollectionAPI<T>, getLabel: (v: T)=>string}>): JSX.Element {
@@ -18,10 +18,10 @@ export function CollectionSelectField<T, M extends true|false = false>({label, o
         collection(secret).list().then(l => l.sort(collectionSort)).then(setList)
     },[])
 
-    const collectionSort = (a: T,b: T): number => {
-        if(!a || !getLabel(a)) return 1
-        if(!b || !getLabel(b)) return -1
-        return getLabel(a).localeCompare(getLabel(b))
+    const collectionSort = (a: BaseModel<T>,b: BaseModel<T>): number => {
+        if(!a || !getLabel(a.data)) return 1
+        if(!b || !getLabel(b.data)) return -1
+        return getLabel(a.data).localeCompare(getLabel(b.data))
     }
 
     return (
