@@ -5,11 +5,11 @@ import Head from "next/head";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {ThemeProvider} from "@material-ui/styles";
-import {createMuiTheme} from "@material-ui/core";
+import {createTheme} from "@material-ui/core";
 import {red} from '@material-ui/core/colors';
 import React from "react";
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
     palette: {
         primary: {
             main: '#556cd6',

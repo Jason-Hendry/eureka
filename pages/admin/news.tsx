@@ -2,7 +2,7 @@ import React, {FC} from "react"
 import {
     Container,
     Paper,
-    Table, TableCell,
+    Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
 } from "@material-ui/core";
@@ -27,12 +27,14 @@ export const AdminIndex: FC<unknown> = () => {
                                 Article</Link></TableCell>
                         </TableRow>
                     </TableHead>
+                    <TableBody>
                     {news.sort(sortByTitle).map(n => (
                         <TableRow key={n.id}>
                             <TableCell>{n.data.Title}</TableCell>
                             <TableCell align={"right"}><Link href={`/admin/newsItem#${n.id}`}>Edit</Link></TableCell>
                         </TableRow>
                     ))}
+                    </TableBody>
                 </Table>
             </TableContainer>
         </Container>

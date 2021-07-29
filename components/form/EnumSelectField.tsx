@@ -1,18 +1,21 @@
-import React, {FC, PropsWithChildren} from "react";
-import {makeStyles} from "@material-ui/styles";
+import React, {PropsWithChildren} from "react";
 import {BaseFieldProps} from "./BaseField";
-import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {FormControl, FormLabel, Switch, TextField} from "@material-ui/core";
+import {FormControl, FormLabel} from "@material-ui/core";
 import EnumSelect from "../../layout/Admin/EnumSelect";
-import {RaceFormat} from "../../models/Race";
+import {GetUniqueId} from "./GetUniqueId";
 
+export type EnumSelectFieldProps<T> =  PropsWithChildren<BaseFieldProps<T> & {enumSet: T[]}>
 
-export function EnumSelectField<T extends string>({label, onChange, value, enumSet}: PropsWithChildren<BaseFieldProps<T> & {enumSet: T[]}>): JSX.Element {
+export function EnumSelectField<T extends string>({label, onChange, value, enumSet, id}: EnumSelectFieldProps<T>): JSX.Element {
+
+    const fieldId = GetUniqueId(id)
+
     return (
         <>
             <FormControl fullWidth={true} margin={"normal"}>
-                <FormLabel>{label}</FormLabel>
+                <FormLabel htmlFor={fieldId}>{label}</FormLabel>
                 <EnumSelect<T>
+                    inputProps={{id:fieldId}}
                     enumSet={enumSet}
                     fullWidth={true}
                     value={value}

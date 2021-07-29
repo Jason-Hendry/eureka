@@ -13,6 +13,7 @@ export function EnumSelect<T extends string>({ onChange, enumSet, value, ...prop
 
     return (
         <Select
+            value={value}
             {...props}
             onChange={(e) => onChange(e.target.value as T)}>
             {ItemList}
