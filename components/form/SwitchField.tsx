@@ -1,8 +1,6 @@
 import React, {FC} from "react";
-import {makeStyles} from "@material-ui/styles";
 import {BaseFieldProps} from "./BaseField";
-import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {FormControl, FormLabel, Switch, TextField} from "@material-ui/core";
+import {FormControl, FormLabel, Switch} from "@material-ui/core";
 
 
 export const SwitchField: FC<BaseFieldProps<boolean>> = ({label, onChange, value}) => {
@@ -12,7 +10,7 @@ export const SwitchField: FC<BaseFieldProps<boolean>> = ({label, onChange, value
                 <FormLabel>{label}</FormLabel>
                 <Switch
                     color={"secondary"}
-                    checked={value}
+                    checked={value === null ? false : value}
                     onChange={(e) => onChange(e.target.checked)}
                 />
             </FormControl>

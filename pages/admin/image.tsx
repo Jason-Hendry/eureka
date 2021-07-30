@@ -144,7 +144,7 @@ const AdminImage:FC<RaceProps> = ({theme}) => {
                 </ul>
 
 
-                <SingleLineTextField label={'Alt Text / Descriptions'} onChange={(e) => merge({alt: e})} value={image.alt}/>
+                <SingleLineTextField label={'Alt Text / Descriptions'} onChange={(e) => merge({alt: e || ''})} value={image.alt}/>
 
                 <FormControl fullWidth={true} margin={"normal"}>
                     <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{isEdit ? 'Save' : 'Create'}</Button>

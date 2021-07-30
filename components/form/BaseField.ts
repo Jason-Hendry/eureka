@@ -2,7 +2,7 @@
 
 export type BaseFieldProps<T> = {
     id?: string
-    value: T
+    value: T|null
     label: string
-    onChange: (value: T) => void
+    onChange: (value: T|null) => void
 }

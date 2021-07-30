@@ -25,8 +25,8 @@ const AdminIndex:FC<unknown> = () => {
             <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Course</Typography>
 
             <form onSubmit={e => e.preventDefault()}>
-                <SingleLineTextField label={'Title'} onChange={(v) => merge({name: v})} value={user.name}/>
-                <EmailField label={'Title'} onChange={(v) => merge({email: v})} value={user.email}/>
+                <SingleLineTextField label={'Title'} onChange={(v) => merge({name: v || undefined})} value={user.name}/>
+                <EmailField label={'Title'} onChange={(v) => merge({email: v || undefined})} value={user.email}/>
 
                 <FormControl fullWidth={true} margin={"normal"}>
                     <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{document.location.hash.length ? 'Save' : 'Create'}</Button>

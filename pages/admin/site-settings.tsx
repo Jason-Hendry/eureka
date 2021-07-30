@@ -20,7 +20,7 @@ const BlankSiteSetting = ():SiteSettingData => ({
     HomePageImage: ""
 })
 
-const AdminIndex:FC<RaceProps> = ({theme}) => {
+const AdminIndex:FC<RaceProps> = ({}) => {
     const {save, merge, data: siteSettings} = useAdminEffects(SiteSettingsCollectionApi, BlankSiteSetting)
 
     if(!siteSettings) {
@@ -33,7 +33,7 @@ const AdminIndex:FC<RaceProps> = ({theme}) => {
         <Container>
             <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Site Settings</Typography>
 
-            <ImageField value={siteSettings.HomePageImage} label={'Home Page Image'} onChange={v => merge({HomePageImage: v})} {...HeroSize} />
+            <ImageField value={siteSettings.HomePageImage} label={'Home Page Image'} onChange={v => merge({HomePageImage: v || undefined})} {...HeroSize} />
 
             <form onSubmit={e => e.preventDefault()}>
                 <FormControl fullWidth={true} margin={"normal"}>

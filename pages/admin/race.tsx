@@ -30,33 +30,38 @@ const AdminIndex: FC<RaceProps> = () => {
         </Paper>
     }
 
-    function valueProps<T extends keyof RaceData, V = RaceData[T]>(field: T, defaultValue: RaceData[T]|null = null): {
-        value: V|null
-        onChange: (v: V) => void
+    function fieldValueSet<T extends keyof RaceData>(fieldValue: RaceData[T]): fieldValue is Required<RaceData>[T] {
+        return fieldValue !== undefined
+    }
+
+    function valueProps<T extends keyof RaceData>(field: T, defaultValue: Required<RaceData>[T]|null = null): {
+        value: Required<RaceData>[T]|null
+        onChange: (v: Required<RaceData>[T]|null) => void
     } {
-        let value: V|null = defaultValue
-        if (race && race?.[field]) {
-            value = race[field]
+        let value: Required<RaceData>[T]|null = defaultValue
+        const fieldValue = race ? race[field] : undefined
+        if (fieldValue !== undefined && fieldValueSet<T>(fieldValue)) {
+            value = fieldValue
         }
         return {
             value,
-            onChange: (val: V) => merge({[field]: val})
+            onChange: (val: Required<RaceData>[T]|null) => merge({[field]: val})
         };
     }
 
-    const RaceFormatSet = Object.keys(RaceFormat).map(k => RaceFormat[k])
+    const RaceFormatSet = Object.keys(RaceFormat).map((k) => RaceFormat[k as keyof typeof RaceFormat])
 
     return <Paper>
         <Container>
             <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Race</Typography>
 
             <form onSubmit={e => e.preventDefault()}>
-                <DateField label={'Race Date'} {...valueProps('Date')} />
+                <DateField label={'Race Date'} {...valueProps('Date', '')} />
                 <SwitchField label={'Cancelled'} {...valueProps('Cancelled', false)} />
                 <SwitchField label={'Postponed'} {...valueProps('Postponed', false)} />
                 <EnumSelectField label={"Race Format"}
                                  enumSet={RaceFormatSet} {...valueProps('RaceFormat', RaceFormat.Handicap)} />
-                <SingleLineTextField label={'Title'} {...valueProps('Title',)} />
+                <SingleLineTextField label={'Title'} {...valueProps('Title')} />
                 <TimeField
                     label={'Registration Cutoff'} {...valueProps('RegistrationCutoff')} />
                 <TimeField label={'Race Start Time'} {...valueProps('RaceStartTime')} />

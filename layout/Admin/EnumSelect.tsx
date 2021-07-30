@@ -3,7 +3,7 @@ import {MenuItem, Select, SelectProps} from "@material-ui/core";
 
 interface EnumSelectProps<T extends string> {
     enumSet: T[]; // Use: Object.values(EnumType)
-    value?: T
+    value: T | null
     onChange: (value: T) => void
 }
 

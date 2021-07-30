@@ -24,13 +24,13 @@ export interface RaceData {
     CourseLaps?: number
     RaceFormat?: RaceFormat
     Marshals?: string
-    Cancelled?: Boolean
-    Postponed?: Boolean
-    VCVEvent?: Boolean
-    Interclub?: Boolean
-    BSCC?: Boolean
-    Trophy?: Boolean
-    ClubChamps?: Boolean
+    Cancelled?: boolean
+    Postponed?: boolean
+    VCVEvent?: boolean
+    Interclub?: boolean
+    BSCC?: boolean
+    Trophy?: boolean
+    ClubChamps?: boolean
     RegistrationURL? :string
     Series? :string
     Notes? :string
