@@ -1,48 +1,59 @@
 import {RaceData} from "../models/Race";
 import {NewsData} from "../models/News";
-import {ResultsData} from "../models/Results";
 import {UserData} from "../models/User";
 import {CourseData} from "../models/Course";
 import {SiteSettingData} from "../models/SiteSetting";
 import {client, q} from "./faunadb";
 import {BaseList, BaseModel, ModelCollection} from "../models/base";
 import {FileData} from "../models/File";
+import {DeployData} from "../models/Deploy";
 
 
 export class Collection<T> {
     protected readonly collection: ModelCollection;
     protected readonly secret: string;
+    public onCreate: (data: unknown) => void;
 
     constructor(collection: ModelCollection, secret: string) {
         this.collection = collection;
         this.secret = secret;
+        this.onCreate = () => {}
     }
 
     list(): Promise<BaseList<T>> {
-        return DocListService<T>(this.collection, this.secret)
+        return DocListService<T>(this.collection)
     }
 
     get(id: string): Promise<BaseModel<T>> {
-        return DocGetService<T>(this.collection, id, this.secret)
+        return DocGetService<T>(this.collection, id)
     }
 
     post(data: T): Promise<BaseModel<T>> {
-        return DocPostService<T>(this.collection, data, this.secret)
+        return DocPostService<T>(this.collection, data)
     }
 
     put(data: T, id: string): Promise<BaseModel<T>>  {
-        return DocPutService<T>(this.collection, data, id, this.secret)
+        return DocPutService<T>(this.collection, data, id)
     }
 }
 
 export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret)
 export const NewsCollection = (secret: string) => new Collection<NewsData>(ModelCollection.News, secret)
-export const ResultsCollection = (secret: string) => new Collection<ResultsData>(ModelCollection.Results, secret)
+// export const ResultsCollection = (secret: string) => new Collection<ResultsData>(ModelCollection.Results, secret)
 export const UserCollection = (secret: string) => new Collection<UserData>(ModelCollection.User, secret)
 export const CoursesCollection = (secret: string) => new Collection<CourseData>(ModelCollection.Courses, secret)
 export const ImagesCollection = (secret: string) => new Collection<ImageData>(ModelCollection.Images, secret)
 export const SiteSettingsCollection = (secret: string) => new Collection<SiteSettingData>(ModelCollection.SiteSettings, secret)
 export const FilesCollection = (secret: string) => new Collection<FileData>(ModelCollection.Files, secret)
+export const DeployCollection = (secret: string) => {
+    const Deploy = new Collection<DeployData>(ModelCollection.Deploy, secret)
+    Deploy.onCreate = () => {
+        if(process.env.DEPLOY) {
+            fetch(process.env.DEPLOY)
+        }
+    }
+    return Deploy
+}
 
 export type FaunaDBList<T> = {
     data: FaunaDBItem<T>[];
@@ -54,7 +65,7 @@ export type FaunaDBItem<T> = {
 
 
 
-function DocListService<T>(collection: string, secret: string): Promise<BaseList<T>> {
+function DocListService<T>(collection: string): Promise<BaseList<T>> {
     return new Promise((resolve, reject) => {
         client.query<FaunaDBList<T>>(
             q.Map(
@@ -79,7 +90,7 @@ function DocListService<T>(collection: string, secret: string): Promise<BaseList
     })
 }
 
-function DocGetService<T>(collection: string, id: string, secret: string): Promise<BaseModel<T>> {
+function DocGetService<T>(collection: string, id: string): Promise<BaseModel<T>> {
     return new Promise((resolve, reject) => {
         client.query<FaunaDBItem<T>>(
             q.Get(
@@ -93,7 +104,7 @@ function DocGetService<T>(collection: string, id: string, secret: string): Promi
     })
 }
 
-function DocPostService<T>(collection: string, data: any, secret: string): Promise<BaseModel<T>> {
+function DocPostService<T>(collection: string, data: any): Promise<BaseModel<T>> {
     return new Promise((resolve, reject) => {
         client.query<FaunaDBItem<T>>(
             q.Create(
@@ -110,7 +121,7 @@ function DocPostService<T>(collection: string, data: any, secret: string): Promi
     })
 }
 
-function DocPutService<T>(collection: string, data: T, id: string, secret: string): Promise<BaseModel<T>> {
+function DocPutService<T>(collection: string, data: T, id: string): Promise<BaseModel<T>> {
     return new Promise((resolve, reject) => {
         client.query<FaunaDBItem<T>>(
             q.Update(

@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {ModelCollection} from "../../models/base";
 import {
     Collection,
-    CoursesCollection, FilesCollection,
+    CoursesCollection, DeployCollection, FilesCollection,
     ImagesCollection, NewsCollection,
     RaceCollection, SiteSettingsCollection,
     UserCollection
@@ -90,11 +90,14 @@ export default (req: CrudlRequest & NextApiRequest, res: NextApiResponse) => {
         case ModelCollection.Files:
             coll = FilesCollection(secret)
             break;
+        case ModelCollection.Deploy:
+            coll = DeployCollection(secret)
+            break;
         default:
             return;
     }
     if(isCreateRequest(req)) {
-        coll.post(req.body).then(res.json).catch()
+        coll.post(req.body).then(res.json).then(coll.onCreate).catch()
     }
     else if(isReadRequest(req)) {
         coll.get(req.query.id).then(res.json)

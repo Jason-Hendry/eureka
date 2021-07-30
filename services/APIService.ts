@@ -16,6 +16,7 @@ import {
     ReadRequest, UpdateRequest
 } from "../pages/api/crud";
 import {FileData} from "../models/File";
+import {DeployData} from "../models/Deploy";
 
 export class CollectionAPI<T> extends Collection<T> {
 
@@ -58,6 +59,7 @@ export const CoursesCollectionApi = (secret: string) => new CollectionAPI<Course
 export const ImagesCollectionApi = (secret: string) => new CollectionAPI<ImageData>(ModelCollection.Images, secret)
 export const SiteSettingsCollectionApi = (secret: string) => new CollectionAPI<SiteSettingData>(ModelCollection.SiteSettings, secret)
 export const FilesCollectionApi = (secret: string) => new CollectionAPI<FileData>(ModelCollection.Files, secret)
+export const DeployCollectionApi = (secret: string) => new CollectionAPI<DeployData>(ModelCollection.Deploy, secret)
 
 export const DoCrudRequest = <T, K extends CrudlRequest>(req: K, body?: unknown): Promise<T> => {
     const queryString: string = (Object.keys(req.query) as (keyof typeof req.query)[]).map((k)=> `${k}=${req.query[k]}`).join('&');

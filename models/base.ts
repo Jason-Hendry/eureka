@@ -14,4 +14,5 @@ export enum ModelCollection {
     Images = 'Images',
     SiteSettings = 'SiteSettings',
     Files = 'Files',
+    Deploy = 'Deploy',
 }

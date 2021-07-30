@@ -5,6 +5,7 @@ import {useRouter} from "next/router";
 import {makeStyles} from "@material-ui/styles";
 import {Secret} from "./Secret";
 import {MouseEvent} from "react";
+import {DeployCollectionApi} from "../../services/APIService";
 
 
 const useStyles = (theme: Theme) => makeStyles({
@@ -56,7 +57,8 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
     const publish = () => {
         if(deployStatus === null) {
             setDeployStatus("Publishing")
-            fetch(`/api/deploy?deploy=yes&secret=${secret}`, {method:"POST"} ).then(d => console.log(d)).catch(e => console.log(e))
+            DeployCollectionApi(secret).post({date: (new Date().toISOString())})
+            // fetch(`/api/deploy?deploy=yes&secret=${secret}`, {method:"POST"} ).then(d => console.log(d)).catch(e => console.log(e))
         }
     }
 
