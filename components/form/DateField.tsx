@@ -1,11 +1,10 @@
 import React, {FC} from "react";
-import {makeStyles} from "@material-ui/styles";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
 
 
-export const DateField: FC<BaseFieldProps<string>> = ({label, onChange, value}) => {
+export const DateField: FC<BaseFieldProps<string>> = ({label, onChange, value, id}) => {
     return (
         <>
             <TextField {...defaultFieldProps}
@@ -13,6 +12,7 @@ export const DateField: FC<BaseFieldProps<string>> = ({label, onChange, value}) 
                        onChange={(e) => onChange(e.target.value)}
                        value={value || ""}
                        type={"date"}
+                       id={id}
             />
         </>
     )

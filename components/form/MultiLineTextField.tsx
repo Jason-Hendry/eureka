@@ -4,7 +4,7 @@ import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
 
 
-export const SingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange, value}) => {
+export const SingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange, value, id}) => {
     return (
         <>
             <TextField {...defaultFieldProps}
@@ -12,6 +12,7 @@ export const SingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange
                        label={label}
                        onChange={(e) => onChange(e.target.value)}
                        value={value || ""}
+                       id={id}
                        // InputProps={{inputComponent: TextareaAutosize}}
                        helperText={"Use 2 new lines to create a new paragraph."}
             />

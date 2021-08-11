@@ -6,7 +6,7 @@ describe('EnumSelectField', () => {
         const Option1 = "Option 1"
         const Option2 = "Option 2"
         const change = jest.fn()
-        const wrapper = render(<EnumSelectField value={Option2} label={"Enum"} onChange={change} enumSet={[Option1, Option2]} />)
+        const wrapper = render(<EnumSelectField id={"test"} value={Option2} label={"Enum"} onChange={change} enumSet={[Option1, Option2]} />)
         wrapper.getByLabelText("Enum")
     });
 });

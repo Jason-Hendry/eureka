@@ -1,40 +1,24 @@
 import React, {FC} from "react"
-import {
-    Button,
-    Container,
-    FormControl, Paper,
-    Typography, withTheme
-} from "@material-ui/core";
 import {UserCollectionApi} from "../../services/APIService";
 import { useAdminEffects} from "../../effects/loadApiEffect";
 import {UserData} from "../../models/User";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import EmailField from "../../components/form/EmailField";
+import AdminLoading from "../../layout/Admin/AdminLoading";
+import {AdminForm} from "../../components/form/AdminForm";
 
 const AdminIndex:FC<unknown> = () => {
-    const {save, data: user, merge} = useAdminEffects<UserData>(UserCollectionApi, () => ({name: "", email: ""}))
+    const {save, data, merge, isEdit} = useAdminEffects<UserData>(UserCollectionApi, () => ({name: "", email: ""}))
 
-    if(!user) {
-        return <Paper>
-            <Container>Loading...</Container>
-        </Paper>
+    if (!data) {
+        return <AdminLoading/>
     }
 
-    return <Paper>
-        <Container>
-            <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Course</Typography>
-
-            <form onSubmit={e => e.preventDefault()}>
-                <SingleLineTextField label={'Title'} onChange={(v) => merge({name: v || undefined})} value={user.name}/>
-                <EmailField label={'Title'} onChange={(v) => merge({email: v || undefined})} value={user.email}/>
-
-                <FormControl fullWidth={true} margin={"normal"}>
-                    <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{document.location.hash.length ? 'Save' : 'Create'}</Button>
-                </FormControl>
-            </form>
-        </Container>
-    </Paper>
+    return <AdminForm label={'User'} isEdit={isEdit} save={save}>
+      <SingleLineTextField label={'Name'} onChange={(v) => merge({name: v || undefined})} value={data.name} id={'name'}/>
+      <EmailField label={'Email'} onChange={(v) => merge({email: v || undefined})} value={data.email} id={'email'}/>
+    </AdminForm>
 
 }
 
-export default withTheme(AdminIndex)
+export default AdminIndex

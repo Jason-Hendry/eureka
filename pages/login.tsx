@@ -14,16 +14,16 @@ import Link from "next/link";
 import {LoginService} from "../auth/login";
 import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
 import {useLocalStorage} from "../layout/Admin/AdminTheme";
+import {preventableEvent} from "../common/events";
 
 export const Login:FC<unknown> = () => {
     const router = useRouter()
 
-    const [secret, setSecret] = useLocalStorage("secret", "")
+    const [, setSecret] = useLocalStorage("secret", "")
 
     const [showPass, setShowPass] = useState<boolean>(false)
     const [pass, setPass] = useState<string>("")
     const [email, setEmail] = useState<string>("")
-    const [resetSent, setResetSent] = useState<boolean>(false)
 
     const hash = process.browser ? (document.location.hash.substring(1)) : ""
 
@@ -34,7 +34,7 @@ export const Login:FC<unknown> = () => {
         onClick={() => setShowPass(!showPass)}><ShowPassIcon/></IconButton></InputAdornment>
 
 
-    const submitLogin: (event: React.FormEvent<HTMLFormElement>) => void = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitLogin = (e: preventableEvent) => {
         LoginService(email, pass, (s) => {
             console.log(s)
             setSecret(s);
@@ -53,15 +53,13 @@ export const Login:FC<unknown> = () => {
         <CardContent>
             <form onSubmit={submitLogin}>
                 <Typography variant={"h6"}>Login</Typography>
-                {resetSent ?
-                    <Typography variant={"h6"}>Reset link has been sent, please check your email</Typography> : null}
                 <TextField margin={"normal"} fullWidth label={"Email"} onChange={e => setEmail(e.target.value)}
-                           value={email}
+                           value={email} id={'email'}
                            type={"text"}/>
                 <TextField margin={"normal"} fullWidth label={"Password"} onChange={e => setPass(e.target.value)}
-                           value={pass}
+                           value={pass} id={'password'}
                            type={hideShowType} InputProps={{endAdornment: showPassAdornment}}/>
-                <Button fullWidth variant={"contained"} color={"primary"} type={"submit"} value={"Login"}>Login</Button>
+                <Button fullWidth variant={"contained"} color={"primary"} type={"submit"} value={"Login"} onClick={submitLogin}>Login</Button>
             </form>
             <CardActions>
                 <Link href={"/password-reset"}>Forgetting your password? Reset it now</Link>

@@ -29,7 +29,7 @@ export const AdminFormTheme: FC<unknown> = ({children}) => {
         spacing={0}
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
         style={{minHeight: '100vh'}}
     >
 

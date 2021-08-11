@@ -1,13 +1,11 @@
 import React, {FC, useRef} from "react";
-import {makeStyles} from "@material-ui/styles";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
 import {useS3Upload} from "../../effects/loadApiEffect";
-import AdminLoading from "../../layout/Admin/AdminLoading";
 
 
-export const FileField: FC<BaseFieldProps<string>> = ({label, onChange, value}) => {
+export const FileField: FC<BaseFieldProps<string>> = ({label, onChange, value, id}) => {
 
     const {s3Upload, uploading} = useS3Upload()
 
@@ -30,6 +28,7 @@ export const FileField: FC<BaseFieldProps<string>> = ({label, onChange, value}) 
         <>
             <TextField {...defaultFieldProps}
                        label={label}
+                       id={id}
                        inputRef={fileRef}
                        inputProps={{type: 'file'}}
                        helperText={uploading ? "...uploading" : value ? value : ""}

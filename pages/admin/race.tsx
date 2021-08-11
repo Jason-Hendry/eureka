@@ -1,8 +1,7 @@
 import React, {FC} from "react"
 import {
-    Button,
     Container,
-    FormControl, Paper,
+    Paper,
     Typography
 } from "@material-ui/core";
 import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
@@ -18,11 +17,12 @@ import {CourseData} from "../../models/Course";
 import NumberField from "../../components/form/NumberField";
 import MultiLineTextField from "../../components/form/MultiLineTextField";
 import FileField from "../../components/form/FileField";
+import {SaveCreateButton} from "../../components/form/SaveCreateButton";
 
 type RaceProps = {}
 
 const AdminIndex: FC<RaceProps> = () => {
-    const {save, merge, data: race} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}))
+    const {save, merge, data: race, isEdit} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}))
 
     if (!race) {
         return <Paper>
@@ -36,6 +36,7 @@ const AdminIndex: FC<RaceProps> = () => {
 
     function valueProps<T extends keyof RaceData>(field: T, defaultValue: Required<RaceData>[T]|null = null): {
         value: Required<RaceData>[T]|null
+        id: string
         onChange: (v: Required<RaceData>[T]|null) => void
     } {
         let value: Required<RaceData>[T]|null = defaultValue
@@ -45,6 +46,7 @@ const AdminIndex: FC<RaceProps> = () => {
         }
         return {
             value,
+            id: field,
             onChange: (val: Required<RaceData>[T]|null) => merge({[field]: val})
         };
     }
@@ -83,10 +85,7 @@ const AdminIndex: FC<RaceProps> = () => {
                 <FileField label={'Map Image'} {...valueProps('MapImage')} />
                 <FileField label={'Map PDF'} {...valueProps('MapDownload')} />
 
-                <FormControl fullWidth={true} margin={"normal"}>
-                    <Button type={"submit"} variant={"contained"} color={"primary"}
-                            onClick={save}>{document.location.hash.length ? 'Save' : 'Create'}</Button>
-                </FormControl>
+                <SaveCreateButton isEdit={isEdit} save={save}/>
             </form>
         </Container>
     </Paper>

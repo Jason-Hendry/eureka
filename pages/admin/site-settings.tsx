@@ -33,7 +33,7 @@ const AdminIndex:FC<RaceProps> = ({}) => {
         <Container>
             <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Site Settings</Typography>
 
-            <ImageField value={siteSettings.HomePageImage} label={'Home Page Image'} onChange={v => merge({HomePageImage: v || undefined})} {...HeroSize} />
+            <ImageField value={siteSettings.HomePageImage} label={'Home Page Image'} onChange={v => merge({HomePageImage: v || undefined})} {...HeroSize} id={"HomePage"} />
 
             <form onSubmit={e => e.preventDefault()}>
                 <FormControl fullWidth={true} margin={"normal"}>

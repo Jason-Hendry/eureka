@@ -65,7 +65,7 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
     return <div className={classes.root}>
         <AppBar position="static">
             <Toolbar>
-                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu"
+                <IconButton edge="start" className={classes.menuButton} color="inherit" title={'Menu'} aria-label="menu"
                             onClick={handleClick}>
                     <MenuIcon/>
                 </IconButton>

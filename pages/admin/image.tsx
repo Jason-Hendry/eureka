@@ -1,8 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from "react"
 import {
-    Button,
     Container,
-    FormControl, Paper,
+    Paper,
     TextField, Theme,
     Typography, withTheme
 } from "@material-ui/core";
@@ -14,6 +13,7 @@ import AdminLoading from "../../layout/Admin/AdminLoading";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import {ImageData} from "../../models/Image";
 import picaF from 'pica';
+import {SaveCreateButton} from "../../components/form/SaveCreateButton";
 const pica = picaF()
 
 
@@ -144,11 +144,9 @@ const AdminImage:FC<RaceProps> = ({theme}) => {
                 </ul>
 
 
-                <SingleLineTextField label={'Alt Text / Descriptions'} onChange={(e) => merge({alt: e || ''})} value={image.alt}/>
+                <SingleLineTextField label={'Alt Text / Descriptions'} onChange={(e) => merge({alt: e || ''})} value={image.alt} id={'alt'}/>
 
-                <FormControl fullWidth={true} margin={"normal"}>
-                    <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{isEdit ? 'Save' : 'Create'}</Button>
-                </FormControl>
+                <SaveCreateButton isEdit={isEdit} save={save}/>
             </form>
         </Container>
     </Paper>

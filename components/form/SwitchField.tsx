@@ -3,12 +3,13 @@ import {BaseFieldProps} from "./BaseField";
 import {FormControl, FormLabel, Switch} from "@material-ui/core";
 
 
-export const SwitchField: FC<BaseFieldProps<boolean>> = ({label, onChange, value}) => {
+export const SwitchField: FC<BaseFieldProps<boolean>> = ({label, onChange, value, id}) => {
     return (
         <>
             <FormControl margin={"normal"}>
-                <FormLabel>{label}</FormLabel>
+                <FormLabel id={id}>{label}</FormLabel>
                 <Switch
+                    id={id}
                     color={"secondary"}
                     checked={value === null ? false : value}
                     onChange={(e) => onChange(e.target.checked)}

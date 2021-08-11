@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": ["jest"]
+    "types": ["jest","cypress", "@testing-library/cypress", "node"]
   },
   "exclude": [
     "node_modules"
