@@ -83,6 +83,7 @@ export const Covid: FC<CovidProps> = ({siteSetting}) => {
 }
 export default Covid
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<CovidProps> = async () => {
 
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))

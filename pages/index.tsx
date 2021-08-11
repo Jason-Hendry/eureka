@@ -72,6 +72,7 @@ export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
 }
 export default Home
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
 
   const courses = await CoursesCollection(process.env.FAUNADB_SECRET || '').list()

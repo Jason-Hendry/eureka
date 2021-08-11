@@ -17,10 +17,7 @@ function awsCredentialsAreValid(awsCredentials: Credentials | undefined):awsCred
     if(!awsCredentials) {
         return false
     }
-    if(awsCredentials.Expiration instanceof Date) {
-       return awsCredentials.Expiration.getSeconds() >= (new Date).getSeconds()
-    }
-    return false
+    return awsCredentials.Expiration.getSeconds() >= (new Date).getSeconds()
 }
 
 export async function getCredential(secret: string): Promise<AWSCredentials> {

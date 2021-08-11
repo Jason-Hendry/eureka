@@ -33,6 +33,7 @@ export const NewsPage: FC<NewsPageProps> = ({ newsItem, siteSetting}) => {
 }
 export default NewsPage;
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<NewsPageProps, NewsPageParams> = async ({params}) => {
     const {id} = params || {}
     const newsItem = id ? await NewsCollection(process.env.FAUNADB_SECRET || '').get(id) : null
@@ -45,6 +46,7 @@ export const getStaticProps: GetStaticProps<NewsPageProps, NewsPageParams> = asy
     }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticPaths: GetStaticPaths<NewsPageParams> = async () => {
     const paths = await NewsCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({id}) => ({params:{id}})))
 

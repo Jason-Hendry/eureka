@@ -20,6 +20,7 @@ export const Join: FC<JoinProps> = ({siteSetting}) => {
 }
 export default Join
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<JoinProps> = async () => {
 
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))

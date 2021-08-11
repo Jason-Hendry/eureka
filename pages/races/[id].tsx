@@ -67,6 +67,7 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
 }
 export default RacePage;
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = async ({params}) => {
     const {id} = params || {}
     const race = id ? await RaceCollection(process.env.FAUNADB_SECRET || '').get(id) : null
@@ -81,6 +82,7 @@ export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = asy
     }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticPaths: GetStaticPaths<NewsPageParams> = async () => {
     const paths = await RaceCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({id}) => ({params:{id}})))
 

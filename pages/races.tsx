@@ -28,6 +28,7 @@ export const Races: FC<RaceProps> = ({siteSetting, races}) =>{
 }
 export default Races
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<RaceProps> = async () => {
 
   const courses = await CoursesCollection(process.env.FAUNADB_SECRET || '').list()

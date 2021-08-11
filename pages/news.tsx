@@ -33,6 +33,7 @@ export const News: FC<NewsProps> = ({siteSetting, news}) =>{
 }
 export default News
 
+// noinspection JSUnusedGlobalSymbols
 export const getStaticProps: GetStaticProps<NewsProps> = async () => {
 
   const news = (await NewsCollection(process.env.FAUNADB_SECRET || '').list())
