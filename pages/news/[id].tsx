@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps<NewsPageProps, NewsPageParams> = asy
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))
 
     if(newsItem) {
-        return {props: {newsItem,siteSetting}}
+        return {props: {newsItem,siteSetting}, revalidate: 60}
     } else {
         return {notFound: true}
     }
@@ -51,7 +51,7 @@ export const getStaticPaths: GetStaticPaths<NewsPageParams> = async () => {
     const paths = await NewsCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({id}) => ({params:{id}})))
 
     return {
-        fallback: "blocking",
+        fallback: true,
         paths
     }
 }

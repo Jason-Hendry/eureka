@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps<RaceProps> = async () => {
 
   const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))
 
-  return {props: {races, siteSetting}, revalidate: 3600}
+  return {props: {races, siteSetting}, revalidate: 60}
 }
 
 

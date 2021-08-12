@@ -21,7 +21,11 @@ interface NewsPageParams extends ParsedUrlQuery {
 }
 
 export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
-    const image = siteSetting.data?.HomePageImages?.length ?
+    if(!race) {
+        return null
+    }
+
+    const image = siteSetting?.data?.HomePageImages?.length ?
         siteSetting.data.HomePageImages[0].data.hero :
         '';
 
@@ -76,7 +80,7 @@ export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = asy
     const CourseData = race?.data?.Course ? await CoursesCollection(process.env.FAUNADB_SECRET || '').get(race?.data?.Course) : null
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))
 
-    return {props: {race:{...race, data: {...race.data, CourseData, MarshallNames:[]}},siteSetting}, revalidate: 3600}
+    return {props: {race:{...race, data: {...race.data, CourseData, MarshallNames:[]}},siteSetting}, revalidate: 60}
 }
 
 // noinspection JSUnusedGlobalSymbols
