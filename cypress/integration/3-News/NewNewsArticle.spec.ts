@@ -3,7 +3,7 @@ import {LoginAsAdmin} from "../../PageObjects/Login";
 describe('News', () => {
     const newNewsName = "Test News"
 
-    xit('should be created', () => {
+    it('should be created', () => {
         LoginAsAdmin()
             .openMenu()
             .clickNews()
@@ -16,8 +16,8 @@ describe('News', () => {
         LoginAsAdmin()
             .openMenu()
             .clickNews()
-            // .findNews(newNewsName)
-            .findNews('Website News')
+            .findNews(newNewsName)
+            // .findNews('Website News')
             .clickEdit()
             .clickDelete()
     });
