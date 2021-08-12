@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = asy
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))
 
     if(race) {
-        return {props: {race:{...race, data: {...race.data, CourseData, MarshallNames:[]}},siteSetting}}
+        return {props: {race:{...race, data: {...race.data, CourseData, MarshallNames:[]}},siteSetting}, revalidate: 3600}
     } else {
         return {notFound: true}
     }
@@ -87,7 +87,7 @@ export const getStaticPaths: GetStaticPaths<NewsPageParams> = async () => {
     const paths = await RaceCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({id}) => ({params:{id}})))
 
     return {
-        fallback: "blocking",
+        fallback: true,
         paths
     }
 }

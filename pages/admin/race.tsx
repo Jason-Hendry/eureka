@@ -14,11 +14,13 @@ import FileField from "../../components/form/FileField";
 import {useAdminEffects} from "../../effects/useAdminEffects";
 import {AdminForm} from "../../components/form/AdminForm";
 import AdminLoading from "../../layout/Admin/AdminLoading";
+import {useRouterPush} from "../../effects/useRouterPush";
 
 type RaceProps = {}
 
 const AdminIndex: FC<RaceProps> = () => {
-    const {save, merge, data: race, isEdit, deleteRecord, errors} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}))
+    const returnToList = useRouterPush('/admin/races')
+    const {save, merge, data: race, isEdit, deleteRecord, errors} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}), returnToList)
 
     if (!race) {
         return <AdminLoading />
