@@ -8,7 +8,7 @@ import PublicLayout from "../../layout/public";
 import {SiteSettingData} from "../../models/SiteSetting";
 import nl2br from "react-nl2br";
 import {Button, Typography} from "@material-ui/core";
-import {RaceMergeData, RaceTitle} from "../../models/Race";
+import {FilterFutureRace, RaceMergeData, RaceTitle} from "../../models/Race";
 import {ISODateToPretty} from "../../services/dates";
 import Columns, {Half} from "../../layout/columns/Columns";
 
@@ -85,8 +85,10 @@ export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = asy
 
 // noinspection JSUnusedGlobalSymbols
 export const getStaticPaths: GetStaticPaths<NewsPageParams> = async () => {
-    const paths = await RaceCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({id}) => ({params:{id}})))
-
+    const paths = await RaceCollection(process.env.FAUNADB_SECRET || '')
+        .list()
+        .then((l) => l.filter(FilterFutureRace()))
+        .then((l) => l.map(({id}) => ({params:{id}})))
     return {
         fallback: true,
         paths

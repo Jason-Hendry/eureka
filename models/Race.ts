@@ -48,7 +48,6 @@ export type RaceMergeData = RaceData & {
 export function FilterFutureRace() {
     return (r:Race): boolean => {
         const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : false;
-        // console.log(r.data, (r.data !== undefined) && raceDate && isFuture(raceDate))
         return (r.data != undefined) && (raceDate && isFuture(raceDate))
     }
 }
