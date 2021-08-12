@@ -18,7 +18,11 @@ interface NewsPageParams extends ParsedUrlQuery {
 }
 
 export const NewsPage: FC<NewsPageProps> = ({ newsItem, siteSetting}) => {
-    const image = siteSetting.data?.HomePageImages?.length ?
+    if(!newsItem) {
+        return null
+    }
+
+    const image = siteSetting?.data?.HomePageImages?.length ?
         siteSetting.data.HomePageImages[0].data.hero :
         '';
 
