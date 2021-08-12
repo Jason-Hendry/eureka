@@ -6,19 +6,20 @@ import {CollectionAPI} from "../../services/APIService";
 import {BaseList, BaseModel} from "../../models/base";
 
 
-export function CollectionSelectField<T, M extends true|false = false>({label, onChange, value, collection, getLabel, id}: PropsWithChildren<BaseFieldProps<string> & {collection: (secret: string) => CollectionAPI<T>, getLabel: (v: T)=>string}>): JSX.Element {
+export function CollectionSelectField<T>({label, onChange, value, collection, getLabel, id}: PropsWithChildren<BaseFieldProps<string> & {collection: (secret: string) => CollectionAPI<T>, getLabel: (v: T)=>string}>): JSX.Element {
 
     const secret = useContext(Secret)
     const [list, setList] =useState<BaseList<T>>([])
-    useEffect(() => {
-        collection(secret).list().then(l => l.sort(collectionSort)).then(setList)
-    },[])
 
-    const collectionSort = (a: BaseModel<T>,b: BaseModel<T>): number => {
-        if(!a || !getLabel(a.data)) return 1
-        if(!b || !getLabel(b.data)) return -1
-        return getLabel(a.data).localeCompare(getLabel(b.data))
-    }
+    useEffect(() => {
+        const collectionSort = (a: BaseModel<T>,b: BaseModel<T>): number => {
+            if(!a || !getLabel(a.data)) return 1
+            if(!b || !getLabel(b.data)) return -1
+            return getLabel(a.data).localeCompare(getLabel(b.data))
+        }
+        collection(secret).list().then(l => l.sort(collectionSort)).then(setList)
+    },[collection, secret, getLabel])
+
 
     return (
         <>

@@ -2,7 +2,7 @@ import React, {FC, useRef} from "react";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
-import {useS3Upload} from "../../effects/loadApiEffect";
+import {useS3Upload} from "../../effects/useS3Upload";
 
 
 export const FileField: FC<BaseFieldProps<string>> = ({label, onChange, value, id}) => {

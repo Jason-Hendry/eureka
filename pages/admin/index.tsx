@@ -4,7 +4,7 @@ import Columns, {Third} from "../../layout/columns/Columns";
 import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
 import {Secret} from "../../layout/Admin/Secret";
 import {dateSortCompareOldestFirst, LimitFilter} from "../../services/sort";
-import {FilterFutureRace, MergeCourseUserData, RaceData, RaceMergeData} from "../../models/Race";
+import {FilterFutureRace, MergeCourseUserData, RaceMergeData} from "../../models/Race";
 import {BaseList} from "../../models/base";
 import RaceList from "../../components/RaceList";
 import {CourseData} from "../../models/Course";

@@ -7,7 +7,7 @@ import {AdminForm} from "../../components/form/AdminForm";
 import {useRouterPush} from "../../effects/useRouterPush";
 
 
-const AdminIndex: VFC = ({}) => {
+const AdminIndex: VFC = () => {
     const returnToList = useRouterPush('/admin/courses')
     const {save, data: course, merge, isEdit, errors, deleteRecord} = useAdminEffects(CoursesCollectionApi, () => ({Title: ""}), returnToList)
 

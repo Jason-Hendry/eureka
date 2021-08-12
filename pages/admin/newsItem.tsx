@@ -12,7 +12,7 @@ const blankNews = ():NewsData => ({
     Title: ""
 })
 
-const AdminIndex: VFC = ({}) => {
+const AdminIndex: VFC = () => {
     const returnToList = useRouterPush('/admin/news')
     const {save, data: news, merge, isEdit, errors, deleteRecord} = useAdminEffects(NewsCollectionApi, blankNews, returnToList)
 

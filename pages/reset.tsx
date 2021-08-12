@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react"
+import React, {VFC, useState} from "react"
 import {
     Button,
     CardContent,
@@ -14,10 +14,10 @@ import { ResetService} from "../auth/reset";
 import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
 import {useLocalStorage} from "../layout/Admin/AdminTheme";
 
-export const Index: FC<unknown> = (props) => {
+export const Index: VFC = () => {
     const router = useRouter()
 
-    const [secret, setSecret] = useLocalStorage("secret", "")
+    const [, setSecret] = useLocalStorage("secret", "")
 
     const [showPass, setShowPass] = useState<boolean>(false)
     const [pass, setPass] = useState<string>("")

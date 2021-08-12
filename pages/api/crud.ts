@@ -26,8 +26,12 @@ export interface ReadRequest extends CrudBaseRequestWithId {
     method: "GET",
 }
 
+export const hasID = (req: CrudlRequest): boolean => {
+    return (req.query as object).hasOwnProperty('id')
+}
+
 export const isReadRequest = (req: CrudlRequest): req is ReadRequest => {
-    return req.method == "GET" && (req.query as object).hasOwnProperty('id');
+    return req.method == "GET" && hasID(req)
 }
 
 export interface ListRequest extends CrudBaseRequest {
@@ -35,7 +39,7 @@ export interface ListRequest extends CrudBaseRequest {
 }
 
 export const isListRequest = (req: CrudlRequest): req is ListRequest => {
-    return req.method == "GET" && !(req.query as object).hasOwnProperty('id');
+    return req.method == "GET" && !hasID(req)
 }
 
 export interface CreateRequest extends CrudBaseRequest {
@@ -43,7 +47,7 @@ export interface CreateRequest extends CrudBaseRequest {
 }
 
 export const isCreateRequest = (req: CrudlRequest): req is CreateRequest => {
-    return req.method == "POST" && !(req.query as object).hasOwnProperty('id');
+    return req.method == "POST" && !hasID(req)
 }
 
 export interface UpdateRequest extends CrudBaseRequestWithId {
@@ -51,7 +55,7 @@ export interface UpdateRequest extends CrudBaseRequestWithId {
 }
 
 export const isUpdateRequest = (req: CrudlRequest): req is UpdateRequest => {
-    return req.method == "PUT" && (req.query as object).hasOwnProperty('id');
+    return req.method == "PUT" && hasID(req)
 }
 
 export interface DeleteRequest extends CrudBaseRequest {
@@ -60,12 +64,12 @@ export interface DeleteRequest extends CrudBaseRequest {
 }
 
 export const isDeleteRequest = (req: CrudlRequest): req is DeleteRequest => {
-    return req.method == "DELETE" && (req.query as object).hasOwnProperty('id');
+    return req.method == "DELETE" && hasID(req)
 }
 
 export type CrudlRequest = CreateRequest | ReadRequest | UpdateRequest | DeleteRequest | ListRequest
 
-export default (req: CrudlRequest & NextApiRequest, res: NextApiResponse) => {
+const CrudAPI = (req: CrudlRequest & NextApiRequest, res: NextApiResponse): void => {
     const {query: {collection, secret}} = req;
     let coll: Collection<unknown>;
     switch (collection) {
@@ -112,3 +116,4 @@ export default (req: CrudlRequest & NextApiRequest, res: NextApiResponse) => {
         coll.delete(req.body, req.query.id).then(res.json)
     }
 }
+export default CrudAPI

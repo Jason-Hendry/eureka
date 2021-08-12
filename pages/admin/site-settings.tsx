@@ -1,26 +1,21 @@
-import React, {FC} from "react"
+import React, {VFC} from "react"
 import {
     Button,
     Container,
     FormControl, Paper,
-    Theme,
-    Typography, withTheme
+    Typography,
 } from "@material-ui/core";
 import {SiteSettingsCollectionApi} from "../../services/APIService";
 import {SiteSettingData} from "../../models/SiteSetting";
 import ImageField, {HeroSize} from "../../components/form/ImageField";
 import {useAdminEffects} from "../../effects/useAdminEffects";
 
-type RaceProps = {
-    theme: Theme;
-}
-
 const BlankSiteSetting = ():SiteSettingData => ({
     HomePageImages: [],
     HomePageImage: ""
 })
 
-const AdminIndex:FC<RaceProps> = ({}) => {
+const AdminIndex:VFC = () => {
     const {save, merge, data: siteSettings} = useAdminEffects(SiteSettingsCollectionApi, BlankSiteSetting)
 
     if(!siteSettings) {
@@ -45,4 +40,4 @@ const AdminIndex:FC<RaceProps> = ({}) => {
 
 }
 
-export default withTheme(AdminIndex)
+export default AdminIndex

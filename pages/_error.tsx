@@ -1,9 +1,6 @@
-import {FC} from "react";
+import {VFC} from "react";
 
-interface ErrorProps {
-}
-
-const error: FC<ErrorProps> = ({}) => {
+const error: VFC = () => {
     return (
         <>
             <h1>Error</h1>

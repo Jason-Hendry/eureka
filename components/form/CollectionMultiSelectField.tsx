@@ -6,13 +6,13 @@ import {CollectionAPI} from "../../services/APIService";
 import {BaseList} from "../../models/base";
 
 
-export function CollectionMultiSelectField<T, M extends true|false = false>({label, onChange, value, collection, getLabel, id}: PropsWithChildren<BaseFieldProps<string[]> & {collection: (secret: string) => CollectionAPI<T>, getLabel: (v: T)=>string}>): JSX.Element {
+export function CollectionMultiSelectField<T>({label, onChange, value, collection, getLabel, id}: PropsWithChildren<BaseFieldProps<string[]> & {collection: (secret: string) => CollectionAPI<T>, getLabel: (v: T)=>string}>): JSX.Element {
 
     const secret = useContext(Secret)
     const [list, setList] =useState<BaseList<T>>([])
     useEffect(() => {
         collection(secret).list().then(setList)
-    },[])
+    },[collection, secret])
 
     return (
         <>

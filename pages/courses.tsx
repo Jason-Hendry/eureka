@@ -15,7 +15,7 @@ type CoursesProps = {
   courses: BaseList<CourseData>
 }
 
-export const Courses: FC<CoursesProps> = ({siteSetting, courses}) =>{
+export const Courses: FC<CoursesProps> = ({siteSetting}) =>{
   const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
 
 

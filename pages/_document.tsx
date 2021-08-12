@@ -1,13 +1,14 @@
+// noinspection HtmlRequiredTitleElement,HtmlUnknownBooleanAttribute
+
 import {ServerStyleSheets} from '@material-ui/core/styles';
 import React from "react";
-import Document, {Html, Head, Main, NextScript} from 'next/document';
-import {DocumentProps} from "next/dist/next-server/lib/utils";
+import Document, {Html, Head, Main, NextScript, DocumentProps} from 'next/document';
 import {theme} from "./_app";
 
 const GTM_ID = 'GTM-MZ5KFQK';
 
 export default class MyDocument extends Document<DocumentProps & {ssrCss: string}> {
-    render() {
+    render(): JSX.Element {
         return (
             <Html lang="en">
                 <Head>

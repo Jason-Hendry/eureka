@@ -2,8 +2,8 @@ import React, {FC, useEffect, useRef, useState} from "react";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
-import {useS3Upload} from "../../effects/loadApiEffect";
 import picaF from 'pica';
+import {useS3Upload} from "../../effects/useS3Upload";
 const pica = picaF()
 
 
@@ -13,7 +13,7 @@ interface ImageSize {
 }
 
 export const HeroSize:ImageSize = {width: 1500, height: 750}
-export const PosterSize:ImageSize = {width: 600, height: 400}
+// export const PosterSize:ImageSize = {width: 600, height: 400}
 
 export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onChange, value, width, height, id}) => {
     const bucket = process.env.AWS_S3_BUCKET || "images.eurekacycling.org.au"; // No getting env?
@@ -50,7 +50,7 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
                 })
             }
         }
-    }, [imgRef])
+    }, [imgRef, bucket, filename, onChange, s3Upload])
 
     const fileRef = useRef<HTMLInputElement>()
     const handleFile = () => {

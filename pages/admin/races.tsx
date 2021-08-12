@@ -52,7 +52,7 @@ export const AdminIndex:FC<unknown> = () => {
                                 </TableRow>
                             </TableHead>
                         {upcomingRaces.sort(dateSortCompareOldestFirst).filter(thisYear(year)).filter(hidePreviousFilter).map(race => (
-                            <TableRow>
+                            <TableRow key={race.id}>
                                 <TableCell>{race.data.Date}</TableCell>
                                 <TableCell>{race.data.Title || race.data.RaceFormat}</TableCell>
                                 <TableCell>{GetCourse(courses, race.data.Course || '')?.Title}</TableCell>

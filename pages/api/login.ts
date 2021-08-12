@@ -41,12 +41,6 @@ const isAWSCredentialsRequest = (request: allActions): request is AWSCredentials
     return (request as AWSCredentialsRequest).body?.action  === 'aws-credentials';
 }
 
-export type URLDetails = {
-    protocol: string
-    host: string
-    origin: string
-}
-
 type allActions = LoginRequest|ResetRequestRequest|ResetRequest|AWSCredentialsRequest;
 
 const error500 = (res: NextApiResponse) => {
@@ -56,7 +50,7 @@ const error500 = (res: NextApiResponse) => {
     }
 }
 
-export default (req: allActions, res: NextApiResponse): void => {
+export const LoginAPI = (req: allActions, res: NextApiResponse): void => {
     if(isResetRequest(req)) {
         doReset(client, req.body.email , req.body.password , req.body.hash).then(res.json).catch(error500(res))
     }
@@ -70,3 +64,4 @@ export default (req: allActions, res: NextApiResponse): void => {
         doLogin(client, req.body.email, req.body.password).then(res.json).catch(error500(res));
     }
 }
+export default LoginAPI

@@ -1,4 +1,4 @@
-import React, {FC} from "react"
+import React, {VFC} from "react"
 import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
 import {RaceData, RaceFormat} from "../../models/Race";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
@@ -7,7 +7,6 @@ import SwitchField from "../../components/form/SwitchField";
 import EnumSelectField from "../../components/form/EnumSelectField";
 import TimeField from "../../components/form/TimeField";
 import CollectionSelectField from "../../components/form/CollectionSelectField";
-import {CourseData} from "../../models/Course";
 import NumberField from "../../components/form/NumberField";
 import MultiLineTextField from "../../components/form/MultiLineTextField";
 import FileField from "../../components/form/FileField";
@@ -16,9 +15,7 @@ import {AdminForm} from "../../components/form/AdminForm";
 import AdminLoading from "../../layout/Admin/AdminLoading";
 import {useRouterPush} from "../../effects/useRouterPush";
 
-type RaceProps = {}
-
-const AdminIndex: FC<RaceProps> = () => {
+const AdminIndex: VFC = () => {
     const returnToList = useRouterPush('/admin/races')
     const {save, merge, data: race, isEdit, deleteRecord, errors} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}), returnToList)
 
@@ -59,7 +56,7 @@ const AdminIndex: FC<RaceProps> = () => {
                 <TimeField
                     label={'Registration Cutoff'} {...valueProps('RegistrationCutoff')} />
                 <TimeField label={'Race Start Time'} {...valueProps('RaceStartTime')} />
-                <CollectionSelectField<CourseData, false> label={"Course"} collection={CoursesCollectionApi}
+                <CollectionSelectField label={"Course"} collection={CoursesCollectionApi}
                                                           getLabel={(v) => v.Title} {...valueProps('Course')} />
                 <NumberField label={"Course Laps"} {...valueProps('CourseLaps', 1)} />
                 <MultiLineTextField label={'Marshals'} {...valueProps('Marshals')} />

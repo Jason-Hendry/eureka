@@ -24,7 +24,7 @@ export class PageObject {
         return this.wrap(cy.contains(text).should('be.visible'))
     }
     protected shouldSeeHeader(text: string) {
-        return this.wrap(cy.get(`:header:contains(${text})`).should('be.visible'))
+        return this.wrap(cy.get(`:header:contains(${text})`, {timeout: 8000}).should('be.visible'))
     }
     protected clickContainsTextAndSeeHeader(text: string, heading: string) {
         this.clickContainsText(text)

@@ -26,7 +26,7 @@ export const theme = createTheme({
     },
 })
 
-function MyApp({Component, pageProps, router}: AppProps) {
+function MyApp({Component, pageProps, router}: AppProps): JSX.Element {
     const admin = router.pathname.match('^/admin');
 
     if (admin) {
