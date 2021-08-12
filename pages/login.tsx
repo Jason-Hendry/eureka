@@ -36,7 +36,6 @@ export const Login:FC<unknown> = () => {
 
     const submitLogin = (e: preventableEvent) => {
         LoginService(email, pass, (s) => {
-            console.log(s)
             setSecret(s);
             if (hash) {
                 return router.push(decodeURIComponent(hash))

@@ -42,7 +42,6 @@ export class Collection<T> {
 
 export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret)
 export const NewsCollection = (secret: string) => new Collection<NewsData>(ModelCollection.News, secret)
-// export const ResultsCollection = (secret: string) => new Collection<ResultsData>(ModelCollection.Results, secret)
 export const UserCollection = (secret: string) => new Collection<UserData>(ModelCollection.User, secret)
 export const CoursesCollection = (secret: string) => new Collection<CourseData>(ModelCollection.Courses, secret)
 export const ImagesCollection = (secret: string) => new Collection<ImageData>(ModelCollection.Images, secret)
