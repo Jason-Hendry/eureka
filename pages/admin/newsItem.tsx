@@ -1,88 +1,56 @@
-import React, {FC, useContext, useState} from "react"
-import {
-    Button,
-    Container,
-    FormControl, Paper,
-    TextField, Theme,
-    Typography, withTheme
-} from "@material-ui/core";
+import React, {VFC} from "react"
+import AdminLoading from "../../layout/Admin/AdminLoading";
+import {useAdminEffects} from "../../effects/useAdminEffects";
+import {AdminForm} from "../../components/form/AdminForm";
+import {useRouterPush} from "../../effects/useRouterPush";
 import {NewsCollectionApi} from "../../services/APIService";
-import {Secret} from "../../layout/Admin/Secret";
-import {makeStyles} from "@material-ui/styles";
-import {loadApiEffectAndSave} from "../../effects/loadApiEffect";
+import {TextField} from "@material-ui/core";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {NewsData} from "../../models/News";
 
-const useStyles = (theme: Theme) => makeStyles({
-    root: {
-        padding: theme.spacing(4),
-    },
-    tableHeading: {
-        padding: 0
-    },
-    raceImage: {
-        marginTop: theme.spacing(2),
-        marginRight: theme.spacing(2)
-    }
+const blankNews = ():NewsData => ({
+    Title: ""
 })
-const inputProps = {
-    step: 300,
-};
 
-type RaceProps = {
-    theme: Theme;
-}
+const AdminIndex: VFC = ({}) => {
+    const returnToList = useRouterPush('/admin/news')
+    const {save, data: news, merge, isEdit, errors, deleteRecord} = useAdminEffects(NewsCollectionApi, blankNews, returnToList)
 
-const AdminIndex:FC<RaceProps> = ({theme}) => {
-    const secret = useContext(Secret)
-    const [news, setNews] = useState<NewsData|null>(null)
-    const save = loadApiEffectAndSave(NewsCollectionApi, secret, news, setNews, () => ({Title: ""}))
-
-    if(!news) {
-        return <Paper>
-            <Container>Loading...</Container>
-        </Paper>
+    if (!news) {
+        return <AdminLoading/>
     }
 
-    return <Paper>
-        <Container>
-            <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} News Item</Typography>
+    return <AdminForm label={'Course'} errors={errors} save={save} deleteRecord={deleteRecord} isEdit={isEdit}>
+        <TextField {...defaultFieldProps}
+                   label={'Title'}
+                   id={'title'}
+                   onChange={(e) => merge({Title: e.target.value})}
+                   value={news?.Title || ""}
+        />
 
-            <form onSubmit={e => e.preventDefault()}>
-                <TextField {...defaultFieldProps}
-                           label={'Title'}
-                           onChange={(e) => setNews({...news, Title: e.target.value})}
-                           value={news?.Title || ""}
-                />
+        <TextField {...defaultFieldProps}
+                   multiline={true}
+                   label={'Teaser'}
+                   id={'teaser'}
+                   onChange={(e) => merge({Teaser: e.target.value})}
+                   value={news?.Teaser || ""}
+        />
 
-                <TextField {...defaultFieldProps}
-                    multiline={true}
-                           label={'Teaser'}
-                           onChange={(e) => setNews({...news, Teaser: e.target.value})}
-                           value={news?.Teaser || ""}
-                />
+        <TextField {...defaultFieldProps}
+                   multiline={true}
+                   label={'Content'}
+                   id={'content'}
+                   onChange={(e) => merge({Body: e.target.value})}
+                   value={news?.Body || ""}
+        />
 
-                <TextField {...defaultFieldProps}
-                    multiline={true}
-                           label={'Content'}
-                           onChange={(e) => setNews({...news, Body: e.target.value})}
-                           value={news?.Body || ""}
-                />
-
-                <TextField {...defaultFieldProps}
-                           label={'News Date'}
-                           value={news.Date || ""}
-                           onChange={(e) => setNews({...news, Date: e.target.value})}
-                           type={"date"}
-                />
-
-                <FormControl fullWidth={true} margin={"normal"}>
-                    <Button type={"submit"} variant={"contained"} color={"primary"} onClick={save}>{document.location.hash.length ? 'Save' : 'Create'}</Button>
-                </FormControl>
-            </form>
-        </Container>
-    </Paper>
-
+        <TextField {...defaultFieldProps}
+                   label={'News Date'}
+                   id={'date'}
+                   value={news.Date || ""}
+                   onChange={(e) => merge({...news, Date: e.target.value})}
+                   type={"date"}
+        />
+    </AdminForm>
 }
-
-export default withTheme(AdminIndex)
+export default AdminIndex

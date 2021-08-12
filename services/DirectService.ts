@@ -35,6 +35,9 @@ export class Collection<T> {
     put(data: T, id: string): Promise<BaseModel<T>>  {
         return DocPutService<T>(this.collection, data, id)
     }
+    delete(data: T, id: string): Promise<BaseModel<T>>  {
+        return DocDeleteService<T>(this.collection, data, id)
+    }
 }
 
 export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret)
@@ -127,6 +130,20 @@ function DocPutService<T>(collection: string, data: T, id: string): Promise<Base
             q.Update(
                 q.Ref(q.Collection(collection), id),
                 {data}
+            )
+        ).then(({ref: {id}, data}) => {
+            resolve({id, data})
+        }).catch((error) => {
+            reject({error: error})
+        })
+    })
+}
+
+function DocDeleteService<T>(collection: string, data: T, id: string): Promise<BaseModel<T>> {
+    return new Promise((resolve, reject) => {
+        client.query<FaunaDBItem<T>>(
+            q.Delete(
+                q.Ref(q.Collection(collection), id),
             )
         ).then(({ref: {id}, data}) => {
             resolve({id, data})

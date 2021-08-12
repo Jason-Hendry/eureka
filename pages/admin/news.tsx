@@ -42,3 +42,4 @@ export const AdminIndex: FC<unknown> = () => {
 }
 
 export default AdminIndex
+

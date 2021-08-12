@@ -1,12 +1,6 @@
 import React, {FC} from "react"
-import {
-    Container,
-    Paper,
-    Typography
-} from "@material-ui/core";
 import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
 import {RaceData, RaceFormat} from "../../models/Race";
-import {useAdminEffects} from "../../effects/loadApiEffect";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import DateField from "../../components/form/DateField";
 import SwitchField from "../../components/form/SwitchField";
@@ -17,17 +11,17 @@ import {CourseData} from "../../models/Course";
 import NumberField from "../../components/form/NumberField";
 import MultiLineTextField from "../../components/form/MultiLineTextField";
 import FileField from "../../components/form/FileField";
-import {SaveCreateButton} from "../../components/form/SaveCreateButton";
+import {useAdminEffects} from "../../effects/useAdminEffects";
+import {AdminForm} from "../../components/form/AdminForm";
+import AdminLoading from "../../layout/Admin/AdminLoading";
 
 type RaceProps = {}
 
 const AdminIndex: FC<RaceProps> = () => {
-    const {save, merge, data: race, isEdit} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}))
+    const {save, merge, data: race, isEdit, deleteRecord, errors} = useAdminEffects<RaceData>(RaceCollectionApi, () => ({Title: ""}))
 
     if (!race) {
-        return <Paper>
-            <Container>Loading...</Container>
-        </Paper>
+        return <AdminLoading />
     }
 
     function fieldValueSet<T extends keyof RaceData>(fieldValue: RaceData[T]): fieldValue is Required<RaceData>[T] {
@@ -53,11 +47,7 @@ const AdminIndex: FC<RaceProps> = () => {
 
     const RaceFormatSet = Object.keys(RaceFormat).map((k) => RaceFormat[k as keyof typeof RaceFormat])
 
-    return <Paper>
-        <Container>
-            <Typography variant={"h6"}>{document.location.hash.length ? 'Edit' : 'Create New '} Race</Typography>
-
-            <form onSubmit={e => e.preventDefault()}>
+    return <AdminForm label={'Race'} deleteRecord={deleteRecord} isEdit={isEdit} save={save} errors={errors}>
                 <DateField label={'Race Date'} {...valueProps('Date', '')} />
                 <SwitchField label={'Cancelled'} {...valueProps('Cancelled', false)} />
                 <SwitchField label={'Postponed'} {...valueProps('Postponed', false)} />
@@ -85,10 +75,7 @@ const AdminIndex: FC<RaceProps> = () => {
                 <FileField label={'Map Image'} {...valueProps('MapImage')} />
                 <FileField label={'Map PDF'} {...valueProps('MapDownload')} />
 
-                <SaveCreateButton isEdit={isEdit} save={save}/>
-            </form>
-        </Container>
-    </Paper>
+    </AdminForm>
 
 }
 

@@ -108,7 +108,7 @@ export default (req: CrudlRequest & NextApiRequest, res: NextApiResponse) => {
     else if(isUpdateRequest(req)) {
         coll.put(req.body, req.query.id).then(res.json)
     }
-    else {
-        // TODO: Delete
+    else if(isDeleteRequest(req)){
+        coll.delete(req.body, req.query.id).then(res.json)
     }
 }

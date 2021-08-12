@@ -1,3 +1,4 @@
+import Chainable = Cypress.Chainable;
 
 
 export class PageObject {
@@ -19,5 +20,28 @@ export class PageObject {
     protected clickContainsText(text: string) {
         return this.wrap(cy.contains(text).click())
     }
+    protected shouldSeeText(text: string) {
+        return this.wrap(cy.contains(text).should('be.visible'))
+    }
+    protected shouldSeeHeader(text: string) {
+        return this.wrap(cy.get(`:header:contains(${text})`).should('be.visible'))
+    }
+    protected clickContainsTextAndSeeHeader(text: string, heading: string) {
+        this.clickContainsText(text)
+        return this.wrap(this.shouldSeeHeader(heading))
+    }
+    protected findRowWithCell(text: string) {
+        return cy.get(`td:contains(${text})`).first().parent()
+    }
 }
 
+export class SubPageObject extends PageObject{
+    protected row: Chainable
+    constructor(data: Chainable) {
+        super(data);
+        this.row = data
+    }
+    protected clickEdit(): unknown {
+        return this.row.find('a:contains("Edit")').click()
+    }
+}

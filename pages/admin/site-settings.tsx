@@ -7,9 +7,9 @@ import {
     Typography, withTheme
 } from "@material-ui/core";
 import {SiteSettingsCollectionApi} from "../../services/APIService";
-import { useAdminEffects} from "../../effects/loadApiEffect";
 import {SiteSettingData} from "../../models/SiteSetting";
 import ImageField, {HeroSize} from "../../components/form/ImageField";
+import {useAdminEffects} from "../../effects/useAdminEffects";
 
 type RaceProps = {
     theme: Theme;

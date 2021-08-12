@@ -1,38 +1,28 @@
-import React, {FC} from "react"
-import {Container, Paper, Theme, Typography, withTheme} from "@material-ui/core";
+import React, {VFC} from "react"
 import {CoursesCollectionApi} from "../../services/APIService";
-import {useAdminEffects} from "../../effects/loadApiEffect";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import AdminLoading from "../../layout/Admin/AdminLoading";
-import {SaveCreateButton} from "../../components/form/SaveCreateButton";
-
-type RaceProps = {
-    theme: Theme;
-}
+import {useAdminEffects} from "../../effects/useAdminEffects";
+import {AdminForm} from "../../components/form/AdminForm";
+import {useRouterPush} from "../../effects/useRouterPush";
 
 
-const AdminIndex: FC<RaceProps> = ({}) => {
-    const {save, data: course, merge, isEdit} = useAdminEffects(CoursesCollectionApi, () => ({Title: ""}))
+const AdminIndex: VFC = ({}) => {
+    const returnToList = useRouterPush('/admin/courses')
+    const {save, data: course, merge, isEdit, errors, deleteRecord} = useAdminEffects(CoursesCollectionApi, () => ({Title: ""}), returnToList)
 
     if (!course) {
         return <AdminLoading/>
     }
 
-    return <Paper>
-        <Container>
-            <Typography variant={"h6"}>{isEdit ? 'Edit' : 'Create New '} Course</Typography>
-
-            <form onSubmit={e => e.preventDefault()}>
+    return <AdminForm label={'Course'} errors={errors} save={save} deleteRecord={deleteRecord} isEdit={isEdit}>
                 <SingleLineTextField
                     label={'Title'}
                     onChange={(e) => merge({Title: e || ''})}
                     value={course.Title}
                     id={'title'}
                 />
-                <SaveCreateButton isEdit={isEdit} save={save}/>
-            </form>
-        </Container>
-    </Paper>
+    </AdminForm>
 }
 
-export default withTheme(AdminIndex)
+export default AdminIndex

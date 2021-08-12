@@ -1,12 +1,23 @@
 import {LoginAsAdmin} from "../../PageObjects/Login";
 
-describe('Login', () => {
-    it('should create course', () => {
+describe('Course', () => {
+    const newCourseName = "Test Course"
+
+    it('should be created', () => {
         LoginAsAdmin()
             .openMenu()
             .clickCourses()
             .clickAddNewCourse()
-            .enterTitle("Test Course")
+            .enterTitle(newCourseName)
             .clickCreate()
+    });
+
+    it('should be deleted', () => {
+        LoginAsAdmin()
+            .openMenu()
+            .clickCourses()
+            .findCourse(newCourseName)
+            .clickEdit()
+            .clickDelete()
     });
 });

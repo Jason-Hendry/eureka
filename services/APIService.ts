@@ -11,7 +11,7 @@ import {
     CreateRequest,
     CrudBaseRequest,
     CrudBaseRequestWithId,
-    CrudlRequest,
+    CrudlRequest, DeleteRequest,
     ListRequest,
     ReadRequest, UpdateRequest
 } from "../pages/api/crud";
@@ -48,6 +48,10 @@ export class CollectionAPI<T> extends Collection<T> {
     put(data: T, id: string): Promise<BaseModel<T>>  {
         const req: UpdateRequest = {...this.baseRequestId(id) , method: "PUT"}
         return DoCrudRequest<BaseModel<T>, UpdateRequest>(req, data)
+    }
+    delete(data: T, id: string): Promise<BaseModel<T>>  {
+        const req: DeleteRequest = {...this.baseRequestId(id) , method: "DELETE"}
+        return DoCrudRequest<BaseModel<T>, DeleteRequest>(req, data)
     }
 }
 

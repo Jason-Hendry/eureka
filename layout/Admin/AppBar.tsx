@@ -80,8 +80,6 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
                     <MenuItem onClick={() => handleLink("/admin/courses")}>Courses</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/news")}>News</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/users")}>Users</MenuItem>
-                    <MenuItem onClick={() => handleLink("/admin/images")}>Images</MenuItem>
-                    <MenuItem onClick={() => handleLink("/admin/files")}>Files</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/site-settings#290096439678206473")}>Site Settings</MenuItem>
                 </Menu>
                 <Typography variant="h6" className={classes.title}>
