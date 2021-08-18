@@ -1,12 +1,9 @@
 import {AppBar, Button, IconButton, Menu, MenuItem, Theme, Toolbar, Typography, withTheme} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import React, {FC, useContext, useEffect} from "react";
+import React, {FC} from "react";
 import {useRouter} from "next/router";
 import {makeStyles} from "@material-ui/styles";
-import {Secret} from "./Secret";
 import {MouseEvent} from "react";
-import {DeployCollectionApi} from "../../services/APIService";
-
 
 const useStyles = (theme: Theme) => makeStyles({
     root: {
@@ -27,19 +24,8 @@ interface AdminAppBarProps {
 
 export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement|null>(null);
-    const [deployStatus, setDeployStatus] = React.useState<string|null>(null);
     const classes = useStyles(theme)();
     const router = useRouter();
-    const secret = useContext(Secret);
-
-    useEffect(() => {
-        if(deployStatus !== null && process.browser) {
-            setTimeout(() => {
-                // TODO: check the real status
-                setDeployStatus(null)
-            }, 90*1000)
-        }
-    })
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -54,12 +40,18 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
         router.push(link)
     }
 
-    const publish = () => {
-        if(deployStatus === null) {
-            setDeployStatus("Publishing")
-            DeployCollectionApi(secret).post({date: (new Date().toISOString())})
-            // fetch(`/api/deploy?deploy=yes&secret=${secret}`, {method:"POST"} ).then(d => console.log(d)).catch(e => console.log(e))
+    const viewSite = () => {
+        const {host, protocol, pathname, hash} = document.location
+        let path = ""
+        switch (pathname) {
+            case '/admin/race':
+                path = `/races/${hash.substring(1)}`
+                break
+            case '/admin/newsItem':
+                path = `/news/${hash.substring(1)}`
+                break
         }
+        window.open(`${protocol}//${host}${path}`, '_blank')
     }
 
     return <div className={classes.root}>
@@ -85,7 +77,7 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
                 <Typography variant="h6" className={classes.title}>
                     Eureka Cycling - Admin
                 </Typography>
-                <Button onClick={publish} color="default" variant={"outlined"} disabled={deployStatus !== null}>{deployStatus === null ? "Publish" : deployStatus}</Button>
+                <Button onClick={viewSite} color="default" variant={"outlined"}>View Site</Button>
                 <Button onClick={logout} color="inherit">Logout</Button>
             </Toolbar>
         </AppBar>

@@ -11,6 +11,10 @@ import {Button, Typography} from "@material-ui/core";
 import {FilterFutureRace, RaceMergeData, RaceTitle} from "../../models/Race";
 import {ISODateToPretty} from "../../services/dates";
 import Columns, {Half} from "../../layout/columns/Columns";
+import {getFile} from "../../services/getFile";
+import {getGPXData} from "../../services/getGPXData";
+import {getGPXSimpleArrays} from "../../services/getGPXSimpleArrays";
+import {PolyLineMapHolder} from "../../components/maps/PolyLineMap";
 
 interface RacePageProps {
     race: BaseModel<RaceMergeData>
@@ -56,6 +60,9 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
                     {race?.data?.MapImage && <img src={race?.data?.MapImage} style={{maxWidth: '100%'}} alt={`${RaceTitle(race.data)} Map`}/>}
                     {race?.data?.MapDownload && <a href={race?.data?.MapDownload} title={`${RaceTitle(race.data)} Map Download`}>Download Map (PDF)</a>}
 
+                    {race.data.CourseData?.data.GPXData &&
+                        <PolyLineMapHolder path={race.data.CourseData?.data.GPXData?.latLong} width={800} height={400}/>
+                    }
                     <br/>
                 </Half>
                 <Half align={'right'}>
@@ -78,6 +85,9 @@ export const getStaticProps: GetStaticProps<RacePageProps, NewsPageParams> = asy
     if(!race) return {notFound: true}
 
     const CourseData = race?.data?.Course ? await CoursesCollection(process.env.FAUNADB_SECRET || '').get(race?.data?.Course) : null
+    if(CourseData?.data.GPXFile) {
+        await getFile(new URL(CourseData?.data.GPXFile)).then(getGPXData).then(getGPXSimpleArrays).then(d => CourseData.data.GPXData = d).catch(console.error)
+    }
     const siteSetting = (await SiteSettingsCollection(process.env.FAUNADB_SECRET || '').get(process.env.SITE_SETTINGS_ID || ''))
 
     return {props: {race:{...race, data: {...race.data, CourseData, MarshallNames:[]}},siteSetting}, revalidate: 60}
@@ -94,3 +104,5 @@ export const getStaticPaths: GetStaticPaths<NewsPageParams> = async () => {
         paths
     }
 }
+
+

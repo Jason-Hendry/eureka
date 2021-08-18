@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": ["jest","cypress", "@testing-library/cypress", "node"]
+    "types": ["jest","cypress", "@testing-library/cypress", "node", "google.maps"]
   },
   "exclude": [
     "node_modules"
