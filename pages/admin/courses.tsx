@@ -11,6 +11,7 @@ import {sortByTitle} from "../../services/sort";
 import Link from "next/link";
 import {useAdminListHooks} from "../../effects/loadApiEffect";
 
+
 export const AdminIndex: FC<unknown> = () => {
     const {list: courses} = useAdminListHooks(CoursesCollectionApi)
 
@@ -21,6 +22,7 @@ export const AdminIndex: FC<unknown> = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell variant={"head"}><Typography variant={"h6"}>Courses</Typography></TableCell>
+                            <TableCell variant={"head"}>Has GPX</TableCell>
                             <TableCell variant={"head"} align={"right"}><Link href={"/admin/course"}>Add New
                                 Course</Link></TableCell>
                         </TableRow>
@@ -28,6 +30,7 @@ export const AdminIndex: FC<unknown> = () => {
                     {courses.sort(sortByTitle).map(course => (
                         <TableRow key={course.id}>
                             <TableCell>{course.data.Title}</TableCell>
+                            <TableCell>{course.data.GPXFile ? "Yes" : null}</TableCell>
                             <TableCell align={"right"}><Link href={`/admin/course#${course.id}`}>Edit</Link></TableCell>
                         </TableRow>
                     ))}

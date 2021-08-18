@@ -4,7 +4,15 @@ import {SaveCreateButton} from "./SaveCreateButton";
 import {Alert} from "@material-ui/lab";
 import {DeleteButton} from "./DeleteButton";
 
-export const AdminForm: FC<{isEdit:boolean, save:() => void, deleteRecord:() => void, label: string, errors: string}> = ({isEdit, deleteRecord, save, label, errors, children}) => {
+type AdminFormProps = {
+    isEdit: boolean,
+    save: () => void,
+    deleteRecord: (() => void)|null,
+    label: string,
+    errors: string
+}
+
+export const AdminForm: FC<AdminFormProps> = ({isEdit, deleteRecord, save, label, errors, children}) => {
         return <Paper>
             <Container>
                 <Typography variant={"h6"}>{isEdit ? 'Edit' : 'Create New '} {label}</Typography>
@@ -15,7 +23,7 @@ export const AdminForm: FC<{isEdit:boolean, save:() => void, deleteRecord:() => 
                     {children}
                     <SaveCreateButton isEdit={isEdit} save={save}/>
                 </form>
-                <DeleteButton isEdit={isEdit} deleteRecord={deleteRecord}/>
+                {deleteRecord !== null && <DeleteButton isEdit={isEdit} deleteRecord={deleteRecord}/>}
             </Container>
         </Paper>
 }

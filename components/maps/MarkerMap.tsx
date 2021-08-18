@@ -8,18 +8,16 @@ type PolylineMapProps = {
     height: number
     path: LatLngArray
     registrationLocation: LatLng|null
-    profileLocation: LatLng|null
 }
-export const PolylineMap = withScriptjs(withGoogleMap(({path, registrationLocation, profileLocation}: PolylineMapProps) => {
+export const PolylineMap = withScriptjs(withGoogleMap(({path, registrationLocation}: PolylineMapProps) => {
 
     const map = useRef<GoogleMap>(null)
-    const register = registrationLocation ? new google.maps.LatLng(registrationLocation[0], registrationLocation[1]) : null
-    const profilePos = profileLocation ? new google.maps.LatLng(profileLocation[0], profileLocation[1]) : null
+    const clubRooms = new google.maps.LatLng(-37.436691, 143.724294)
+    const register = registrationLocation ? new google.maps.LatLng(registrationLocation[0], registrationLocation[1]) : clubRooms
 
     useEffect(() => {
         var bounds = new google.maps.LatLngBounds();
-        if(register)
-            bounds.extend(register)
+        bounds.extend(register)
         path.forEach(function(n) {
             bounds.extend(new google.maps.LatLng(n[0], n[1]));
         });
@@ -50,7 +48,7 @@ export const PolylineMap = withScriptjs(withGoogleMap(({path, registrationLocati
 
             },}} />
 
-        {register && <Marker options={{position: register, icon: {
+        <Marker options={{position: register, icon: {
                 path: faMapMarker.icon[4] as string,
                 fillColor: "#3858dc",
                 fillOpacity: 1,
@@ -61,19 +59,7 @@ export const PolylineMap = withScriptjs(withGoogleMap(({path, registrationLocati
                 strokeWeight: 1,
                 strokeColor: '#12244f',
                 scale: 0.05,
-            },}} />}
-        {profilePos && <Marker options={{position: profilePos, icon: {
-                path: faMapMarker.icon[4] as string,
-                fillColor: "#ce7a37",
-                fillOpacity: 1,
-                anchor: new google.maps.Point(
-                    faMapMarker.icon[0] / 2, // width
-                    faMapMarker.icon[1] // height
-                ),
-                strokeWeight: 1,
-                strokeColor: '#12244f',
-                scale: 0.025,
-            },}} />}
+            },}} />
     </GoogleMap>
 }))
 

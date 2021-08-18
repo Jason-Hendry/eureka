@@ -13,10 +13,10 @@ interface ImageSize {
 }
 
 export const HeroSize:ImageSize = {width: 1500, height: 750}
-// export const PosterSize:ImageSize = {width: 600, height: 400}
+export const PosterSize:ImageSize = {width: 600, height: 400}
 
 export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onChange, value, width, height, id}) => {
-    const bucket = process.env.AWS_S3_BUCKET || "images.eurekacycling.org.au"; // No getting env?
+    const bucket = process.env.AWS_S3_BUCKET || "images.eurekacycling.org.au"; // Not getting env?
 
     const {s3Upload, uploading} = useS3Upload()
     const [src, setSrc] = useState<string|undefined>(undefined)
@@ -62,8 +62,6 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
             return;
         }
 
-        // const key = file.name
-        // const bucket = 'images.eurekacycling.org.au';
         setFilename(file.name)
         setSrc(URL.createObjectURL(file))
     }
@@ -80,7 +78,7 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
             />
             <img alt="Admin image loader" ref={imgRef} src={src} style={{ display:"none" }} />
             <canvas ref={fromCanvas} style={{ display:"none" }} />
-            <canvas ref={toCanvas} width={width} height={height} style={{ transform: 'scale(.5)', transformOrigin: '0 0' }} />
+            <canvas ref={toCanvas} width={width} height={height} style={{ transform: 'scale(.5)', transformOrigin: '0 0', display:"none" }} />
         </>
     )
 }

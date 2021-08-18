@@ -4,13 +4,14 @@ import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
 
 
-export const SingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange, value, id}) => {
+export const SingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange, value, id,placeholder}) => {
     return (
         <>
             <TextField {...defaultFieldProps}
                        label={label}
                        onChange={(e) => onChange(e.target.value)}
                        value={value || ""}
+                       placeholder={placeholder}
                        id={id}
             />
         </>

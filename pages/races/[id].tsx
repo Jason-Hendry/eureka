@@ -14,7 +14,7 @@ import Columns, {Half} from "../../layout/columns/Columns";
 import {getFile} from "../../services/getFile";
 import {getGPXData} from "../../services/getGPXData";
 import {getGPXSimpleArrays} from "../../services/getGPXSimpleArrays";
-import {PolyLineMapHolder} from "../../components/maps/PolyLineMap";
+import {RaceCourse} from "../../components/sections/RaceCourse";
 
 interface RacePageProps {
     race: BaseModel<RaceMergeData>
@@ -57,12 +57,11 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
                     {race.data.CourseLaps && <p>{race.data.CourseLaps} Laps</p>}
                     {race.data.CourseData?.data?.LapDistance && <p>{race.data.CourseData?.data?.LapDistance} per lap</p>}
 
+                    <RaceCourse course={race.data.CourseData} siteSetting={siteSetting} />
+
                     {race?.data?.MapImage && <img src={race?.data?.MapImage} style={{maxWidth: '100%'}} alt={`${RaceTitle(race.data)} Map`}/>}
                     {race?.data?.MapDownload && <a href={race?.data?.MapDownload} title={`${RaceTitle(race.data)} Map Download`}>Download Map (PDF)</a>}
 
-                    {race.data.CourseData?.data.GPXData &&
-                        <PolyLineMapHolder path={race.data.CourseData?.data.GPXData?.latLong} width={800} height={400}/>
-                    }
                     <br/>
                 </Half>
                 <Half align={'right'}>

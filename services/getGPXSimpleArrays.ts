@@ -1,9 +1,9 @@
-import {getGPXPoints, LatLogArray} from "./getGPXPoints";
+import {getGPXPoints, LatLngArray} from "./getGPXPoints";
 import {ElevationArray, getGPXElevation} from "./getGPXElevation";
 import {Gpxjs} from "./getGPXData";
 
 export type GPXSimpleArrays = {
-    latLong: LatLogArray
+    latLong: LatLngArray
     elevation: ElevationArray
 }
 export const getGPXSimpleArrays = (gpx: Gpxjs): GPXSimpleArrays => {
