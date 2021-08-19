@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
-import {LatLng} from "../../services/getGPXPoints";
+import {LatLng} from "../../services/maps/getGPXPoints";
 
 export const stringToLatLng = (str:string): LatLng => {
     console.log({str})

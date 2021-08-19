@@ -1,7 +1,7 @@
 import {Image} from "./Image";
 import {BaseList, BaseModel} from "./base";
 import {AWSCredentials} from "../services/Login";
-import {LatLng} from "../services/getGPXPoints";
+import {LatLng} from "../services/maps/getGPXPoints";
 
 export type SiteSetting = BaseModel<SiteSettingData>
 export type SiteSettingList = BaseList<SiteSettingData>;

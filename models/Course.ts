@@ -3,8 +3,8 @@
 // @ts-ignore
 import {Image} from "./Image";
 import {BaseList, BaseModel} from "./base";
-import {GPXSimpleArrays} from "../services/getGPXSimpleArrays";
-import {LatLng} from "../services/getGPXPoints";
+import {GPXSimpleArrays} from "../services/maps/getGPXSimpleArrays";
+import {LatLng} from "../services/maps/getGPXPoints";
 
 export type Course = BaseModel<CourseData>
 export type CourseList = BaseList<CourseData>;

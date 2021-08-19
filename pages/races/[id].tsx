@@ -12,8 +12,8 @@ import {FilterFutureRace, RaceMergeData, RaceTitle} from "../../models/Race";
 import {ISODateToPretty} from "../../services/dates";
 import Columns, {Half} from "../../layout/columns/Columns";
 import {getFile} from "../../services/getFile";
-import {getGPXData} from "../../services/getGPXData";
-import {getGPXSimpleArrays} from "../../services/getGPXSimpleArrays";
+import {getGPXData} from "../../services/maps/getGPXData";
+import {getGPXSimpleArrays} from "../../services/maps/getGPXSimpleArrays";
 import {RaceCourse} from "../../components/sections/RaceCourse";
 
 interface RacePageProps {

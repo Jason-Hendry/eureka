@@ -3,7 +3,7 @@ import {PolyLineMapHolder} from "../maps/PolyLineMap";
 import {Course} from "../../models/Course";
 import {SiteSetting} from "../../models/SiteSetting";
 import {CourseProfile} from "../profile/CourseProfile";
-import {LatLng} from "../../services/getGPXPoints";
+import {LatLng} from "../../services/maps/getGPXPoints";
 
 interface RaceCourseProps {
     course: Course | null

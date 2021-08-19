@@ -1,5 +1,5 @@
 import {GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs} from "react-google-maps";
-import {LatLng, LatLngArray} from "../../services/getGPXPoints";
+import {LatLng, LatLngArray} from "../../services/maps/getGPXPoints";
 import {useEffect, useRef, VFC} from "react";
 import { faMapMarker } from "@fortawesome/free-solid-svg-icons";
 

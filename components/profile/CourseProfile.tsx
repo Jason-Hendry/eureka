@@ -1,7 +1,16 @@
-import {VFC, MouseEvent} from "react";
-import {ElevationArray} from "../../services/getGPXElevation";
-import {LatLng, LatLngArray} from "../../services/getGPXPoints";
-import distance from '@turf/distance'
+import {MouseEvent, useEffect, useRef, useState, VFC} from "react";
+import {ElevationArray} from "../../services/maps/getGPXElevation";
+import {LatLng, LatLngArray} from "../../services/maps/getGPXPoints";
+import {StatsTable} from "./StatsTable";
+import {GetCourseLength} from "../../services/maps/GetCourseLength";
+import {courseTotalLength} from "../../services/maps/CourseTotalLength";
+import {Round} from "../../services/formatting/Round";
+import {GetMinMaxElevation} from "../../services/maps/GetMinMaxElevation";
+import {elevationGain} from "../../services/maps/ElevationGain";
+import {CreateSVGLine} from "../../services/maps/CreateSVGLine";
+import {GetRangeIntervals} from "../../services/maps/GetRangeIntervals";
+import {CreateSVGElevationIntervalLines} from "../../services/maps/CreateSVGElevationIntervalLines";
+import {CreateSVGDistanceIntervalLines} from "../../services/maps/CreateSVGDistanceIntervalLines";
 
 interface CourseProfileProps {
     path: LatLngArray
@@ -9,75 +18,34 @@ interface CourseProfileProps {
     showLocation: (position: LatLng) => void
 }
 
-type LatLngDistanceArray = [lat: number, lng: number, distance: number][]
-
-function GetCourseLength(path: LatLngArray): LatLngDistanceArray {
-    let progressive = 0;
-    return path.map((point, i) => {
-            if (i === 0) {
-                return [point[0], point[1], 0]
-            }
-            progressive += GetPointDistance(point, path[i - 1])
-            return [point[0], point[1], progressive]
-        }
-    )
-}
-
-function GetPointDistance(p1: LatLng, p0: LatLng): number {
-    if(p0 && p1) {
-        return distance(p0, p1, {units: "kilometers"});
-    }
-    return 0
-}
-
-const courseTotalLength = (latLngDistance: LatLngDistanceArray): number => {
-  return Round(latLngDistance[latLngDistance.length-1][2], 1)
-}
-
-const Round = (n: number, digits: number) => {
-    const tens = Math.pow(10, digits)
-    return Math.round(n*tens)/tens;
-}
-
-function GetMinMaxElevation(elevation: ElevationArray): [min: number,max: number] {
-    return elevation.reduce(([minOld,maxOld], point) => {
-        const min = point < minOld ? point : minOld
-        const max = point > maxOld ? point : maxOld
-        return [min, max]
-    }, [elevation[0],elevation[0]])
-}
-
-const CreateSVGPath = (width: number, height: number, path: LatLngDistanceArray, elevation: ElevationArray) => {
-    const maxLength = courseTotalLength(path)
-    const minMaxElevation = GetMinMaxElevation(elevation)
-    const range = minMaxElevation[1]-minMaxElevation[0]
-
-    return path.map(([,,distance], i) => {
-      const zeroedElevation = elevation[i] - minMaxElevation[0]
-      const x = distance/maxLength * width
-      const y = zeroedElevation/range * height
-      if(i == 0) {
-
-          return `M 0 0 L ${x} ${height-y}`
-      }
-      if(i == path.length-1) {
-          return `L ${x} ${height-y} L ${x} 0`
-      }
-      return `L ${x} ${height-y}`
-
-  }).join(" ")
-}
-
 export const CourseProfile: VFC<CourseProfileProps> = ({elevation, path, showLocation}) => {
 
-    const width = 600
-    const height = 200
+    const svgContainerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        onPageResize()
+        window.addEventListener('resize', onPageResize)
+        return () => {
+            window.removeEventListener('resize', onPageResize)
+        }
+    }, [])
+
+    const onPageResize = () => {
+        if(svgContainerRef.current) {
+            console.log(svgContainerRef.current.getBoundingClientRect().width)
+            setWidth(svgContainerRef.current.getBoundingClientRect().width)
+        }
+    }
+
+    const [width, setWidth] = useState<number>(100)
+    const height = 100
 
     const courseLatLngDist = GetCourseLength(path)
+    const totalLength = courseTotalLength(courseLatLngDist)
     const maxLength = courseTotalLength(courseLatLngDist)
     const minMaxElevation = GetMinMaxElevation(elevation)
 
-    const svgPath = CreateSVGPath(width, height, GetCourseLength(path), elevation)
+    const svgPath = CreateSVGLine(width, height, GetCourseLength(path), elevation)
 
     const mouseMove = (e: MouseEvent<HTMLDivElement>) => {
         const x = e.clientX - e.currentTarget.getBoundingClientRect().x
@@ -91,14 +59,19 @@ export const CourseProfile: VFC<CourseProfileProps> = ({elevation, path, showLoc
     }
 
     return <>
-        Elevation Min: {Round(minMaxElevation[0], 1)}m
-        Elevation Max: {Round(minMaxElevation[1], 1)}m
-        Course Length: {courseTotalLength(courseLatLngDist)}km
-        <div onMouseMove={mouseMove}>
-        <svg width={width} height={height}>
-            <path color={'rgba(0,0,0,0.45)'} d={svgPath}/>
+        <div onMouseMove={mouseMove} ref={svgContainerRef}>
+        <svg width={'100%'} height={height}>
+            <CreateSVGElevationIntervalLines intervals={GetRangeIntervals(minMaxElevation, 10)} height={height} width={width} elevationRange={minMaxElevation} />
+            <CreateSVGDistanceIntervalLines intervals={GetRangeIntervals([0, totalLength], 10)} height={height} width={width} totalLength={totalLength} />
+            <polyline fill={'none'} stroke={'#6c6c6c'} strokeWidth={2} points={svgPath}/>
         </svg>
         </div>
+        <StatsTable data={[
+            ['Course Length', `${totalLength}km`],
+            ['Elevation Gain', `${Round(elevationGain(elevation),0)}m`],
+            ['Elevation Min', `${Round(minMaxElevation[0], 1)}m`],
+            ['Elevation Max', `${Round(minMaxElevation[1], 1)}m`],
+        ]}/>
     </>
 }
 
