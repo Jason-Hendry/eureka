@@ -44,8 +44,9 @@ export const CourseProfile: VFC<CourseProfileProps> = ({elevation, path, showLoc
     const totalLength = courseTotalLength(courseLatLngDist)
     const maxLength = courseTotalLength(courseLatLngDist)
     const minMaxElevation = GetMinMaxElevation(elevation)
+    const profileRange: [number,number] = [minMaxElevation[0]-200, (height/width * totalLength * 1000)/10] // Adjust profile against race length - exaggerate by 10 time the elevation
 
-    const svgPath = CreateSVGLine(width, height, GetCourseLength(path), elevation)
+    const svgPath = CreateSVGLine(width, height, GetCourseLength(path), elevation, profileRange)
 
     const mouseMove = (e: MouseEvent<HTMLDivElement>) => {
         const x = e.clientX - e.currentTarget.getBoundingClientRect().x
@@ -61,7 +62,7 @@ export const CourseProfile: VFC<CourseProfileProps> = ({elevation, path, showLoc
     return <>
         <div onMouseMove={mouseMove} ref={svgContainerRef}>
         <svg width={'100%'} height={height}>
-            <CreateSVGElevationIntervalLines intervals={GetRangeIntervals(minMaxElevation, 10)} height={height} width={width} elevationRange={minMaxElevation} />
+            <CreateSVGElevationIntervalLines intervals={GetRangeIntervals(profileRange, 200)} height={height} width={width} elevationRange={profileRange} />
             <CreateSVGDistanceIntervalLines intervals={GetRangeIntervals([0, totalLength], 10)} height={height} width={width} totalLength={totalLength} />
             <polyline fill={'none'} stroke={'#6c6c6c'} strokeWidth={2} points={svgPath}/>
         </svg>
