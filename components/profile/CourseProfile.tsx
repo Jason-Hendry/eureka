@@ -7,10 +7,10 @@ import {courseTotalLength} from "../../services/maps/CourseTotalLength";
 import {Round} from "../../services/formatting/Round";
 import {GetMinMaxElevation} from "../../services/maps/GetMinMaxElevation";
 import {elevationGain} from "../../services/maps/ElevationGain";
-import {CreateSVGLine} from "../../services/maps/CreateSVGLine";
+import {SVGLine} from "../../services/maps/SVGLine";
 import {GetRangeIntervals} from "../../services/maps/GetRangeIntervals";
-import {CreateSVGElevationIntervalLines} from "../../services/maps/CreateSVGElevationIntervalLines";
-import {CreateSVGDistanceIntervalLines} from "../../services/maps/CreateSVGDistanceIntervalLines";
+import {SVGElevationIntervalLines} from "./SVGElevationIntervalLines";
+import {SVGDistanceIntervalLines} from "./SVGDistanceIntervalLines";
 
 interface CourseProfileProps {
     path: LatLngArray
@@ -44,9 +44,7 @@ export const CourseProfile: VFC<CourseProfileProps> = ({elevation, path, showLoc
     const totalLength = courseTotalLength(courseLatLngDist)
     const maxLength = courseTotalLength(courseLatLngDist)
     const minMaxElevation = GetMinMaxElevation(elevation)
-    const profileRange: [number,number] = [minMaxElevation[0]-200, (height/width * totalLength * 1000)/10] // Adjust profile against race length - exaggerate by 10 time the elevation
-
-    const svgPath = CreateSVGLine(width, height, GetCourseLength(path), elevation, profileRange)
+    const profileRange: [number,number] = [minMaxElevation[0]-20, (height/width * totalLength * 1000)/15] // Adjust profile against race length - exaggerate by 10 time the elevation
 
     const mouseMove = (e: MouseEvent<HTMLDivElement>) => {
         const x = e.clientX - e.currentTarget.getBoundingClientRect().x
@@ -62,9 +60,9 @@ export const CourseProfile: VFC<CourseProfileProps> = ({elevation, path, showLoc
     return <>
         <div onMouseMove={mouseMove} ref={svgContainerRef}>
         <svg width={'100%'} height={height}>
-            <CreateSVGElevationIntervalLines intervals={GetRangeIntervals(profileRange, 200)} height={height} width={width} elevationRange={profileRange} />
-            <CreateSVGDistanceIntervalLines intervals={GetRangeIntervals([0, totalLength], 10)} height={height} width={width} totalLength={totalLength} />
-            <polyline fill={'none'} stroke={'#6c6c6c'} strokeWidth={2} points={svgPath}/>
+            <SVGElevationIntervalLines intervals={GetRangeIntervals(profileRange, 100)} height={height} width={width} elevationRange={profileRange} />
+            <SVGDistanceIntervalLines intervals={GetRangeIntervals([0, totalLength], 10)} height={height} width={width} totalLength={totalLength} />
+            <SVGLine width={width} height={height} path={courseLatLngDist} elevation={elevation} elevationRange={profileRange} />
         </svg>
         </div>
         <StatsTable data={[
