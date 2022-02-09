@@ -18,7 +18,7 @@ export const AdminIndex:FC<unknown> = () => {
         const userData = UserCollectionApi(secret).list()
         const courseData = CoursesCollectionApi(secret).list()
         RaceCollectionApi(secret).list().then(races => {
-            Promise.all<BaseList<CourseData>, BaseList<UserData>>([courseData, userData]).then(([c, u]) => {
+            Promise.all([courseData, userData]).then(([c, u]) => {
                 setUpcomingRaces(races.map(MergeCourseUserData(c, u)).sort(dateSortCompareOldestFirst).filter(FilterFutureRace()).filter(LimitFilter(5)));
             })
         });

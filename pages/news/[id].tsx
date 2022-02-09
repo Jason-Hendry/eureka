@@ -23,7 +23,7 @@ export const NewsPage: FC<NewsPageProps> = ({ newsItem, siteSetting}) => {
     }
 
     const image = siteSetting?.data?.HomePageImages?.length ?
-        siteSetting.data.HomePageImages[0].data.hero :
+        siteSetting.data.HomePageImages[0].image :
         '';
 
     return (

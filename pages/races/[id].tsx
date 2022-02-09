@@ -30,7 +30,7 @@ export const RacePage: FC<RacePageProps> = ({ race, siteSetting}) => {
     }
 
     const image = siteSetting?.data?.HomePageImages?.length ?
-        siteSetting.data.HomePageImages[0].data.hero :
+        siteSetting.data.HomePageImages[0].image :
         '';
 
     const leadP: JSX.Element | undefined  = race.data?.RegistrationURL ? <Button variant={"contained"} color={"primary"} href={race.data?.RegistrationURL}>Register Online Now</Button> : undefined
