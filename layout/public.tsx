@@ -1,4 +1,4 @@
-import React, {FC, ReactChild, ReactChildren} from "react";
+import React, {FC} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {HeroHeading} from "./hero/HeroHeading";
 import Parallax from "./parallax/Parallax";
@@ -6,6 +6,7 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import {Container, createStyles, Paper, PaperClassKey, Theme} from "@material-ui/core";
 import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
+import {EmbeddedImage} from "../models/base";
 
 const usePaperStyles: () => Partial<ClassNameMap<PaperClassKey>> = makeStyles(({
                                                                                    palette,
@@ -16,7 +17,7 @@ const usePaperStyles: () => Partial<ClassNameMap<PaperClassKey>> = makeStyles(({
         padding: spacing(2)
     }
 }));
-const useStyles = makeStyles(({palette}: Theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
     brandImage: {
         cursor: "pointer"
     },
@@ -36,13 +37,14 @@ const eurekaLogoWhite = require("../assets/img/eureka-logo-white.svg")
 interface PublicLayoutProps {
     children: React.ReactNode
     heroImage: string
+    heroImages?: EmbeddedImage[]
     title: string
     leadParagraph?: string | JSX.Element
     small?: boolean
     blur?: boolean
 }
 
-export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title, leadParagraph, small, blur}) => {
+export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, heroImages, title, leadParagraph, small, blur}) => {
     const classes = useStyles();
     const paperClass = usePaperStyles();
 
@@ -57,7 +59,7 @@ export const PublicLayout: FC<PublicLayoutProps> = ({children, heroImage, title,
                 scrollBrand: <img className={classes.brandImage} height={80} src={eurekaLogo} alt={"Eureka Cycling"}/>
             }}
         />
-        <Parallax filter small={small} responsive image={heroImage}
+        <Parallax filter small={small} responsive image={heroImages ? heroImages : heroImage}
                   className={classes.heroBg} blur={blur}>
             <HeroHeading title={title} leadParagraph={leadParagraph}/>
         </Parallax>

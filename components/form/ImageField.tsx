@@ -3,7 +3,9 @@ import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {TextField} from "@material-ui/core";
 import picaF from 'pica';
-import {useS3Upload} from "../../effects/useS3Upload";
+import {useFileUpload} from "../../effects/useFileUpload";
+import {useS3StorageConfiguration} from "../../effects/useS3StorageConfiguration";
+import {useSecret} from "../../effects/useSecret";
 const pica = picaF()
 
 
@@ -17,8 +19,11 @@ export const PosterSize:ImageSize = {width: 600, height: 400}
 
 export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onChange, value, width, height, id}) => {
     const bucket = process.env.AWS_S3_BUCKET || "images.eurekacycling.org.au"; // Not getting env?
+    const s3 = useS3StorageConfiguration(useSecret(), "images.eurekacycling.org.au")
 
-    const {s3Upload, uploading} = useS3Upload()
+    console.log(s3)
+
+    const {FileUpload, uploading} = useFileUpload(s3)
     const [src, setSrc] = useState<string|undefined>(undefined)
     const [filename, setFilename] = useState<string|undefined>(undefined)
     const imgRef = useRef<HTMLImageElement>(null)
@@ -42,7 +47,7 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
                     console.log('Resizing')
                     pica.toBlob(toCanvas.current, 'image/jpeg').then((b) => {
                         console.log('Uploading')
-                        s3Upload(b, filename+'-hero.jpg', bucket).then(f => {
+                        FileUpload({filepath: filename+'-hero.jpg', body: b}).then(f => {
                             console.log(`Uploaded: ${f.filename}`)
                             onChange(f.filename)
                         })
@@ -50,7 +55,7 @@ export const ImageField: FC<BaseFieldProps<string> & ImageSize> = ({label, onCha
                 })
             }
         }
-    }, [imgRef, bucket, filename, onChange, s3Upload])
+    }, [imgRef, bucket, filename, onChange, FileUpload])
 
     const fileRef = useRef<HTMLInputElement>()
     const handleFile = () => {

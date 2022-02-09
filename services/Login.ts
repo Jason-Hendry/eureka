@@ -10,6 +10,7 @@ export interface AWSCredentials {
     SecretAccessKey: string,
     SessionToken: string,
     Expiration: number,
+    error?: { message: string }
 }
 
 export const toAWSCredentials = (c: Credentials): AWSCredentials => {

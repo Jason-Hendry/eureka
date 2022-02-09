@@ -12,7 +12,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import {useRouter} from 'next/router'
 import { ResetService} from "../auth/reset";
 import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
-import {useLocalStorage} from "../layout/Admin/AdminTheme";
+import {useLocalStorage} from "../effects/UseLocalStorage";
 
 export const Index: VFC = () => {
     const router = useRouter()

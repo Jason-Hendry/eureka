@@ -13,8 +13,8 @@ import {useRouter} from 'next/router'
 import Link from "next/link";
 import {LoginService} from "../auth/login";
 import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";
-import {useLocalStorage} from "../layout/Admin/AdminTheme";
 import {preventableEvent} from "../common/events";
+import {useLocalStorage} from "../effects/UseLocalStorage";
 
 export const Login:FC<unknown> = () => {
     const router = useRouter()

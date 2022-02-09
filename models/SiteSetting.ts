@@ -1,5 +1,4 @@
-import {Image} from "./Image";
-import {BaseList, BaseModel} from "./base";
+import {BaseList, BaseModel, EmbeddedImage} from "./base";
 import {AWSCredentials} from "../services/Login";
 import {LatLng} from "../services/maps/getGPXPoints";
 
@@ -7,8 +6,11 @@ export type SiteSetting = BaseModel<SiteSettingData>
 export type SiteSettingList = BaseList<SiteSettingData>;
 
 export interface SiteSettingData {
-    HomePageImages?: Image[]
+    HomePageImages: EmbeddedImage[]
     HomePageImage: string
+
+    HomePageText: string
+
     EurekaClubHouseLocation: LatLng|null
     EurekaClubHouseRegistration: string|null
 

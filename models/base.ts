@@ -1,3 +1,4 @@
+
 export type BaseModel<T> = {
     id: string
     data: T
@@ -15,4 +16,17 @@ export enum ModelCollection {
     SiteSettings = 'SiteSettings',
     Files = 'Files',
     Deploy = 'Deploy',
+}
+
+export type EmbeddedImage = {
+    image: string
+    altText: string
+    caption?: string
+}
+
+export const BlankEmbeddedImage = (): EmbeddedImage => {
+    return {
+        image: "",
+        altText: ""
+    }
 }

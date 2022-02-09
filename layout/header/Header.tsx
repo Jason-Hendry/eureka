@@ -1,4 +1,4 @@
-import React, {FC, ReactChild, ReactNode, useState} from "react";
+import React, {FC, ReactChild, useState} from "react";
 import Link from "next/link";
 import {
     AppBar,
@@ -91,7 +91,7 @@ export const Header: FC<HeaderProps> = ({
 
 
     const links: Array<[string, ReactChild]> = [
-        ["/news", <><AnnouncementIcon/> News</>],
+        ["/news", <><AnnouncementIcon/> Announcements and Race Reports</>],
         ["/races", <><EventIcon/> Calendar</>],
         ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],
         ["/join", <><PersonAddIcon/> Join</>]

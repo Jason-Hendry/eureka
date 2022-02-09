@@ -1,6 +1,7 @@
 import React, {CSSProperties, FC} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {createStyles, Theme} from "@material-ui/core";
+import {EmbeddedImage} from "../../models/base";
 
 // core components
 const useStyles = makeStyles(({breakpoints}: Theme) => createStyles({
@@ -42,7 +43,7 @@ interface ParallaxProps {
   filter: boolean
   className: string
   style?: CSSProperties
-  image : unknown
+  image : string|EmbeddedImage[]
   small? : boolean
   responsive : boolean
   blur?: boolean
@@ -66,6 +67,14 @@ const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) 
   };
   const classes = useStyles();
 
+  const img = Array.isArray(image) ?
+      <>
+        {image.map((i) => <div key={i.image} style={{backgroundImage: `url(${i.image})`, filter: blur && 'blur(10px)' || undefined, height: '100%', width: '100%', position: "absolute", backgroundSize: "cover"}} >
+          <span style={{position :"absolute", bottom: 10, right: 10, color: '#fff', textShadow: '0 0 3px #000'}}>{i.caption}</span>
+        </div>)}
+      </>:
+      <div style={{backgroundImage: `url(${image})`, filter: blur && 'blur(10px)' || undefined, height: '100%', width: '100%', position: "absolute", backgroundSize: "cover"}} />
+
   return (
     <div
       className={[classes.parallax, small && classes.small].filter(Boolean).join(' ')}
@@ -74,7 +83,7 @@ const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) 
         transform: transform
       }}
     >
-      <div style={{backgroundImage: `url(${image})`, filter: blur && 'blur(10px)' || undefined, height: '100%', width: '100%', position: "absolute", backgroundSize: "cover"}} />
+      {img}
       {children}
     </div>
   );
