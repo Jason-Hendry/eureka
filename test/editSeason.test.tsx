@@ -1,6 +1,6 @@
-import {BaseList} from "../../models/base";
-import {RaceData} from "../../models/Race";
-import {LastDatePlus7} from "./editSeason";
+import {BaseList} from "../models/base";
+import {RaceData} from "../models/Race";
+import {LastDatePlus7} from "../pages/admin/editSeason";
 
 describe("editSeason", () => {
     it('should add 7 days to last date', () => {
