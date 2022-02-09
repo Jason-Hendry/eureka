@@ -20,7 +20,8 @@ export function RepeatSection<T>({
             } else {
                 value[i] = newValue as T
             }
-            onChange(value)
+            console.log(value[i])
+            onChange([...value])
         }
         const insertAfter = () => {
             const newValue = [...value]
@@ -59,11 +60,16 @@ export function RepeatSection<T>({
         </> : null
         const insertAfterButton = i < value.length - 1 ?
             <button onClick={insertAfter} aria-label={`Insert after ${i + 1}`}>+</button> : null
-
+        const deleteItem = () => {
+            const newValue = [...value]
+            newValue.splice(i, 1)
+            onChange(newValue)
+        }
         return <section key={i}>
             {moveButtons}
             {section(v, merge, i)}
             {insertAfterButton}
+            <button onClick={deleteItem} aria-label={`Delete item ${i + 1}`}>x</button>
         </section>
     })
     const append = () => {

@@ -73,3 +73,9 @@ export const RaceTitle: (r: RaceMergeData) => string = (r) => {
     }
     return title.join(' - ')
 }
+
+export const BlankRace = (): RaceData => {
+    return {
+        Title: ""
+    }
+}

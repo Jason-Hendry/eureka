@@ -81,13 +81,21 @@ describe("Repeat Section", () => {
         fireEvent.click(wrapper.getByLabelText("Move item 3 to top"))
         expect(onChange).toHaveBeenCalledWith(["item3", "item1", "item2"])
     })
-    it("should reorder items (move to top)", () => {
+    it("should reorder items (move to bottom)", () => {
+        const onChange = jest.fn()
+        const wrapper = render(<RepeatSection id={"test"} value={["item1", "item2", "item3", "item4"]} label={"Repeat"} onChange={onChange} section={(v,m,i) => (
+            <label>{v}<input type={"text"} value={v} onChange={(v) => m(v.target.value)} /></label>
+        )} blank={()=>("")}/>)
+        fireEvent.click(wrapper.getByLabelText("Move item 2 to bottom"))
+        expect(onChange).toHaveBeenCalledWith(["item1", "item3", "item4", "item2"])
+    })
+    it("should delete items", () => {
         const onChange = jest.fn()
         const wrapper = render(<RepeatSection id={"test"} value={["item1", "item2", "item3"]} label={"Repeat"} onChange={onChange} section={(v,m,i) => (
             <label>{v}<input type={"text"} value={v} onChange={(v) => m(v.target.value)} /></label>
         )} blank={()=>("")}/>)
-        fireEvent.click(wrapper.getByLabelText("Move item 3 to top"))
-        expect(onChange).toHaveBeenCalledWith(["item3", "item1", "item2"])
+        fireEvent.click(wrapper.getByLabelText("Delete item 2"))
+        expect(onChange).toHaveBeenCalledWith(["item1", "item3"])
     })
 
 })

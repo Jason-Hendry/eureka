@@ -49,6 +49,7 @@ interface ParallaxProps {
   responsive : boolean
   blur?: boolean
 }
+const rotationSpeedMillis = 7000;
 
 const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) => {
   const [transform, setTransform] = React.useState("translate3d(0,0px,0)");
@@ -59,7 +60,7 @@ const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) 
     if(Array.isArray(image) && image.length > 1) {
       interval = Timers.setInterval(() => {
         setShowImageNumber((showImageNumber + 1)  % image.length)
-      }, 4000)
+      }, rotationSpeedMillis)
     }
     if (window.innerWidth >= 768) {
       window.addEventListener("scroll", resetTransform);
@@ -72,9 +73,9 @@ const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) 
         window.removeEventListener("scroll", resetTransform);
       }
     };
-  });
+  }, [image]);
   const resetTransform = () => {
-    const windowScrollTop = window.pageYOffset / 3;
+    const windowScrollTop = window.scrollY / 3;
     setTransform(`translate3d(0,${windowScrollTop}px,0)`);
   };
   const classes = useStyles();
