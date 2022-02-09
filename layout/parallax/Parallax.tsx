@@ -2,6 +2,7 @@ import React, {CSSProperties, FC} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {createStyles, Theme} from "@material-ui/core";
 import {EmbeddedImage} from "../../models/base";
+import * as Timers from "timers";
 
 // core components
 const useStyles = makeStyles(({breakpoints}: Theme) => createStyles({
@@ -51,11 +52,22 @@ interface ParallaxProps {
 
 const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) => {
   const [transform, setTransform] = React.useState("translate3d(0,0px,0)");
+  const [showImageNumber, setShowImageNumber] = React.useState<number>(0)
+
   React.useEffect(() => {
+    let interval: ReturnType<typeof Timers.setInterval>|null = null
+    if(Array.isArray(image) && image.length > 1) {
+      interval = Timers.setInterval(() => {
+        setShowImageNumber((showImageNumber + 1)  % image.length)
+      }, 4000)
+    }
     if (window.innerWidth >= 768) {
       window.addEventListener("scroll", resetTransform);
     }
     return function cleanup() {
+      if(interval) {
+        Timers.clearInterval(interval)
+      }
       if (window.innerWidth >= 768) {
         window.removeEventListener("scroll", resetTransform);
       }
@@ -69,7 +81,7 @@ const Parallax: FC<ParallaxProps> = ({  children, style, image, small, blur } ) 
 
   const img = Array.isArray(image) ?
       <>
-        {image.map((i) => <div key={i.image} style={{backgroundImage: `url(${i.image})`, filter: blur && 'blur(10px)' || undefined, height: '100%', width: '100%', position: "absolute", backgroundSize: "cover"}} >
+        {image.map((i, index) => <div key={i.image} style={{backgroundImage: `url(${i.image})`, display:index==showImageNumber ? "" : "none", filter: blur && 'blur(10px)' || undefined, height: '100%', width: '100%', position: "absolute", backgroundSize: "cover"}} >
           <span style={{position :"absolute", bottom: 10, right: 10, color: '#fff', textShadow: '0 0 3px #000'}}>{i.caption}</span>
         </div>)}
       </>:
