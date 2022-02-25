@@ -71,11 +71,13 @@ export type RaceMergeData = RaceData & {
     MarshallNames: Array<string>
 }
 
+export function isFutureRace(r: Race) {
+    const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : false;
+    return (r.data != undefined) && (raceDate && isFuture(raceDate))
+}
+
 export function FilterFutureRace() {
-    return (r:Race): boolean => {
-        const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : false;
-        return (r.data != undefined) && (raceDate && isFuture(raceDate))
-    }
+    return isFutureRace
 }
 
 export function MergeCourseUserData(courses: CourseList, users: UserList) {
