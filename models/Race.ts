@@ -15,6 +15,30 @@ export enum RaceFormat {
     TimeTrial = 'Time Trial'
 }
 
+export interface ResultPlace {
+    position: number,
+    rider: string,
+    aggregatePoints: number,
+}
+
+export interface DivisionResult {
+    divisionNumber: number
+    results: ResultPlace[]
+}
+export const BlankDivisionResult = (places: number) => {
+    return (): DivisionResult => ({
+        divisionNumber: 0,
+        results: BlankResultPlaces(places)
+    })
+}
+export const BlankResultPlaces = (places: number): ResultPlace[] => {
+    return Array.from({length: places}, (_,k) => ({
+        position: k+1,
+        rider: "",
+        aggregatePoints: places-k
+    }))
+}
+
 export interface RaceData {
     Title: string
     Date?: string
@@ -38,6 +62,8 @@ export interface RaceData {
     Poster?: string
     MapImage?: string
     MapDownload?: string
+    divisionResults?: DivisionResult[]
+    results?: ResultPlace[]
 }
 
 export type RaceMergeData = RaceData & {

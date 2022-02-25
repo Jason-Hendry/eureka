@@ -9,15 +9,21 @@ import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
 
 
+type Action<T> = (data: T) => void;
+
 export class Collection<T> {
     protected readonly collection: ModelCollection;
     protected readonly secret: string;
-    public onCreate: (data: unknown) => void;
+    public onCreate: Action<T>
+    public onUpdate: Action<T>
+    public onDelete: Action<T>
 
-    constructor(collection: ModelCollection, secret: string) {
+    constructor(collection: ModelCollection, secret: string, actions?: Partial<Record<"create"|"update"|"delete", Action<T>>>) {
         this.collection = collection;
         this.secret = secret;
-        this.onCreate = () => {}
+        this.onCreate = actions?.create || (() => {})
+        this.onUpdate = actions?.update || (() => {})
+        this.onDelete = actions?.delete || (() => {})
     }
 
     list(): Promise<BaseList<T>> {

@@ -17,4 +17,18 @@ export const SingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange
         </>
     )
 }
+export const InlineSingleLineTextField: FC<BaseFieldProps<string>> = ({label, onChange, value, id,placeholder}) => {
+    return (
+        <>
+            <TextField {...defaultFieldProps}
+                fullWidth={false}
+                       label={label}
+                       onChange={(e) => onChange(e.target.value)}
+                       value={value || ""}
+                       placeholder={placeholder}
+                       id={id}
+            />
+        </>
+    )
+}
 export default SingleLineTextField;

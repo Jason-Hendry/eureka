@@ -10,10 +10,12 @@ export class Admin extends PageObject {
         return new AdminMenu(cy.findByRole('menu'))
     }
 }
+export const thisYear = new Date().getFullYear()
 export class AdminMenu extends SubPageObject {
+
     public clickRaces = () => {
         this.row.find(':contains(Races)').click()
-        return new Races(this.shouldSeeHeader('2021 Races'))
+        return new Races(this.shouldSeeHeader(`${thisYear} Races`))
     }
     public clickUsers = () => new Users(this.clickContainsTextAndSeeHeader('Users', 'Users'))
     public clickCourses = () => new Courses(this.clickContainsTextAndSeeHeader('Courses', 'Courses'))

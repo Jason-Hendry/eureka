@@ -1,4 +1,5 @@
 import {LoginAsAdmin} from "../../PageObjects/Login";
+import {thisYear} from "../../PageObjects/Admin";
 
 describe('Race', () => {
     const newRaceName = "Test Race"
@@ -9,7 +10,7 @@ describe('Race', () => {
             .clickRaces()
             .clickAddNewRace()
             .enterTitle(newRaceName)
-            .enterDate('2021-12-12')
+            .enterDate(`${thisYear}-12-12`)
             .clickCreate()
     });
 

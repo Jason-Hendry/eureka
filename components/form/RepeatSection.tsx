@@ -3,6 +3,7 @@ import {BaseFieldProps} from "./BaseField";
 
 export type RepeatSectionProps<T> = BaseFieldProps<T[]> & {
     section: (value: T, merge: (newValue: T extends {} ? Partial<T> : T) => void, index: number) => JSX.Element
+    sortable?: boolean
     blank: () => T
 }
 
@@ -11,7 +12,8 @@ export function RepeatSection<T>({
                                      value,
                                      section,
                                      onChange,
-                                     blank
+                                     blank,
+    sortable = true
                                  }: RepeatSectionProps<T>): ReturnType<VFC<RepeatSectionProps<T>>> {
     const items = value?.map((v, i) => {
         const merge = (newValue: T extends {} ? Partial<T> : T) => {
@@ -52,24 +54,28 @@ export function RepeatSection<T>({
             newValue.splice(value?.length, 0, ...v)
             onChange(newValue)
         }
-        const moveButtons = value?.length > 1 ? <>
+        const moveButtons = value?.length > 1 && sortable ? <>
             <button onClick={moveUp} aria-label={`Move item ${i + 1} up`}>∧</button>
             <button onClick={moveDown} aria-label={`Move item ${i + 1} down`}>∨</button>
             <button onClick={moveToTop} aria-label={`Move item ${i + 1} to top`}>▲</button>
             <button onClick={moveToBottom} aria-label={`Move item ${i + 1} to bottom`}>▼</button>
         </> : null
-        const insertAfterButton = i < value.length - 1 ?
+        const insertAfterButton = i < value.length - 1 && sortable ?
             <button onClick={insertAfter} aria-label={`Insert after ${i + 1}`}>+</button> : null
         const deleteItem = () => {
             const newValue = [...value]
             newValue.splice(i, 1)
             onChange(newValue)
         }
-        return <section key={i}>
+        return <section key={i} style={{
+            borderBottom: "2px solid #eee",
+            marginBottom: 4,
+            paddingBottom: 4
+        }}>
             {moveButtons}
+            <button onClick={deleteItem} aria-label={`Delete item ${i + 1}`}>x</button>
             {section(v, merge, i)}
             {insertAfterButton}
-            <button onClick={deleteItem} aria-label={`Delete item ${i + 1}`}>x</button>
         </section>
     })
     const append = () => {
@@ -78,12 +84,15 @@ export function RepeatSection<T>({
     const prepend = () => {
         onChange([blank(), ...value || []])
     }
-    const prependButton = (value?.length || 0 > 0) ? <button onClick={prepend} aria-label={"Prepend"}>+</button> : null
-    return <>
+    const prependButton = ((value?.length || 0 > 0) && sortable) ? <button onClick={prepend} aria-label={"Prepend"}>+</button> : null
+    return <div style={{
+        border: "1px solid #ccc",
+        padding: 4
+    }}>
         <label>{label}</label>
 
         {prependButton}
         {items}
         <button onClick={append} aria-label={"Append"}>+</button>
-    </>
+    </div>
 }
