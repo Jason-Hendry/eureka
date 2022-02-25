@@ -3,7 +3,7 @@ import {
     Checkbox,
     Container, FormControlLabel,
     Paper,
-    Table, TableCell,
+    Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
 } from "@material-ui/core";
@@ -51,6 +51,7 @@ export const AdminIndex:FC<unknown> = () => {
                                     <TableCell variant={"head"} align={"right"}><Link href={"/admin/race"}>Add New Race</Link></TableCell>
                                 </TableRow>
                             </TableHead>
+                            <TableBody>
                         {upcomingRaces.sort(dateSortCompareOldestFirst).filter(thisYear(year)).filter(hidePreviousFilter).map(race => (
                             <TableRow key={race.id}>
                                 <TableCell>{race.data.Date}</TableCell>
@@ -59,6 +60,7 @@ export const AdminIndex:FC<unknown> = () => {
                                 <TableCell align={"right"}><Link href={`/admin/race#${race.id}`}>Edit</Link></TableCell>
                             </TableRow>
                     ))}
+                            </TableBody>
                         </Table>
                         </TableContainer>
         </Container>
