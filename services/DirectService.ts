@@ -9,7 +9,7 @@ import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
 
 
-type Action<T> = (data: BaseModel<T>) => void;
+type Action<T> = (data: BaseModel<T>, res: { refresh: (url: string) => void }) => void;
 
 export class Collection<T> {
     protected readonly collection: ModelCollection;
@@ -18,12 +18,15 @@ export class Collection<T> {
     public onUpdate: Action<T>
     public onDelete: Action<T>
 
-    constructor(collection: ModelCollection, secret: string, actions?: Partial<Record<"create"|"update"|"delete", Action<T>>>) {
+    constructor(collection: ModelCollection, secret: string, actions?: Partial<Record<"create" | "update" | "delete", Action<T>>>) {
         this.collection = collection;
         this.secret = secret;
-        this.onCreate = actions?.create || (() => {})
-        this.onUpdate = actions?.update || (() => {})
-        this.onDelete = actions?.delete || (() => {})
+        this.onCreate = actions?.create || (() => {
+        })
+        this.onUpdate = actions?.update || (() => {
+        })
+        this.onDelete = actions?.delete || (() => {
+        })
     }
 
     list(): Promise<BaseList<T>> {
@@ -38,15 +41,30 @@ export class Collection<T> {
         return DocPostService<T>(this.collection, data)
     }
 
-    put(data: T, id: string): Promise<BaseModel<T>>  {
+    put(data: T, id: string): Promise<BaseModel<T>> {
         return DocPutService<T>(this.collection, data, id)
     }
-    delete(data: T, id: string): Promise<BaseModel<T>>  {
+
+    delete(data: T, id: string): Promise<BaseModel<T>> {
         return DocDeleteService<T>(this.collection, data, id)
     }
 }
 
-export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret)
+export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret, {
+    create: (d, r) => {
+        r.refresh("/")
+        r.refresh("/races")
+    },
+    update: (d, r) => {
+        r.refresh("/")
+        r.refresh("/races")
+        r.refresh("/races/"+d.id)
+    },
+    delete: (d, r) => {
+        r.refresh("/")
+        r.refresh("/races")
+    },
+})
 export const NewsCollection = (secret: string) => new Collection<NewsData>(ModelCollection.News, secret)
 export const UserCollection = (secret: string) => new Collection<UserData>(ModelCollection.User, secret)
 export const CoursesCollection = (secret: string) => new Collection<CourseData>(ModelCollection.Courses, secret)
@@ -56,7 +74,7 @@ export const FilesCollection = (secret: string) => new Collection<FileData>(Mode
 export const DeployCollection = (secret: string) => {
     const Deploy = new Collection<DeployData>(ModelCollection.Deploy, secret)
     Deploy.onCreate = () => {
-        if(process.env.DEPLOY) {
+        if (process.env.DEPLOY) {
             fetch(process.env.DEPLOY)
         }
     }
@@ -70,7 +88,6 @@ export type FaunaDBItem<T> = {
     ref: { id: string },
     data: T
 }
-
 
 
 function DocListService<T>(collection: string): Promise<BaseList<T>> {

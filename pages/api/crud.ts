@@ -75,15 +75,18 @@ const jsonError = (res: NextApiResponse) => (e: unknown) => {
     res.json({error: "Unknown error"})
 }
 
-const callAction = <T>(coll: Collection<T>, action: 'onCreate'|'onUpdate'|'onDelete') => (data: BaseModel<T>): BaseModel<T> => {
-    coll[action](data)
+const callAction = <T>(coll: Collection<T>, action: 'onCreate'|'onUpdate'|'onDelete', res: NextApiResponse) => (data: BaseModel<T>): BaseModel<T> => {
+    coll[action](data, {refresh: async (url: string) => {
+            await res.unstable_revalidate(url)
+            console.log("revalidate " + url)
+        }})
     return data
 }
 
 function ApplyCRUD<T>(coll: Collection<T>, req: CrudlRequest & NextApiRequest, res: NextApiResponse) {
     if(isCreateRequest(req)) {
         coll.post(req.body)
-            .then(callAction(coll, 'onCreate'))
+            .then(callAction(coll, 'onCreate', res))
             .then(res.json)
             .catch(jsonError(res))
     }
@@ -95,50 +98,48 @@ function ApplyCRUD<T>(coll: Collection<T>, req: CrudlRequest & NextApiRequest, r
     }
     else if(isUpdateRequest(req)) {
         coll.put(req.body, req.query.id)
-            .then(callAction(coll, 'onUpdate'))
+            .then(callAction(coll, 'onUpdate', res))
             .then(res.json)
             .catch(jsonError(res))
     }
     else if(isDeleteRequest(req)){
         coll.delete(req.body, req.query.id)
-            .then(callAction(coll, 'onDelete'))
+            .then(callAction(coll, 'onDelete', res))
             .then(res.json)
             .catch(jsonError(res))
     }
 }
 
-const CrudAPI = (req: CrudlRequest & NextApiRequest, res: NextApiResponse): void => {
+const CrudAPI = async (req: CrudlRequest & NextApiRequest, res: NextApiResponse): Promise<void> => {
     const {query: {collection, secret}} = req;
-    let coll: Collection<unknown>;
     switch (collection) {
         case ModelCollection.Courses:
-            ApplyCRUD(CoursesCollection(secret), req, res)
+            await ApplyCRUD(CoursesCollection(secret), req, res)
             break;
         case ModelCollection.Races:
-            ApplyCRUD(RaceCollection(secret), req, res)
+            await ApplyCRUD(RaceCollection(secret), req, res)
             break;
         case ModelCollection.Images:
-            ApplyCRUD(ImagesCollection(secret), req, res)
+            await ApplyCRUD(ImagesCollection(secret), req, res)
             break;
         case ModelCollection.User:
-            ApplyCRUD(UserCollection(secret), req, res)
+            await ApplyCRUD(UserCollection(secret), req, res)
             break;
         case ModelCollection.SiteSettings:
-            ApplyCRUD(SiteSettingsCollection(secret), req, res)
+            await ApplyCRUD(SiteSettingsCollection(secret), req, res)
             break;
         case ModelCollection.News:
-            ApplyCRUD(NewsCollection(secret), req, res)
+            await ApplyCRUD(NewsCollection(secret), req, res)
             break;
         case ModelCollection.Files:
-            ApplyCRUD(FilesCollection(secret), req, res)
+            await ApplyCRUD(FilesCollection(secret), req, res)
             break;
         case ModelCollection.Deploy:
-            ApplyCRUD(DeployCollection(secret), req, res)
+            await ApplyCRUD(DeployCollection(secret), req, res)
             break;
         default:
             return;
     }
-
 }
 
 
