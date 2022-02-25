@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {ModelCollection} from "../../models/base";
+import {BaseModel, ModelCollection} from "../../models/base";
 import {
     Collection,
     CoursesCollection, DeployCollection, FilesCollection,
@@ -69,51 +69,78 @@ export const isDeleteRequest = (req: CrudlRequest): req is DeleteRequest => {
 
 export type CrudlRequest = CreateRequest | ReadRequest | UpdateRequest | DeleteRequest | ListRequest
 
+const jsonError = (res: NextApiResponse) => (e: unknown) => {
+    res.status(500)
+    console.log(e)
+    res.json({error: "Unknown error"})
+}
+
+const callAction = <T>(coll: Collection<T>, action: 'onCreate'|'onUpdate'|'onDelete') => (data: BaseModel<T>): BaseModel<T> => {
+    coll[action](data)
+    return data
+}
+
+function ApplyCRUD<T>(coll: Collection<T>, req: CrudlRequest & NextApiRequest, res: NextApiResponse) {
+    if(isCreateRequest(req)) {
+        coll.post(req.body)
+            .then(callAction(coll, 'onCreate'))
+            .then(res.json)
+            .catch(jsonError(res))
+    }
+    else if(isReadRequest(req)) {
+        coll.get(req.query.id).then(res.json).catch(jsonError(res))
+    }
+    else if(isListRequest(req)) {
+        coll.list().then(res.json).catch(jsonError(res))
+    }
+    else if(isUpdateRequest(req)) {
+        coll.put(req.body, req.query.id)
+            .then(callAction(coll, 'onUpdate'))
+            .then(res.json)
+            .catch(jsonError(res))
+    }
+    else if(isDeleteRequest(req)){
+        coll.delete(req.body, req.query.id)
+            .then(callAction(coll, 'onDelete'))
+            .then(res.json)
+            .catch(jsonError(res))
+    }
+}
+
 const CrudAPI = (req: CrudlRequest & NextApiRequest, res: NextApiResponse): void => {
     const {query: {collection, secret}} = req;
     let coll: Collection<unknown>;
     switch (collection) {
         case ModelCollection.Courses:
-            coll = CoursesCollection(secret)
+            ApplyCRUD(CoursesCollection(secret), req, res)
             break;
         case ModelCollection.Races:
-            coll = RaceCollection(secret)
+            ApplyCRUD(RaceCollection(secret), req, res)
             break;
         case ModelCollection.Images:
-            coll = ImagesCollection(secret)
+            ApplyCRUD(ImagesCollection(secret), req, res)
             break;
         case ModelCollection.User:
-            coll = UserCollection(secret)
+            ApplyCRUD(UserCollection(secret), req, res)
             break;
         case ModelCollection.SiteSettings:
-            coll = SiteSettingsCollection(secret)
+            ApplyCRUD(SiteSettingsCollection(secret), req, res)
             break;
         case ModelCollection.News:
-            coll = NewsCollection(secret)
+            ApplyCRUD(NewsCollection(secret), req, res)
             break;
         case ModelCollection.Files:
-            coll = FilesCollection(secret)
+            ApplyCRUD(FilesCollection(secret), req, res)
             break;
         case ModelCollection.Deploy:
-            coll = DeployCollection(secret)
+            ApplyCRUD(DeployCollection(secret), req, res)
             break;
         default:
             return;
     }
-    if(isCreateRequest(req)) {
-        coll.post(req.body).then(res.json).then(coll.onCreate).catch()
-    }
-    else if(isReadRequest(req)) {
-        coll.get(req.query.id).then(res.json)
-    }
-    else if(isListRequest(req)) {
-        coll.list().then(res.json)
-    }
-    else if(isUpdateRequest(req)) {
-        coll.put(req.body, req.query.id).then(res.json)
-    }
-    else if(isDeleteRequest(req)){
-        coll.delete(req.body, req.query.id).then(res.json)
-    }
+
 }
+
+
+
 export default CrudAPI

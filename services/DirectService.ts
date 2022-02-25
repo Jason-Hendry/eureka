@@ -9,7 +9,7 @@ import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
 
 
-type Action<T> = (data: T) => void;
+type Action<T> = (data: BaseModel<T>) => void;
 
 export class Collection<T> {
     protected readonly collection: ModelCollection;
