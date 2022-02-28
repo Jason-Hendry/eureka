@@ -86,6 +86,9 @@ export function isFutureRace(r: Race) {
 export function FilterFutureRace() {
     return isFutureRace
 }
+export function FilterPastRace() {
+    return (r: Race) => !isFutureRace(r)
+}
 
 export function MergeCourseUserData(courses: CourseList, users: UserList) {
     return (r:Race): BaseModel<RaceMergeData> => {

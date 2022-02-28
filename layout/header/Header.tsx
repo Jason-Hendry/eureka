@@ -93,6 +93,7 @@ export const Header: FC<HeaderProps> = ({
     const links: Array<[string, ReactChild]> = [
         ["/news", <><AnnouncementIcon/> Announcements and Race Reports</>],
         ["/races", <><EventIcon/> Calendar</>],
+        ["/results", <><EventIcon/> Results</>],
         ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],
         ["/join", <><PersonAddIcon/> Join</>]
     ];

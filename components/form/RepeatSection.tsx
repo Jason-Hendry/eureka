@@ -22,7 +22,6 @@ export function RepeatSection<T>({
             } else {
                 value[i] = newValue as T
             }
-            console.log(value[i])
             onChange([...value])
         }
         const insertAfter = () => {

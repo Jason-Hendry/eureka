@@ -32,7 +32,7 @@ function nextPosition(results: ResultPlace[] | undefined): number {
     return (results?.map(r => r.position).reduce((max, v) => Math.max(max, v), 0) || 0) + 1
 }
 
-function nicePosition(position: number): string {
+export function nicePosition(position: number): string {
     if (position == -1) {
         return 'Fastest Time'
     }
