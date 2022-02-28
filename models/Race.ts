@@ -38,6 +38,13 @@ export const BlankResultPlaces = (places: number): ResultPlace[] => {
         aggregatePoints: places-k
     }))
 }
+export const BlankResultPlacesWithFastest = (places: number): ResultPlace[] => {
+    return [{
+        position: -1,
+        rider: "",
+        aggregatePoints: 1
+    }, ...BlankResultPlaces(places)]
+}
 
 export interface RaceData {
     Title: string

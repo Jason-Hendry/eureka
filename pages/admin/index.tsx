@@ -7,9 +7,10 @@ import {dateSortCompareOldestFirst, LimitFilter} from "../../services/sort";
 import {FilterFutureRace, MergeCourseUserData, RaceMergeData} from "../../models/Race";
 import {BaseList} from "../../models/base";
 import RaceList from "../../components/RaceList";
-import {CourseData} from "../../models/Course";
-import {UserData} from "../../models/User";
 
+function noop() {
+
+}
 
 export const AdminIndex:FC<unknown> = () => {
     const secret = useContext(Secret)
@@ -17,11 +18,17 @@ export const AdminIndex:FC<unknown> = () => {
     useEffect(() => {
         const userData = UserCollectionApi(secret).list()
         const courseData = CoursesCollectionApi(secret).list()
+        let doSetUpcomingRaces = (data: BaseList<RaceMergeData>) => setUpcomingRaces(data)
+
         RaceCollectionApi(secret).list().then(races => {
             Promise.all([courseData, userData]).then(([c, u]) => {
-                setUpcomingRaces(races.map(MergeCourseUserData(c, u)).sort(dateSortCompareOldestFirst).filter(FilterFutureRace()).filter(LimitFilter(5)));
+                doSetUpcomingRaces(races.map(MergeCourseUserData(c, u)).sort(dateSortCompareOldestFirst).filter(FilterFutureRace()).filter(LimitFilter(5)));
             })
         });
+        return () => {
+            // Prevents setState calls if components unmounted before data is returned
+            doSetUpcomingRaces = noop
+        }
     }, [secret])
 
     return <Paper>
