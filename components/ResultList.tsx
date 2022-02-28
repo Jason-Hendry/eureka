@@ -29,6 +29,10 @@ function PositionalResults({results}: { results: ResultPlace[] | undefined }) {
 
 function Result({data}: { data: RaceMergeData }) {
 
+    if(!data?.divisionResults?.length && !data?.results?.length) {
+        return null
+    }
+
     const result = data.divisionResults?.length ? <DivisionalResult results={data.divisionResults}/> :
         <PositionalResults results={data.results}/>
 
