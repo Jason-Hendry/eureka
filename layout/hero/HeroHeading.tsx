@@ -9,8 +9,8 @@ interface HeroHeadingProps {
     leadParagraph?: string|JSX.Element
 }
 
-const useTypographyStyle: () => Partial<ClassNameMap<TypographyClassKey>> = makeStyles({
-    colorTextPrimary: {
+const useTypographyStyle = makeStyles({
+    root: {
         color: "#ffffff",
         zIndex: 2,
         position: "relative"
