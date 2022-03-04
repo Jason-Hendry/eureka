@@ -7,6 +7,7 @@ import {useAdminEffects} from "../../effects/useAdminEffects";
 import {useRouterPush} from "../../effects/useRouterPush";
 import {PageData} from "../../models/Page";
 import {PageCollectionApi} from "../../services/APIService";
+import {MarkdownEditorField} from "../../components/form/MarkdownEditorField";
 
 const AdminIndex:FC<unknown> = () => {
     const returnToList = useRouterPush('/admin/users')
@@ -19,7 +20,7 @@ const AdminIndex:FC<unknown> = () => {
     return <AdminForm label={'User'} isEdit={isEdit} save={save} errors={errors} deleteRecord={deleteRecord}>
       <SingleLineTextField label={'Url'} onChange={(v) => merge({url: v || undefined})} value={data.url} id={'name'}/>
       <SingleLineTextField label={'Title'} onChange={(v) => merge({title: v || undefined})} value={data.title} id={'name'}/>
-      <SingleLineTextField label={'Content'} onChange={(v) => merge({content: v || undefined})} value={data.content} id={'email'}/>
+      <MarkdownEditorField label={'Content'} onChange={(v) => merge({content: v || undefined})} value={data.content} id={'email'}/>
     </AdminForm>
 
 }

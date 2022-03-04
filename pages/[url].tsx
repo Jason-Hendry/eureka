@@ -1,14 +1,13 @@
 import {FC} from "react";
 import Head from "next/head";
 import {BaseModel} from "../models/base";
-import {NewsData} from "../models/News";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {NewsCollection, PageCollection, SiteSettingsCollection} from "../services/DirectService";
+import {PageCollection, SiteSettingsCollection} from "../services/DirectService";
 import {ParsedUrlQuery} from "querystring";
 import PublicLayout from "../layout/public";
 import {SiteSettingData} from "../models/SiteSetting";
-import nl2br from "react-nl2br";
 import {PageData} from "../models/Page";
+import {DisplayMarkdown} from "../components/form/MarkdownEditorField";
 
 interface PageProps {
     newsItem: BaseModel<PageData>
@@ -31,7 +30,7 @@ export const Page: FC<PageProps> = ({ newsItem, siteSetting}) => {
         <Head>
             <title>{newsItem.data.title}</title>
         </Head>
-        {nl2br(newsItem.data.content)}
+        <DisplayMarkdown value={newsItem.data.content} />
     </PublicLayout>
 }
 export default Page;
