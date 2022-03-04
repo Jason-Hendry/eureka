@@ -9,11 +9,17 @@ import {
     Theme,
     Container
 } from "@mui/material";
+
 import MenuIcon from '@mui/icons-material/Menu';
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import EventIcon from "@mui/icons-material/Event";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import MapIcon from '@mui/icons-material/Map';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import PeopleIcon from '@mui/icons-material/People';
+import StoreIcon from '@mui/icons-material/Store';
+
 import HeaderLink from "./HeaderLink";
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import {createStyles, makeStyles} from "@mui/styles";
@@ -95,6 +101,10 @@ export const Header: FC<HeaderProps> = ({
         ["/news", <><AnnouncementIcon/> Announcements and Race Reports</>],
         ["/races", <><EventIcon/> Calendar</>],
         ["/results", <><EmojiEventsIcon /> Results</>],
+        ["/contact-us", <><MapIcon /> Contact Us</>],
+        ["/handbook", <><MenuBookIcon /> Club Handbook & Policies</>],
+        ["/committee", <><PeopleIcon /> Committee</>],
+        ["/merchandise", <><StoreIcon /> Club Merch</>],
         ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],
         ["/join", <><PersonAddIcon/> Join</>]
     ];
@@ -105,20 +115,19 @@ export const Header: FC<HeaderProps> = ({
                 <Toolbar>
                     {brandComponent}
                     <div style={{flexGrow: 1, textAlign: 'right'}}>
-                        <Hidden smDown>
-                            {links.map(([url, link]) => (
-                                <HeaderLink altColor={color == "default"} key={url} href={url}>{link}</HeaderLink>
-                            ))}
-                        </Hidden>
-                        <Hidden mdUp>
+                        {/*<Hidden xlDown>*/}
+                        {/*    {links.map(([url, link]) => (*/}
+                        {/*        <HeaderLink altColor={color == "default"} key={url} href={url}>{link}</HeaderLink>*/}
+                        {/*    ))}*/}
+                        {/*</Hidden>*/}
+
                             <IconButton classes={iconButtonClasses}
                                         color={color == "default" ? "primary" : 'secondary'}
                                         aria-label="open drawer"
                                         onClick={() => setMobileOpen(!mobileOpen)}
                             >
-                                <MenuIcon/>
+                                <MenuIcon/>&nbsp;&nbsp;Menu
                             </IconButton>
-                        </Hidden>
                     </div>
                 </Toolbar>
             </Container>
