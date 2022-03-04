@@ -6,7 +6,7 @@ import {
     Table, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
 import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, thisYear} from "../../services/sort";
 import {BlankRace, FilterFutureRace, RaceData, RaceFormat} from "../../models/Race";
@@ -17,7 +17,7 @@ import {useAdminListHooks} from "../../effects/loadApiEffect";
 import {AdminForm} from "../../components/form/AdminForm";
 import {RepeatSection} from "../../components/form/RepeatSection";
 import DateField from "../../components/form/DateField";
-import {Title} from "@material-ui/icons";
+import {Title} from "@mui/icons-material";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import CollectionSelectField from "../../components/form/CollectionSelectField";
 import EnumSelectField from "../../components/form/EnumSelectField";

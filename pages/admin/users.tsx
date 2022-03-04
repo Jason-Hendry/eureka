@@ -5,7 +5,7 @@ import {
     Table, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {UserCollectionApi} from "../../services/APIService";
 import {sortByName} from "../../services/sort";
 import Link from "next/link";

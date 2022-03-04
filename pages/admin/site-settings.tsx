@@ -2,7 +2,7 @@ import React, {VFC} from "react"
 import {
     Container,
     Paper,
-} from "@material-ui/core";
+} from "@mui/material";
 import {SiteSettingsCollectionApi} from "../../services/APIService";
 import {SiteSettingData} from "../../models/SiteSetting";
 import ImageField, {HeroSize} from "../../components/form/ImageField";

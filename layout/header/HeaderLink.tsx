@@ -1,6 +1,6 @@
 import {FC} from "react";
-import {createStyles, Theme, withTheme} from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
+import {Theme} from "@mui/material";
+import {makeStyles, createStyles} from "@mui/styles";
 import Link, {LinkProps} from "next/link";
 
 
@@ -9,7 +9,6 @@ interface HeaderLinkProps extends LinkProps{
 }
 
 const useStyles = makeStyles(({spacing, palette, breakpoints}: Theme) => createStyles({
-
     a: {
         color:'#FFFFFF',
         paddingTop: spacing(1),

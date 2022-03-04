@@ -1,6 +1,6 @@
-import {Card, Grid} from "@material-ui/core";
 import React, {FC} from "react";
-import {makeStyles} from "@material-ui/styles";
+import {makeStyles} from "@mui/styles";
+import {Card, Grid} from "@mui/material";
 
 const useStyles = makeStyles({
     root: {

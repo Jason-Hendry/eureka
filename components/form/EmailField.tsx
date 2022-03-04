@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {TextField} from "@material-ui/core";
+import {TextField} from "@mui/material";
 
 
 export const EmailField: FC<BaseFieldProps<string>> = ({label, onChange, value, id}) => {

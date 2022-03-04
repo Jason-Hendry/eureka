@@ -1,11 +1,11 @@
-import React, {FC} from "react";
-import {List, ListItem, Theme, withTheme} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {VFC} from "react";
+import {List, Theme} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import {container} from "../container/container";
 
-// @material-ui/icons
+// @mui/icons-material
 
-const useStyles = ({palette}: Theme) => makeStyles({
+const useStyles = makeStyles(({palette}: Theme) => ({
   footer: {
     padding: "0.9375rem 0",
     textAlign: "center",
@@ -28,15 +28,11 @@ const useStyles = ({palette}: Theme) => makeStyles({
     padding: "0",
     marginTop: "0"
   },
-});
+}));
 
 
-interface FooterProps {
-  theme: Theme
-}
-
-export const Footer: FC<FooterProps> = ({theme}) => {
-  const classes = useStyles(theme)();
+export const Footer: VFC = () => {
+  const classes = useStyles();
   return (
     <footer className={classes.footer}>
       <div className={classes.container}>
@@ -49,4 +45,4 @@ export const Footer: FC<FooterProps> = ({theme}) => {
     </footer>
   );
 }
-export default withTheme(Footer);
+export default Footer;

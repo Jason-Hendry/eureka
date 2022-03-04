@@ -1,11 +1,11 @@
 import React, {FC} from "react";
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles, createStyles} from "@mui/styles";
 import {HeroHeading} from "./hero/HeroHeading";
 import Parallax from "./parallax/Parallax";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
-import {Container, createStyles, Paper, PaperClassKey, Theme} from "@material-ui/core";
-import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
+import {Container, Paper, PaperClassKey, Theme} from "@mui/material";
+import {ClassNameMap} from "@mui/styles/withStyles/withStyles";
 import {EmbeddedImage} from "../models/base";
 
 const usePaperStyles: () => Partial<ClassNameMap<PaperClassKey>> = makeStyles(({

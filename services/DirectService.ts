@@ -7,6 +7,7 @@ import {client, q} from "./faunadb";
 import {BaseList, BaseModel, ModelCollection} from "../models/base";
 import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
+import {PageData} from "../models/Page";
 
 
 type Action<T> = (data: BaseModel<T>, res: { refresh: (url: string) => void }) => void;
@@ -48,6 +49,10 @@ export class Collection<T> {
     delete(data: T, id: string): Promise<BaseModel<T>> {
         return DocDeleteService<T>(this.collection, data, id)
     }
+
+    findBy(index: string, value: string): Promise<BaseModel<T>> {
+        return DocFindService<T>(this.collection, index, value)
+    }
 }
 
 export const RaceCollection = (secret: string) => new Collection<RaceData>(ModelCollection.Races, secret, {
@@ -66,6 +71,11 @@ export const RaceCollection = (secret: string) => new Collection<RaceData>(Model
     },
 })
 export const NewsCollection = (secret: string) => new Collection<NewsData>(ModelCollection.News, secret)
+export const PageCollection = (secret: string) => new Collection<PageData>(ModelCollection.Page, secret, {
+    update: (d, r) => {
+        r.refresh(d.data.url)
+    }
+})
 export const UserCollection = (secret: string) => new Collection<UserData>(ModelCollection.User, secret)
 export const CoursesCollection = (secret: string) => new Collection<CourseData>(ModelCollection.Courses, secret)
 export const ImagesCollection = (secret: string) => new Collection<ImageData>(ModelCollection.Images, secret)
@@ -122,6 +132,20 @@ function DocGetService<T>(collection: string, id: string): Promise<BaseModel<T>>
                 q.Ref(q.Collection(collection), id)
             )
         ).then(({data}) => {
+            resolve({id, data})
+        }).catch((error) => {
+            reject({error: error})
+        })
+    })
+}
+
+function DocFindService<T>(collection: string, index: string, value: string): Promise<BaseModel<T>> {
+    return new Promise((resolve, reject) => {
+        client.query<FaunaDBItem<T>>(
+            q.Get(
+                q.Match(q.Index(index), value)
+            )
+        ).then(({data, ref: {id}}) => {
             resolve({id, data})
         }).catch((error) => {
             reject({error: error})

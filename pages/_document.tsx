@@ -1,9 +1,9 @@
 // noinspection HtmlRequiredTitleElement,HtmlUnknownBooleanAttribute
 
-import {ServerStyleSheets} from '@material-ui/core/styles';
 import React from "react";
 import Document, {Html, Head, Main, NextScript, DocumentProps} from 'next/document';
 import {theme} from "./_app";
+import {ServerStyleSheets} from "@mui/styles";
 
 const GTM_ID = 'GTM-MZ5KFQK';
 

@@ -76,8 +76,8 @@ export const Covid: FC<CovidProps> = ({siteSetting}) => {
         </ul>
 
 
-        <img style={{maxWidth: '100%'}} src={require('../assets/img/Eureka-COVIDSafe-Plan-the-basics-25112020.jpg')}
-             alt="Covid Safe Plan Poster"/>
+        {/*<img style={{maxWidth: '100%'}} src={require('../assets/img/Eureka-COVIDSafe-Plan-the-basics-25112020.jpg')}*/}
+        {/*     alt="Covid Safe Plan Poster"/>*/}
     </PublicLayout>
 
 }

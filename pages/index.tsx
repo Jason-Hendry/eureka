@@ -13,12 +13,12 @@ import {SiteSetting} from "../models/SiteSetting";
 import {BaseList} from "../models/base";
 import Columns, {Third} from "../layout/columns/Columns";
 import InfoArea from "../layout/InfoArea/InfoArea";
-import AnnouncementIcon from '@material-ui/icons/Announcement';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
 import NewsList from "../components/NewsList";
 import RaceList from "../components/RaceList";
-import EventIcon from "@material-ui/icons/Event";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import {Button, Card, CardActions, CardContent} from "@material-ui/core";
+import EventIcon from "@mui/icons-material/Event";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import {Button, Card, CardActions, CardContent} from "@mui/material";
 import Join, {membershipRaceAllDiscipline} from "../components/commonInfo/Join";
 
 type HomeProps = {

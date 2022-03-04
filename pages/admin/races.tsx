@@ -6,7 +6,7 @@ import {
     Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
 import {dateSortCompareOldestFirst, thisYear} from "../../services/sort";
 import {FilterFutureRace, isFutureRace, RaceData} from "../../models/Race";

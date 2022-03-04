@@ -1,7 +1,7 @@
-import {Container, Paper, Typography} from "@material-ui/core";
+import {Container, Paper, Typography} from "@mui/material";
 import React, {FC} from "react";
 import {SaveCreateButton} from "./SaveCreateButton";
-import {Alert} from "@material-ui/lab";
+import {Alert} from "@mui/lab";
 import {DeleteButton} from "./DeleteButton";
 
 type AdminFormProps = {

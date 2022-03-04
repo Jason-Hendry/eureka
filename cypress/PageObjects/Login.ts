@@ -10,7 +10,20 @@ export class Login extends PageObject {
 
 const LOGIN_PATH = "login";
 export const GoToLogin = () => new Login(cy.visit(LOGIN_PATH))
+export const GoToSite = () => new Site(cy.visit("/"))
 
+export class Site extends PageObject {
+    mainMenu = () => new MainMenu("")
+}
+export class MainMenu extends PageObject {
+    clickAnnouncentsRaceReport = () => new RaceReport(this.clickContainsText("Announcements and Race Reports"))
+    clickCalendar = () => new RaceReport(this.clickContainsText("Calendar"))
+    clickResults = () => new RaceReport(this.clickContainsText("Results"))
+    clickCovidSafe = () => new RaceReport(this.clickContainsText("Covid Safe"))
+    clickJoin = () => new RaceReport(this.clickContainsText("Join"))
+}
+export class RaceReport extends Site {
+}
 
 export const LoginAsAdmin = () => {
     return GoToLogin()

@@ -4,7 +4,7 @@ import {useAdminEffects} from "../../effects/useAdminEffects";
 import {AdminForm} from "../../components/form/AdminForm";
 import {useRouterPush} from "../../effects/useRouterPush";
 import {NewsCollectionApi} from "../../services/APIService";
-import {TextField} from "@material-ui/core";
+import {TextField} from "@mui/material";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
 import {NewsData} from "../../models/News";
 

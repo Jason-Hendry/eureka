@@ -1,5 +1,5 @@
 import React, {VFC} from "react";
-import {Button, FormControl} from "@material-ui/core";
+import {Button, FormControl} from "@mui/material";
 
 export const SaveCreateButton: VFC<{ isEdit: boolean, save: () => void }> = ({save, isEdit}) => <FormControl
     fullWidth={true} margin={"normal"}>

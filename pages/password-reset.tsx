@@ -4,7 +4,7 @@ import {
     CardContent,
     TextField,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import Link from "next/link";
 import {ResetRequestService} from "../auth/reset";
 import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";

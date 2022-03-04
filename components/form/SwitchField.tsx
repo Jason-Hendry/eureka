@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {BaseFieldProps} from "./BaseField";
-import {FormControl, FormLabel, Switch} from "@material-ui/core";
+import {FormControl, FormLabel, Switch} from "@mui/material";
 
 
 export const SwitchField: FC<BaseFieldProps<boolean>> = ({label, onChange, value, id}) => {

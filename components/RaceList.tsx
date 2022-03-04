@@ -1,9 +1,9 @@
 import {FC} from "react";
-import {Button, Card, CardActions, CardContent, CardHeader, Theme, withTheme} from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
+import {makeStyles} from "@mui/styles";
 import {BaseList} from "../models/base";
 import {RaceMergeData, RaceTitle} from "../models/Race";
 import {ISODateToPretty} from "../services/dates";
+import {Button, Card, CardActions, CardContent, CardHeader, Theme} from "@mui/material";
 
 interface RaceListProps {
     races: BaseList<RaceMergeData>
@@ -11,15 +11,15 @@ interface RaceListProps {
     edit?: boolean
 }
 
-const useStyles = ({spacing}: Theme) => makeStyles({
+const useStyles = makeStyles(({spacing}: Theme) => ({
     races: {
         marginBottom: spacing(2),
         textAlign: "left"
     }
-})
+}))
 
-export const RaceList: FC<RaceListProps> = ({theme, races, edit= false}) => {
-    const classes = useStyles(theme)()
+export const RaceList: FC<RaceListProps> = ({ races, edit= false}) => {
+    const classes = useStyles()
 
     return (
         <>
@@ -42,4 +42,4 @@ export const RaceList: FC<RaceListProps> = ({theme, races, edit= false}) => {
         </>
     )
 }
-export default withTheme(RaceList);
+export default RaceList;

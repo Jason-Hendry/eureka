@@ -1,5 +1,5 @@
 import React from "react";
-import {MenuItem, Select, SelectProps} from "@material-ui/core";
+import {MenuItem, Select, SelectProps} from "@mui/material";
 
 interface EnumSelectProps<T extends string> {
     enumSet: T[]; // Use: Object.values(EnumType)

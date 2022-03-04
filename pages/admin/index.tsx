@@ -1,5 +1,5 @@
 import React, {FC, useContext, useEffect, useState} from "react"
-import {Container, Paper, Typography} from "@material-ui/core";
+import {Container, Paper, Typography} from "@mui/material";
 import Columns, {Third} from "../../layout/columns/Columns";
 import {CoursesCollectionApi, RaceCollectionApi, UserCollectionApi} from "../../services/APIService";
 import {Secret} from "../../layout/Admin/Secret";

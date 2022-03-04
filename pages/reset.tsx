@@ -6,9 +6,9 @@ import {
     InputAdornment,
     TextField,
     Typography
-} from "@material-ui/core";
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+} from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {useRouter} from 'next/router'
 import { ResetService} from "../auth/reset";
 import {AdminFormTheme} from "../layout/Admin/AdminFormTheme";

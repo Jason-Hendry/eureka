@@ -1,11 +1,11 @@
-import {AppBar, Button, IconButton, Menu, MenuItem, Theme, Toolbar, Typography, withTheme} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import {AppBar, Button, IconButton, Menu, MenuItem, Theme, Toolbar, Typography} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import React, {FC} from "react";
 import {useRouter} from "next/router";
-import {makeStyles} from "@material-ui/styles";
+import {makeStyles} from "@mui/styles";
 import {MouseEvent} from "react";
 
-const useStyles = (theme: Theme) => makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
         flexGrow: 1,
     },
@@ -15,16 +15,15 @@ const useStyles = (theme: Theme) => makeStyles({
     title: {
         flexGrow: 1,
     },
-});
+}));
 
 interface AdminAppBarProps {
     logout: () => void
-    theme: Theme
 }
 
-export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
+export const AdminAppBar:FC<AdminAppBarProps> = ({logout}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement|null>(null);
-    const classes = useStyles(theme)();
+    const classes = useStyles();
     const router = useRouter();
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -70,6 +69,7 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
                 >
                     <MenuItem onClick={() => handleLink("/admin/races")}>Races</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/editSeason")}>Edit Season</MenuItem>
+                    <MenuItem onClick={() => handleLink("/admin/pages")}>Pages</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/courses")}>Courses</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/news")}>News</MenuItem>
                     <MenuItem onClick={() => handleLink("/admin/users")}>Users</MenuItem>
@@ -78,11 +78,11 @@ export const AdminAppBar:FC<AdminAppBarProps> = ({logout, theme}) => {
                 <Typography variant="h6" className={classes.title}>
                     Eureka Cycling - Admin
                 </Typography>
-                <Button onClick={viewSite} color="default" variant={"outlined"}>View Site</Button>
+                <Button onClick={viewSite} color="primary" variant={"outlined"}>View Site</Button>
                 <Button onClick={logout} color="inherit">Logout</Button>
             </Toolbar>
         </AppBar>
     </div>
 }
 
-export default withTheme(AdminAppBar)
+export default AdminAppBar

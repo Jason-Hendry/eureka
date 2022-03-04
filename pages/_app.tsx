@@ -1,13 +1,14 @@
 import {AppProps} from "next/app";
 
-import AdminTheme from "../layout/Admin/AdminTheme";
-import Head from "next/head";
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import {ThemeProvider} from "@material-ui/styles";
-import {createTheme} from "@material-ui/core";
-import {red} from '@material-ui/core/colors';
 import React from "react";
+import Head from "next/head";
+import CssBaseline from '@mui/material/CssBaseline';
+
+import {ThemeProvider} from "@mui/styles";
+import {createTheme} from "@mui/material";
+import {red} from "@mui/material/colors";
+
+import AdminTheme from "../layout/Admin/AdminTheme";
 
 export const theme = createTheme({
     palette: {
@@ -29,10 +30,6 @@ export const theme = createTheme({
 function MyApp({Component, pageProps, router}: AppProps): JSX.Element {
     const admin = router.pathname.match('^/admin');
 
-    if (admin) {
-        return <AdminTheme><Component {...pageProps} /></AdminTheme>
-    }
-
     return (
         <>
             <Head>
@@ -40,9 +37,8 @@ function MyApp({Component, pageProps, router}: AppProps): JSX.Element {
             </Head>
 
             <ThemeProvider theme={theme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline/>
-                <Component {...pageProps} />
+                {admin  ? <AdminTheme><Component {...pageProps} /></AdminTheme> : <Component {...pageProps} />}
             </ThemeProvider>
         </>
     )

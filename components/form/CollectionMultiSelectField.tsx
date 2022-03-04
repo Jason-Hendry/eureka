@@ -1,6 +1,6 @@
 import React, {PropsWithChildren, useContext, useEffect, useState} from "react";
 import {BaseFieldProps} from "./BaseField";
-import {FormControl, FormLabel, MenuItem, Select} from "@material-ui/core";
+import {FormControl, FormLabel, MenuItem, Select} from "@mui/material";
 import {Secret} from "../../layout/Admin/Secret";
 import {CollectionAPI} from "../../services/APIService";
 import {BaseList} from "../../models/base";

@@ -7,15 +7,16 @@ import {
     Hidden,
     Drawer,
     Theme,
-    makeStyles,
-    Container, createStyles
-} from "@material-ui/core";
-import MenuIcon from '@material-ui/icons/Menu';
-import AnnouncementIcon from "@material-ui/icons/Announcement";
-import EventIcon from "@material-ui/icons/Event";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+    Container
+} from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import AnnouncementIcon from "@mui/icons-material/Announcement";
+import EventIcon from "@mui/icons-material/Event";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import HeaderLink from "./HeaderLink";
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import {createStyles, makeStyles} from "@mui/styles";
 
 const useAppBarStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -93,7 +94,7 @@ export const Header: FC<HeaderProps> = ({
     const links: Array<[string, ReactChild]> = [
         ["/news", <><AnnouncementIcon/> Announcements and Race Reports</>],
         ["/races", <><EventIcon/> Calendar</>],
-        ["/results", <><EventIcon/> Results</>],
+        ["/results", <><EmojiEventsIcon /> Results</>],
         ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],
         ["/join", <><PersonAddIcon/> Join</>]
     ];

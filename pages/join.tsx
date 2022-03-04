@@ -12,8 +12,6 @@ type JoinProps = {
 export const Join: FC<JoinProps> = ({siteSetting}) => {
     const image = siteSetting.data?.HomePageImage ? siteSetting.data.HomePageImage : '';
 
-
-
     return <PublicLayout small={true} heroImage={image} title={"JoinPage Eureka Cycling"}>
             <JoinInfo />
     </PublicLayout>

@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react'
-import {Container} from "@material-ui/core";
+import {Container} from "@mui/material";
 import {Secret} from "./Secret";
 import AdminAppBar from "./AppBar";
 import {useRouter} from "next/router";

@@ -1,30 +1,31 @@
 import {FC} from "react";
 import {BaseList, BaseModel} from "../models/base";
 import {NewsData} from "../models/News";
-import {Card, CardContent, CardHeader, Theme, Typography, withTheme} from "@material-ui/core";
-import {makeStyles} from "@material-ui/styles";
+import {makeStyles} from "@mui/styles";
 import Link from "next/link";
 import {ISODateToPretty} from "../services/dates";
 import {toURL} from "../services/url";
+import {Card, CardContent, CardHeader, Theme, Typography} from "@mui/material";
 
 interface NewsListProps {
     news: BaseList<NewsData>
     theme: Theme;
 }
 
-const useStyles = ({spacing}: Theme) => makeStyles({
-    news: {
-        marginBottom: spacing(2),
-        textAlign: "left"
-    }
-})
+const useStyles = makeStyles(({spacing}: Theme) => ({
+        news: {
+            marginBottom: spacing(2),
+            textAlign: "left"
+        }
+    })
+)
 
-export const NewsList: FC<NewsListProps> = ({news, theme}) => {
+export const NewsList: FC<NewsListProps> = ({news}) => {
 
-    const classes = useStyles(theme)()
+    const classes = useStyles()
 
     const displayDate = (n: BaseModel<NewsData>) => ISODateToPretty(n.data.Date)
-    const url  = (n: BaseModel<NewsData>) =>  "/news/" + toURL(n.id)
+    const url = (n: BaseModel<NewsData>) => "/news/" + toURL(n.id)
 
     return (
         <>
@@ -42,4 +43,4 @@ export const NewsList: FC<NewsListProps> = ({news, theme}) => {
         </>
     )
 }
-export default withTheme(NewsList);
+export default NewsList

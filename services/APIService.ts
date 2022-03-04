@@ -17,6 +17,7 @@ import {
 } from "../pages/api/crud";
 import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
+import {PageData} from "../models/Page";
 
 export class CollectionAPI<T> extends Collection<T> {
 
@@ -59,6 +60,7 @@ export const RaceCollectionApi = (secret: string) => new CollectionAPI<RaceData>
 export const NewsCollectionApi = (secret: string) => new CollectionAPI<NewsData>(ModelCollection.News, secret)
 export const ResultsCollectionApi = (secret: string) => new CollectionAPI<ResultsData>(ModelCollection.Results, secret)
 export const UserCollectionApi = (secret: string) => new CollectionAPI<UserData>(ModelCollection.User, secret)
+export const PageCollectionApi = (secret: string) => new CollectionAPI<PageData>(ModelCollection.Page, secret)
 export const CoursesCollectionApi = (secret: string) => new CollectionAPI<CourseData>(ModelCollection.Courses, secret)
 export const ImagesCollectionApi = (secret: string) => new CollectionAPI<ImageData>(ModelCollection.Images, secret)
 export const SiteSettingsCollectionApi = (secret: string) => new CollectionAPI<SiteSettingData>(ModelCollection.SiteSettings, secret)

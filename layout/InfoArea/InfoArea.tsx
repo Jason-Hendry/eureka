@@ -1,11 +1,9 @@
-import React, {Component, FC, ReactNode} from "react";
+import React, {FC, ReactNode} from "react";
 // nodejs library to set properties for components
-import PropTypes from "prop-types";
 // nodejs library that concatenates classes
-import classNames from "classnames";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import {createStyles, Theme, Typography, withTheme} from "@material-ui/core";
+// @mui/material components
+import { makeStyles, createStyles } from "@mui/styles";
+import {Theme, Typography} from "@mui/material";
 
 const useStyles = makeStyles(({spacing}: Theme) => createStyles({
   infoArea: {
@@ -32,7 +30,7 @@ interface InfoAreaProps {
 }
 
 export const InfoArea: FC<InfoAreaProps> = (props) => {
-  const { title, description, vertical,theme, icon } = props;
+  const { title, icon } = props;
   const classes = useStyles();
 
   const Icon = icon;
@@ -44,4 +42,4 @@ export const InfoArea: FC<InfoAreaProps> = (props) => {
     </div>
   );
 }
-export default withTheme(InfoArea);
+export default InfoArea;

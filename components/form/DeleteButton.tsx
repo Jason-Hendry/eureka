@@ -1,5 +1,5 @@
 import React, {VFC} from "react";
-import {Button, FormControl} from "@material-ui/core";
+import {Button, FormControl} from "@mui/material";
 
 export type DeleteButtonProps = {
     isEdit: boolean,

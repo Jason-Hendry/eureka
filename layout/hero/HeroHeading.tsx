@@ -1,8 +1,8 @@
 import React, {FC, ReactChild, ReactChildren} from "react";
-import {Container, createStyles, Grid, Typography, TypographyClassKey} from "@material-ui/core"
-import {makeStyles} from "@material-ui/styles";
+import {Container, createStyles, Grid, Typography, TypographyClassKey} from "@mui/material"
+import {makeStyles} from "@mui/styles";
 import {container} from "../container/container";
-import {ClassNameMap} from "@material-ui/styles/withStyles/withStyles";
+import {ClassNameMap} from "@mui/styles/withStyles/withStyles";
 
 interface HeroHeadingProps {
     title: string

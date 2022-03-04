@@ -5,7 +5,7 @@ import {
     Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {
     NewsCollectionApi,
 } from "../../services/APIService";

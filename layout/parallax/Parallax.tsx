@@ -1,6 +1,6 @@
 import React, {CSSProperties, FC} from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {createStyles, Theme} from "@material-ui/core";
+import { createStyles, makeStyles } from "@mui/styles";
+import {Theme} from "@mui/material";
 import {EmbeddedImage} from "../../models/base";
 import * as Timers from "timers";
 

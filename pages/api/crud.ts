@@ -3,7 +3,7 @@ import {BaseModel, ModelCollection} from "../../models/base";
 import {
     Collection,
     CoursesCollection, DeployCollection, FilesCollection,
-    ImagesCollection, NewsCollection,
+    ImagesCollection, NewsCollection, PageCollection,
     RaceCollection, SiteSettingsCollection,
     UserCollection
 } from "../../services/DirectService";
@@ -136,6 +136,9 @@ const CrudAPI = async (req: CrudlRequest & NextApiRequest, res: NextApiResponse)
             break;
         case ModelCollection.Deploy:
             await ApplyCRUD(DeployCollection(secret), req, res)
+            break;
+        case ModelCollection.Page:
+            await ApplyCRUD(PageCollection(secret), req, res)
             break;
         default:
             return;

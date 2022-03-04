@@ -7,7 +7,7 @@ import {ParsedUrlQuery} from "querystring";
 import PublicLayout from "../../layout/public";
 import {SiteSettingData} from "../../models/SiteSetting";
 import nl2br from "react-nl2br";
-import {Button, Typography} from "@material-ui/core";
+import {Button, Typography} from "@mui/material";
 import {FilterFutureRace, RaceMergeData, RaceTitle} from "../../models/Race";
 import {ISODateToPretty} from "../../services/dates";
 import Columns, {Half} from "../../layout/columns/Columns";

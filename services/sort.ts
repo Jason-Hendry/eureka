@@ -47,6 +47,7 @@ export function sortBy<T extends string>(field: T, a: withDataField<T>, b:withDa
 }
 
 export const sortByName =(a: withDataField<'name'>,b: withDataField<'name'>) => sortBy<'name'>('name', a, b,)
+export const sortByUrl =(a: withDataField<'url'>,b: withDataField<'url'>) => sortBy<'url'>('url', a, b,)
 export const sortByFilename =(a: withDataField<'filename'>,b: withDataField<'filename'>) => sortBy<'filename'>('filename', a, b,)
 export const sortByTitle =(a: withDataField<'Title'>,b: withDataField<'Title'>) => sortBy<'Title'>('Title', a, b,)
 

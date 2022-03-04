@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from "react";
 import {BaseFieldProps} from "./BaseField";
-import {FormControl, FormLabel} from "@material-ui/core";
+import {FormControl, FormLabel} from "@mui/material";
 import EnumSelect from "../../layout/Admin/EnumSelect";
 import {GetUniqueId} from "./GetUniqueId";
 

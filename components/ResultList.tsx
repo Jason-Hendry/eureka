@@ -1,5 +1,5 @@
 import {BaseList} from "../models/base";
-import {DivisionResult, RaceData, RaceMergeData, RaceTitle, ResultPlace} from "../models/Race";
+import {DivisionResult, RaceMergeData, RaceTitle, ResultPlace} from "../models/Race";
 import {nicePosition} from "../pages/admin/results";
 
 

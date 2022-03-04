@@ -1,7 +1,7 @@
 import React, {FC, RefObject, useRef, useState} from "react";
 import {BaseFieldProps} from "./BaseField";
 import {defaultFieldProps} from "../../layout/Admin/defaultFieldProps";
-import {TextField} from "@material-ui/core";
+import {TextField} from "@mui/material";
 import {useFileUpload} from "../../effects/useFileUpload";
 import {useS3StorageConfiguration} from "../../effects/useS3StorageConfiguration";
 import {useSecret} from "../../effects/useSecret";

@@ -11,6 +11,7 @@ export enum ModelCollection {
     News = 'News',
     Results = 'Results',
     User = 'User',
+    Page = 'Pages',
     Courses = 'Courses',
     Images = 'Images',
     SiteSettings = 'SiteSettings',
