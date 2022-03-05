@@ -7,7 +7,6 @@ import {Button, Card, CardActions, CardContent, CardHeader, Theme} from "@mui/ma
 
 interface RaceListProps {
     races: BaseList<RaceMergeData>
-    theme: Theme;
     edit?: boolean
 }
 

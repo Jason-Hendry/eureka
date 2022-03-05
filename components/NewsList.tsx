@@ -9,7 +9,6 @@ import {Card, CardContent, CardHeader, Theme, Typography} from "@mui/material";
 
 interface NewsListProps {
     news: BaseList<NewsData>
-    theme: Theme;
 }
 
 const useStyles = makeStyles(({spacing}: Theme) => ({

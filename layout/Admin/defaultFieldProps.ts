@@ -1,4 +1,4 @@
-import {TextFieldProps} from "@material-ui/core";
+import {TextFieldProps} from "@mui/material";
 
 export const defaultFieldProps: TextFieldProps = {
     fullWidth: true,

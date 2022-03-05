@@ -48,9 +48,11 @@ export const getStaticProps: GetStaticProps<PageProps, PageParams> = async ({par
     }
 }
 
+const stripLeadingSlash = (url: string) => url.replace(/^\//, '')
+
 // noinspection JSUnusedGlobalSymbols
 export const getStaticPaths: GetStaticPaths<PageParams> = async () => {
-    const paths = await PageCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({data:{url}}) => ({params:{url}})))
+    const paths = await PageCollection(process.env.FAUNADB_SECRET || '').list().then((l) => l.map(({data:{url}}) => url).map(stripLeadingSlash).map(url => ({params:{url}})))
 
     return {
         fallback: true,

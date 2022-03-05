@@ -1,23 +1,16 @@
 import React, {FC, useEffect, useState} from "react"
 import {
-    Checkbox,
-    Container, FormControlLabel,
-    Paper,
-    Table, TableCell,
-    TableContainer, TableHead, TableRow,
+    Container, Paper,
     Typography
 } from "@mui/material";
 import {CoursesCollectionApi, RaceCollectionApi} from "../../services/APIService";
 import {dateSortCompareNewestFirst, dateSortCompareOldestFirst, thisYear} from "../../services/sort";
-import {BlankRace, FilterFutureRace, RaceData, RaceFormat} from "../../models/Race";
+import {BlankRace, RaceData, RaceFormat} from "../../models/Race";
 import {BaseList, BaseModel} from "../../models/base";
-import Link from "next/link";
-import {CourseData, GetCourse} from "../../models/Course";
 import {useAdminListHooks} from "../../effects/loadApiEffect";
 import {AdminForm} from "../../components/form/AdminForm";
 import {RepeatSection} from "../../components/form/RepeatSection";
 import DateField from "../../components/form/DateField";
-import {Title} from "@mui/icons-material";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import CollectionSelectField from "../../components/form/CollectionSelectField";
 import EnumSelectField from "../../components/form/EnumSelectField";
@@ -37,24 +30,13 @@ export function LastDatePlus7(season: Array<BaseModel<RaceData>> | undefined, ye
 export const AdminIndex:FC<unknown> = () => {
 
     const {list: upcomingRaces, secret} = useAdminListHooks(RaceCollectionApi)
-    const [courses, setCourses] = useState<BaseList<CourseData>>([])
     const [errors, setErrors] = useState<string>("")
     const [season, setSeason] = useState<BaseList<RaceData>>()
-
-    useEffect(() => {
-        setSeason(upcomingRaces.sort(dateSortCompareOldestFirst).filter(thisYear(year)).filter(hidePreviousFilter))
-    }, [upcomingRaces])
-
     const year = (new Date()).getFullYear();
 
     useEffect(() => {
-        CoursesCollectionApi(secret).list().then(setCourses)
-    }, [secret])
-
-    const [ hidePrevious, setHidePrevious ] = useState<boolean>(true);
-    const hidePreviousFilter = (a: BaseModel<RaceData>): boolean => {
-        return hidePrevious? FilterFutureRace()(a) : true
-    }
+        setSeason(upcomingRaces.sort(dateSortCompareOldestFirst).filter(thisYear(year)))
+    }, [upcomingRaces, year])
 
     const save = () => {
         if(season) {
@@ -63,7 +45,9 @@ export const AdminIndex:FC<unknown> = () => {
                     return RaceCollectionApi(secret).put(race.data, race.id)
                 }
                 return RaceCollectionApi(secret).post(race.data)
-            })).then((...v) => setSeason(...v))
+            }))
+                .then((...v) => setSeason(...v))
+                .catch(setErrors)
         }
     }
     const RaceFormatSet = Object.keys(RaceFormat).map((k) => RaceFormat[k as keyof typeof RaceFormat])

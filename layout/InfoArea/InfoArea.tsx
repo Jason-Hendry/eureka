@@ -14,7 +14,6 @@ const useStyles = makeStyles(({spacing}: Theme) => createStyles({
 }));
 
 interface InfoAreaProps {
-  theme: Theme,
   icon: ReactNode,
   title: string,
   description: string,
@@ -32,8 +31,6 @@ interface InfoAreaProps {
 export const InfoArea: FC<InfoAreaProps> = (props) => {
   const { title, icon } = props;
   const classes = useStyles();
-
-  const Icon = icon;
 
   return (
     <div className={classes.infoArea}>
