@@ -1,6 +1,6 @@
 import {GoogleMap, Marker, Polyline, withGoogleMap, withScriptjs} from "react-google-maps";
 import {LatLng, LatLngArray} from "../../services/maps/getGPXPoints";
-import {useEffect, useRef, VFC} from "react";
+import {useEffect, useMemo, useRef, VFC} from "react";
 import { faMapMarker } from "@fortawesome/free-solid-svg-icons";
 
 type PolylineMapProps = {
@@ -13,7 +13,7 @@ type PolylineMapProps = {
 export const PolylineMap = withScriptjs(withGoogleMap(({path, registrationLocation, profileLocation}: PolylineMapProps) => {
 
     const map = useRef<GoogleMap>(null)
-    const register = registrationLocation ? new google.maps.LatLng(registrationLocation[0], registrationLocation[1]) : null
+    const register = useMemo(() => registrationLocation ? new google.maps.LatLng(registrationLocation[0], registrationLocation[1]) : null, [registrationLocation])
     const profilePos = profileLocation ? new google.maps.LatLng(profileLocation[0], profileLocation[1]) : null
 
     useEffect(() => {
@@ -29,6 +29,7 @@ export const PolylineMap = withScriptjs(withGoogleMap(({path, registrationLocati
     }, [register, path])
 
     return <GoogleMap ref={map}
+
         defaultZoom={10}
         defaultCenter={GetPathCenter(path)}
                       options={{
