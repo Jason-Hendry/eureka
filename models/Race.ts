@@ -1,6 +1,6 @@
 import {UserList} from "./User";
 import {Course, CourseList} from "./Course";
-import {isFuture, parse} from "date-fns";
+import {isFuture, isToday, parse} from "date-fns";
 import {Image} from "./Image";
 import {BaseList, BaseModel} from "./base";
 
@@ -78,13 +78,22 @@ export type RaceMergeData = RaceData & {
     MarshallNames: Array<string>
 }
 
+
+export function getRaceDate(r: Race) {
+    return r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : false;
+}
+
 export function isFutureRace(r: Race) {
-    const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : false;
+    const raceDate = getRaceDate(r);
     return (r.data != undefined) && (raceDate && isFuture(raceDate))
+}
+export function isTodayRace(r: Race) {
+    const raceDate = r.data?.Date ? parse(r.data.Date, "yyyy-MM-dd", new Date()) : false;
+    return (r.data != undefined) && (raceDate && isToday(raceDate))
 }
 
 export function FilterFutureRace() {
-    return isFutureRace
+    return (r: Race) => isFutureRace(r) || isTodayRace(r)
 }
 export function FilterPastRace() {
     return (r: Race) => !isFutureRace(r)

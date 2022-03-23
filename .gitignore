@@ -35,3 +35,6 @@ yarn-error.log*
 .vercel
 /cypress.env.json
 /cypress/videos/
+/cypress/screenshots/
+
+tsconfig.tsbuildinfo
