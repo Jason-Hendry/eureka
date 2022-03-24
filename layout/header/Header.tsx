@@ -4,7 +4,6 @@ import {
     AppBar,
     Toolbar,
     IconButton,
-    Hidden,
     Drawer,
     Theme,
     Container
@@ -24,7 +23,7 @@ import HeaderLink from "./HeaderLink";
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import {createStyles, makeStyles} from "@mui/styles";
 
-const useAppBarStyles = makeStyles((theme: Theme) =>
+const useAppBarStyles = makeStyles(() =>
     createStyles({
         colorDefault: {
             backgroundColor: "#fff",
@@ -100,6 +99,7 @@ export const Header: FC<HeaderProps> = ({
     const links: Array<[string, ReactChild]> = [
         ["/news", <><AnnouncementIcon/> Announcements and Race Reports</>],
         ["/races", <><EventIcon/> Calendar</>],
+        ["/marshal-roster", <><EventIcon /> Marshal Roster</>],
         ["/results", <><EmojiEventsIcon /> Results</>],
         ["/contact-us", <><MapIcon /> Contact Us</>],
         ["/handbook", <><MenuBookIcon /> Club Handbook & Policies</>],
