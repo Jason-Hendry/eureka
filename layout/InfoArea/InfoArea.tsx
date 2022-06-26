@@ -2,14 +2,15 @@ import React, {FC, ReactNode} from "react";
 // nodejs library to set properties for components
 // nodejs library that concatenates classes
 // @mui/material components
-import { makeStyles, createStyles } from "@mui/styles";
+import {makeStyles, createStyles, useTheme} from "@mui/styles";
 import {Theme, Typography} from "@mui/material";
 
-const useStyles = makeStyles(({spacing}: Theme) => createStyles({
+const useStyles = makeStyles(({spacing, typography}: Theme) => createStyles({
   infoArea: {
-    textAlign: 'center',
-    paddingTop: spacing(4),
-    paddingBottom: spacing(6)
+    textAlign: 'left',
+    paddingTop: spacing(2),
+    paddingBottom: spacing(2),
+    fontFamily: typography.h2.fontFamily
   }
 }));
 
@@ -34,8 +35,7 @@ export const InfoArea: FC<InfoAreaProps> = (props) => {
 
   return (
     <div className={classes.infoArea}>
-        {icon}
-        <Typography variant={'h5'} component={'h2'}>{title}</Typography>
+        <Typography variant={'h2'}>{title}</Typography>
     </div>
   );
 }

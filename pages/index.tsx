@@ -53,7 +53,7 @@ export const Home: FC<HomeProps> = ({siteSetting, news, races}) =>{
         <Third>
           <InfoArea
               icon={<PersonAddIcon/>}
-              title={"JoinPage Eureka"}
+              title={"Join Eureka"}
               description={""} />
           <Card>
             <CardContent>

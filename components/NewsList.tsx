@@ -29,7 +29,7 @@ export const NewsList: FC<NewsListProps> = ({news}) => {
     return (
         <>
             {news.map(n => (
-                <Card className={classes.news} key={n.id}>
+                <Card className={classes.news} key={n.id} elevation={1}>
                     <CardHeader title={n.data.Title} subheader={displayDate(n)}/>
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">
