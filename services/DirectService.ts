@@ -8,11 +8,12 @@ import {BaseList, BaseModel, ModelCollection} from "../models/base";
 import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
 import {PageData} from "../models/Page";
+import {CollectionInterface} from "./CollectionInterface";
 
 
 type Action<T> = (data: BaseModel<T>, res: { refresh: (url: string) => void }) => void;
 
-export class Collection<T> {
+export class Collection<T> implements CollectionInterface<T> {
     protected readonly collection: ModelCollection;
     protected readonly secret: string;
     public onCreate: Action<T>

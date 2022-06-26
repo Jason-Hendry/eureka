@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react"
+import React, {FC, useContext, useEffect, useState} from "react"
 import {
     Container, Paper,
     Typography
@@ -14,6 +14,8 @@ import DateField from "../../components/form/DateField";
 import SingleLineTextField from "../../components/form/SingleLineTextField";
 import CollectionSelectField from "../../components/form/CollectionSelectField";
 import EnumSelectField from "../../components/form/EnumSelectField";
+import {CollectionCache, CollectionCacheProxyBuilder} from "../../layout/Admin/CollectionCache";
+import {CourseData} from "../../models/Course";
 
 
 export function LastDatePlus7(season: Array<BaseModel<RaceData>> | undefined, year: number): string {
@@ -33,6 +35,7 @@ export const AdminIndex:FC<unknown> = () => {
     const [errors, setErrors] = useState<string>("")
     const [season, setSeason] = useState<BaseList<RaceData>>()
     const year = (new Date()).getFullYear();
+    const collectionCache = useContext(CollectionCache)
 
     useEffect(() => {
         setSeason(upcomingRaces.sort(dateSortCompareOldestFirst).filter(thisYear(year)))
@@ -68,7 +71,7 @@ export const AdminIndex:FC<unknown> = () => {
                     <DateField id={"date"+i} value={v.data?.Date || null} label={"Date"} onChange={newValue => m({data: {...v.data, Date: newValue || undefined}})} />
                     <EnumSelectField id={"raceFormat"+i} label={"Race Format"} enumSet={RaceFormatSet} value={v.data?.RaceFormat || null} onChange={nv => m({data: {...v.data, RaceFormat: nv || undefined}})} />
                     <SingleLineTextField id={"title"+i} value={v.data?.Title || null} label={"Title"} onChange={newValue => m({data: {...v.data, Title: newValue || ""}})} />
-                    <CollectionSelectField id={"course"+i} label={"Course"} value={v.data.Course || ""} collection={CoursesCollectionApi}
+                    <CollectionSelectField<CourseData> id={"course"+i} label={"Course"} value={v.data.Course || ""} collection={CollectionCacheProxyBuilder(CoursesCollectionApi, collectionCache.get('course'))}
                                            getLabel={(v) => v.Title} onChange={newValue => m({data: {...v.data, Course: newValue || undefined}})} />
                 </>} blank={() => ({id: "", data: {...BlankRace(), Date: LastDatePlus7(season, year)}})} />
             </AdminForm>

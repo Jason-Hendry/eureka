@@ -18,8 +18,9 @@ import {
 import {FileData} from "../models/File";
 import {DeployData} from "../models/Deploy";
 import {PageData} from "../models/Page";
+import {CollectionInterface} from "./CollectionInterface";
 
-export class CollectionAPI<T> extends Collection<T> {
+export class CollectionAPI<T> extends Collection<T> implements CollectionInterface<T> {
 
     constructor(collection: ModelCollection, secret: string) {
         super(collection, secret)

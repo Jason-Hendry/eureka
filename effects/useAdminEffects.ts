@@ -1,6 +1,6 @@
-import {CollectionAPI} from "../services/APIService";
 import {useContext, useEffect, useState} from "react";
 import {Secret} from "../layout/Admin/Secret";
+import {CollectionInterface} from "../services/CollectionInterface";
 
 export type adminEffects<T> = {
     save: () => void
@@ -13,7 +13,7 @@ export type adminEffects<T> = {
     isEdit: boolean
 }
 
-export function useAdminEffects<T>(collection: (secret: string) => CollectionAPI<T>, blank: () => T, afterDelete?: () => void): adminEffects<T> {
+export function useAdminEffects<T>(collection: (secret: string) => CollectionInterface<T>, blank: () => T, afterDelete?: () => void): adminEffects<T> {
     const secret = useContext(Secret)
     const [data, setData] = useState<T | null>(null)
     const [isEdit, setIsEdit] = useState<boolean>(false)

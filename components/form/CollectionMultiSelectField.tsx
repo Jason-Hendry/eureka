@@ -2,11 +2,11 @@ import React, {PropsWithChildren, useContext, useEffect, useState} from "react";
 import {BaseFieldProps} from "./BaseField";
 import {FormControl, FormLabel, MenuItem, Select} from "@mui/material";
 import {Secret} from "../../layout/Admin/Secret";
-import {CollectionAPI} from "../../services/APIService";
 import {BaseList} from "../../models/base";
+import {CollectionInterface} from "../../services/CollectionInterface";
 
 
-export function CollectionMultiSelectField<T>({label, onChange, value, collection, getLabel, id}: PropsWithChildren<BaseFieldProps<string[]> & {collection: (secret: string) => CollectionAPI<T>, getLabel: (v: T)=>string}>): JSX.Element {
+export function CollectionMultiSelectField<T>({label, onChange, value, collection, getLabel, id}: PropsWithChildren<BaseFieldProps<string[]> & {collection: (secret: string) => CollectionInterface<T>, getLabel: (v: T)=>string}>): JSX.Element {
 
     const secret = useContext(Secret)
     const [list, setList] =useState<BaseList<T>>([])
