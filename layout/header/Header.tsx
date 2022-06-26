@@ -102,7 +102,7 @@ export const Header: FC<HeaderProps> = ({
         ["/marshal-roster", <><EventIcon /> Marshal Roster</>],
         ["/results", <><EmojiEventsIcon /> Results</>],
         ["/contact-us", <><MapIcon /> Contact Us</>],
-        ["/handbook", <><MenuBookIcon /> Club Handbook & Policies</>],
+        ["/handbook", <><MenuBookIcon /> </>],
         ["/committee", <><PeopleIcon /> Committee</>],
         ["/merchandise", <><StoreIcon /> Club Merch</>],
         ["/eureka-covidsafe-plan", <><InsertDriveFileIcon/> Covid Safe</>],

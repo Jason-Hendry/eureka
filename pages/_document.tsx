@@ -18,6 +18,9 @@ export default class MyDocument extends Document<DocumentProps & {ssrCss: string
                         rel="stylesheet"
                         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
                     />
+                    <link rel="preconnect" href="https://fonts.googleapis.com" />
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin={"crossOrigin"} />
+                    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap" rel="stylesheet" />
                     {/* Google Tag Manager */}
                     <script
                         dangerouslySetInnerHTML={{

@@ -4,43 +4,30 @@ import {makeStyles, createStyles} from "@mui/styles";
 import Link, {LinkProps} from "next/link";
 
 
-interface HeaderLinkProps extends LinkProps{
-    altColor: boolean
+interface HeaderLinkProps extends LinkProps {
+    altColor?: boolean
 }
 
 const useStyles = makeStyles(({spacing, palette, breakpoints}: Theme) => createStyles({
     a: {
-        color:'#FFFFFF',
-        paddingTop: spacing(1),
-        paddingLeft: spacing(4),
-        verticalAlign: "text-top",
+        fontFamily: "'Poppins', sans-serif",
+        fontWeight: 800,
+        fontSize: "16px",
+        textTransform: "uppercase",
         textDecoration: "none",
-        fontSize: '1.5em',
-        lineHeight: '20px',
-        position: 'relative',
-        '&:hover' : {
-            color: palette.primary.main,
-            textShadow: '0px 0px 15px #fff'
-        },
-        "&>svg": {
-            position: 'relative',
-            top: 6
-        },
-        [breakpoints.down('sm')]: {
-            width: 300,
-            maxWidth: '80%'
-        }
+        padding: 10,
+        color: "#fff",
+        backgroundColor: "#0054A5",
+
     },
     altColor: {
-        color: palette.primary.main,
-        '&:hover' : {
-            color: palette.primary.main,
-            textShadow: '0px 0px 15px #fff'
-        }
+        color: "#0054A5",
+        fontSize: "18px",
+        backgroundColor: "#fff",
     }
 }))
 
-const HeaderLink: FC<HeaderLinkProps> = ({ altColor, children, ...linkProps}) => {
+const HeaderLink: FC<HeaderLinkProps> = ({altColor = false, children, ...linkProps}) => {
     const classes = useStyles()
 
     return (
