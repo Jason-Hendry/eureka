@@ -108,7 +108,8 @@ function DocListService<T>(collection: string): Promise<BaseList<T>> {
                 q.Paginate(
                     q.Match(
                         q.Index(`all${collection}`)
-                    )
+                    ),
+                    {size: 10000}
                 ),
                 q.Lambda("x", q.Get(q.Var("x")))
             )
